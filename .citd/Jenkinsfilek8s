@@ -1,0 +1,60 @@
+// Jenkinsfile v2.0.0
+
+pipeline {
+    agent {
+        kubernetes {
+
+			defaultContainer 'xc8-mplabx'
+            yamlFile '.citd/cloudprovider.yml'
+        }
+    }
+    parameters {
+        string( name: 'NOTIFICATION_EMAIL',
+                defaultValue: 'PICAVR_Examples_GateKeepers@microchip.com',
+                description: "Email to send build failure and fixed notifications.")
+    }
+	
+	environment {
+		GITHUB_OWNER = 'microchip-pic-avr-examples'	
+		GITHUB_URL ='https://github.com/microchip-pic-avr-examples/pic16f17146-cold-plate-mplab-mcc'
+		BITBUCKET_URL = 'https://bitbucket.microchip.com/scm/ebe/pic16f17146-cold-plate-mplab-mcc.git'
+		SEMVER_REGEX = '^(0|[1-9]\\d*)+\\.(0|[1-9]\\d*)+\\.(0|[1-9]\\d*)+$'
+		ARTIFACTORY_SERVER = 'https://artifacts.microchip.com:7999/artifactory'
+	}	
+	options {
+		timestamps()
+		timeout(time: 30, unit: 'MINUTES')
+	}
+
+	stages {
+		stage('setup') {
+		    steps {
+				script {
+					execute("git clone https://bitbucket.microchip.com/scm/citd/mpae-buildpipeline-groovy-scripts.git")
+					def buildPipeline = load ('mpae-buildpipeline-groovy-scripts/xc8mplabx-buildpipeline.groovy')
+					buildPipeline.runStages()
+				}
+            }
+		}
+	}
+	
+	post {
+        failure {			
+            script {			
+				sendPipelineFailureEmail()
+            }
+        }	
+	}
+}
+def execute(String cmd) {
+	if(isUnix()) {
+		sh cmd
+	} else {
+		bat cmd
+	}
+}
+def sendPipelineFailureEmail() {			  
+    mail to: "${env.EMAILLIST},${params.NOTIFICATION_EMAIL}",
+    subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+    body: "Pipeline failure. ${env.BUILD_URL}"
+}

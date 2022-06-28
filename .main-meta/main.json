@@ -1,0 +1,54 @@
+{
+    "metaDataVersion": "1.0.0",
+    "category": "com.microchip.ide.project",
+    "content": {
+        "metaDataVersion": "1.3.0",
+        "name": "com.microchip.mcu8.mplabx.project.pic16f17146-cold-plate-mplab-mcc",
+        "version": " ",
+        "displayName": "",
+        "projectName": "pic16f17146-cold-plate-mplab-mcc",
+        "shortDescription": "Control a Peltier device with a PIC16F17146 to regulate the temperature of a metal plate.",
+        "ide": {
+            "name": "MPLAB X",
+            "semverRange": ">=6.0.0"
+        },
+        "compiler": [
+            {
+                "name": "XC8",
+                "semverRange": "^2.36.0"
+            }
+        ],
+        "dfp": {
+            "name": "",
+            "semverRange": ""
+        },
+        "configurator": {
+            "name": "",
+            "semverRange": ""
+        },
+        "device": {
+            "metaDataVersion": "1.0.0",
+            "category": "com.microchip.portal.contentRef",
+            "content": {
+                "metaDataVersion": "1.0.0",
+                "category": "com.microchip.device",
+                "name": "PIC16F17146",
+                "versionRange": "*"
+            }
+        },
+        "author": "Robert Perkel",
+        "peripherals": [],
+        "keywords": [],
+        "additionalData": {
+            "longDescription": {
+                "metaDataVersion": "1.0.0",
+                "category": "com.microchip.portal.fileRef",
+                "content": {
+                    "metaDataVersion": "1.0.0",
+                    "fileName": "./README.md",
+                    "mimeType": "text/markdown"
+                }
+            }
+        }
+    }
+}
