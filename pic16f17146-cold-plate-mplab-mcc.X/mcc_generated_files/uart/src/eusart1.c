@@ -97,14 +97,14 @@ void EUSART1_Initialize(void)
 
     //ABDEN disabled; WUE disabled; BRG16 16bit_generator; SCKP Non-Inverted; 
     BAUD1CON = 0x48; 
-    //ADDEN disabled; CREN enabled; SREN disabled; RX9 8-bit; SPEN enabled; 
-    RC1STA = 0x90; 
+    //ADDEN disabled; CREN disabled; SREN disabled; RX9 8-bit; SPEN enabled; 
+    RC1STA = 0x80; 
     //TX9D 0x0; BRGH hi_speed; SENDB sync_break_complete; SYNC asynchronous; TXEN enabled; TX9 8-bit; CSRC client; 
     TX1STA = 0x26; 
-    //SPBRGL 64; 
-    SP1BRGL = 0x40; 
-    //SPBRGH 3; 
-    SP1BRGH = 0x3; 
+    //SPBRGL 68; 
+    SP1BRGL = 0x44; 
+    //SPBRGH 0; 
+    SP1BRGH = 0x0; 
 
     EUSART1_FramingErrorCallbackRegister(EUSART1_DefaultFramingErrorCallback);
     EUSART1_OverrunErrorCallbackRegister(EUSART1_DefaultOverrunErrorCallback);
@@ -140,16 +140,6 @@ inline void EUSART1_TransmitEnable(void)
 inline void EUSART1_TransmitDisable(void)
 {
     TX1STAbits.TXEN = 0;
-}
-
-inline void EUSART1_ReceiveEnable(void)
-{
-    RC1STAbits.CREN = 1;
-}
-
-inline void EUSART1_ReceiveDisable(void)
-{
-    RC1STAbits.CREN = 0;
 }
 
 inline void EUSART1_SendBreakControlEnable(void)
@@ -207,6 +197,18 @@ uint8_t EUSART1_Read(void)
 void EUSART1_Write(uint8_t txData)
 {
     TX1REG = txData;
+}
+
+int getch(void)
+{
+    while(!(EUSART1_IsRxReady()));
+    return EUSART1_Read();
+}
+
+void putch(char txData)
+{
+    while(!(EUSART1_IsTxReady()));
+    return EUSART1_Write(txData);   
 }
 
 static void EUSART1_DefaultFramingErrorCallback(void)

@@ -31,14 +31,38 @@
     THIS SOFTWARE.
 */
 #include "mcc_generated_files/system/system.h"
+#include "tempControl.h"
+#include "fanControl.h"
 
-/*
-    Main application
-*/
+static volatile bool timerActive = false;
+
+//This is called every 10ms from Timer 0
+void Timer_10ms_Callback(void)
+{
+    //Update Count
+    fanControl_timerCallback();
+    
+    //Set Flag
+    timerActive = true;
+    
+    LED_ERROR_Toggle();
+}
 
 int main(void)
 {
     SYSTEM_Initialize();
+    UART1_TransmitEnable();
+    
+    printf("Start\r\n");
+    
+    //Configure 10ms Callback
+    Timer0_OverflowCallbackRegister(&Timer_10ms_Callback);
+    
+    //Init Peltier Controls
+    tempControl_init();
+    
+    //Init Fan Controls
+    fanControl_init();
 
     // If using interrupts in PIC18 High/Low Priority Mode you need to enable the Global High and Low Interrupts 
     // If using interrupts in PIC Mid-Range Compatibility Mode you need to enable the Global and Peripheral Interrupts 
@@ -49,8 +73,27 @@ int main(void)
 
     // Enable the Peripheral Interrupts 
     INTERRUPT_PeripheralInterruptEnable(); 
+    
+    //Start Timer 0 (10ms)
+    Timer0_Start();
+    
+    uint8_t counter = 0;
 
     while(1)
     {
+        if (timerActive)
+        {
+            counter++;
+            timerActive = false;            
+            printf("Timer 2 Count: %u\r\n", fanControl_getFan1RPM());
+            printf("Timer 4 Count: %u\r\n", fanControl_getFan2RPM());
+
+            
+        }
+        
+        if (counter == 99)
+        {
+            counter = 0;
+        }
     }    
 }

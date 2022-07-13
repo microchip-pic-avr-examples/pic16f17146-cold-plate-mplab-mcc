@@ -99,6 +99,13 @@ void Timer0_Write(size_t timerVal);
  */
 void Timer0_Reload(uint8_t periodVal);
 
+/**
+ * @ingroup tmr0
+ * @brief Interrupt Service Routine for Timer-0 overflow interrupt.
+ * @param void
+ * @return void
+ */
+void Timer0_OverflowISR(void);
 
 /**
  * @ingroup tmr0
@@ -108,13 +115,6 @@ void Timer0_Reload(uint8_t periodVal);
  */
  void Timer0_OverflowCallbackRegister(void (* CallbackHandler)(void));
 
-/**
- * @ingroup tmr0
- * @brief This function performs tasks to be executed on timer overflow event
- * @param void
- * @return void
- */
-void Timer0_Tasks(void);
 
 /**
  * @}
