@@ -7,9 +7,6 @@ extern "C" {
     
 #include <stdint.h>
     
-//Number of times pulse count is read per second
-#define FAN_UPDATE_CALLBACKS_PER_SEC 100
-    
     //Init Fan Speed Control
     void fanControl_init(void);
 

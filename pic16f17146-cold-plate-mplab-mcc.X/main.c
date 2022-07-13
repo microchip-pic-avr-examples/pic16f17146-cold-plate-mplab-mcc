@@ -34,18 +34,42 @@
 #include "tempControl.h"
 #include "fanControl.h"
 
+#include <stdint.h>
+#include <stdbool.h>
+
 static volatile bool timerActive = false;
 
 //This is called every 10ms from Timer 0
 void Timer_10ms_Callback(void)
 {
-    //Update Count
-    fanControl_timerCallback();
+    static uint8_t delayCounter = 1;
     
-    //Set Flag
-    timerActive = true;
+    //Call these functions every 10ms
+    {
+        
+    }
+    //End of 10ms Period
     
-    LED_ERROR_Toggle();
+    if (delayCounter == 100)
+    {
+        LED_ERROR_Toggle();
+        
+        delayCounter = 0;
+        timerActive = true;
+        
+        //Call these functions every second
+        {
+            //Update Count
+            fanControl_timerCallback();
+
+        }
+        //End of 1s Period
+        
+        LED_ERROR_Toggle();
+    }
+    
+    //Increment Counter
+    delayCounter++;
 }
 
 int main(void)
@@ -77,23 +101,14 @@ int main(void)
     //Start Timer 0 (10ms)
     Timer0_Start();
     
-    uint8_t counter = 0;
-
     while(1)
     {
-        if (timerActive)
+        //Debug Print (1s)
+        if (timerActive == true)
         {
-            counter++;
-            timerActive = false;            
-            printf("Timer 2 Count: %u\r\n", fanControl_getFan1RPM());
-            printf("Timer 4 Count: %u\r\n", fanControl_getFan2RPM());
-
-            
-        }
-        
-        if (counter == 99)
-        {
-            counter = 0;
+            timerActive = false;
+            printf("Fan 1 RPM: %u\r\n", fanControl_getFan1RPM());
+            printf("Fan 2 RPM: %u\r\n", fanControl_getFan2RPM());
         }
     }    
 }

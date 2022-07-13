@@ -5,9 +5,6 @@
 
 #include <stdint.h>
 
-//Scaling Value for Number of Pulses to RPM
-#define FAN_SCALING_VALUE 1 // (FAN_UPDATE_CALLBACKS_PER_SEC * 60)
-
 //Last RPM of the cooling fans
 static volatile uint16_t fan1RPM = 0, fan2RPM = 0;
 
@@ -62,35 +59,32 @@ void fanControl_timerCallback(void)
     uint8_t cTimer2, cTimer4;
     
     //Read Current Pulse Counts
-    cTimer2 = T2TMR;
+    cTimer2 = Timer2_Read();
     cTimer4 = lastTimer2;
     
     //Compute RPM from number of pulses since last time
     if (cTimer2 < lastTimer2)
     {
         //Overflow!
-        //fan1RPM = ((0xFF - lastTimer2) + cTimer2 + 1);
-        fan1RPM = 0;
-        fan2RPM = 0;
+        fan1RPM = ((0xFF - lastTimer2) + cTimer2 + 1) * 60;
     }
     else
     {
         //No Overflow
-        fan1RPM = cTimer2; //((cTimer2 - lastTimer2));
-        fan2RPM = lastTimer2;
+        fan1RPM = (cTimer2 - lastTimer2) * 60;
     }
     
     //Compute RPM from number of pulses since last time
-//    if (cTimer4 < lastTimer4)
-//    {
-//        //Overflow!
-//        fan2RPM = FAN_SCALING_VALUE * ((0xFF - lastTimer4) + cTimer4 + 1);
-//    }
-//    else
-//    {
-//        //No Overflow
-//        fan2RPM = FAN_SCALING_VALUE * (cTimer4 - lastTimer4);
-//    }
+    if (cTimer4 < lastTimer4)
+    {
+        //Overflow!
+        fan2RPM = FAN_SCALING_VALUE * ((0xFF - lastTimer4) + cTimer4 + 1);
+    }
+    else
+    {
+        //No Overflow
+        fan2RPM = FAN_SCALING_VALUE * (cTimer4 - lastTimer4);
+    }
     
     //Update Last Counts
     lastTimer2 = cTimer2;
