@@ -37,6 +37,8 @@
 #include <xc.h>
 #include "../adcc.h"
 
+static void (*ADCC_ADTI_InterruptHandler)(void);
+static void ADCC_DefaultADTI_ISR(void);
 
 /**
   Section: ADCC Module APIs
@@ -59,8 +61,8 @@ void ADCC_Initialize(void)
     ADSTPTH = 0x0;
     //ADACCU 0x0; 
     ADACCU = 0x0;
-    //ADRPT 0; 
-    ADRPT = 0x0;
+    //ADRPT 8; 
+    ADRPT = 0x8;
     //ADCHS ANA0; 
     ADPCH = 0x0;
     //ADCHS ANA0; 
@@ -83,26 +85,30 @@ void ADCC_Initialize(void)
     ADCG1C = 0x0;
     //ADDSEN disabled; ADPCSC internal sampling capacitor and ext i/o pin; ADGPOL digital_low; ADIPEN disabled; ADPPOL Vss; 
     ADCON1 = 0x0;
-    //ADMD Basic_mode; ADACLR disabled; ADCRS 1; ADPSIS RES; 
-    ADCON2 = 0x10;
-    //ADTMD disabled; ADSOI ADGO not cleared; ADCALC First derivative of Single measurement; 
-    ADCON3 = 0x0;
+    //ADMD Burst_average_mode; ADACLR disabled; ADCRS 3; ADPSIS RES; 
+    ADCON2 = 0x33;
+    //ADTMD enabled; ADSOI ADGO not cleared; ADCALC First derivative of Single measurement; 
+    ADCON3 = 0x7;
     //ADMATH registers not updated; 
     ADSTAT = 0x0;
-    //ADPREF VDD; 
-    ADREF = 0x0;
+    //ADPREF FVR; 
+    ADREF = 0x3;
     //ADACT disabled; 
     ADACT = 0x0;
     //ADCCS FOSC/2; 
     ADCLK = 0x0;
-    //GO_nDONE undefined; ADIC single-ended mode; ADFM left justified; ADCS FOSC; ADCONT disabled; ADON enabled; 
-    ADCON0 = 0x80;
+    //GO_nDONE undefined; ADIC single-ended mode; ADFM left justified; ADCS ADCRC; ADCONT disabled; ADON enabled; 
+    ADCON0 = 0x90;
     
     // Clear the ADC interrupt flag
     PIR6bits.ADIF = 0;
 
     // Clear the ADC Threshold interrupt flag
     PIR6bits.ADTIF = 0;
+    //Configure interrupt handlers
+    ADCC_SetADTIInterruptHandler(ADCC_DefaultADTI_ISR);
+    // Enabling ADCC threshold interrupt.
+    PIE6bits.ADTIE = 1;
 }
 void ADCC_StartConversion(adcc_channel_t channel)
 {
@@ -290,3 +296,24 @@ uint8_t ADCC_GetConversionStageStatus(void)
 }
 
 
+void ADCC_ThresholdISR(void)
+{
+    // Clear the ADCC Threshold interrupt flag
+    PIR6bits.ADTIF = 0;
+
+    if (ADCC_ADTI_InterruptHandler != NULL)
+    {
+        ADCC_ADTI_InterruptHandler();
+    }
+}
+
+void ADCC_SetADTIInterruptHandler(void (* InterruptHandler)(void))
+{
+    ADCC_ADTI_InterruptHandler = InterruptHandler;
+}
+
+static void ADCC_DefaultADTI_ISR(void)
+{
+    //Add your interrupt code here or
+    //Use ADCC_SetADTIInterruptHandler() function to use Custom ISR
+}

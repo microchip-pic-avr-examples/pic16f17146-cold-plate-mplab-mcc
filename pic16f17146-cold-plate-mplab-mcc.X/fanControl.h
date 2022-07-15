@@ -22,7 +22,7 @@ extern "C" {
     //Returns the RPM of Fan 2
     uint16_t fanControl_getFan2RPM(void);
     
-    //Every 10ms, call this function to update RPM
+    //Call this function once per second to update RPM
     void fanControl_timerCallback(void);
     
 #ifdef	__cplusplus

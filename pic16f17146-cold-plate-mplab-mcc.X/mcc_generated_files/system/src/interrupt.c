@@ -70,6 +70,10 @@ void __interrupt() INTERRUPT_InterruptManager (void)
         {
             Timer0_OverflowISR();
         } 
+        else if(PIE6bits.ADTIE == 1 && PIR6bits.ADTIF == 1)
+        {
+            ADCC_ThresholdISR();
+        } 
         else
         {
             //Unhandled Interrupt

@@ -1,13 +1,13 @@
 /**
- * DAC1 Generated Driver API Header File
+ * DAC2 Generated Driver File
  * 
- * @file dac1.h
+ * @file dac2.c
  * 
- * @defgroup  dac1 DAC1
+ * @ingroup dac2
  * 
- * @brief This is the generated header file for the DAC1 driver using PIC10 / PIC12 / PIC16 / PIC18 MCUs
+ * @brief This is the generated driver implementation file for the DAC2 driver using PIC10 / PIC12 / PIC16 / PIC18 MCUs
  *
- * @version DAC1 Driver Version 2.1.0
+ * @version DAC2 Driver Version 2.1.0
 */
 /*
 © [2022] Microchip Technology Inc. and its subsidiaries.
@@ -30,46 +30,35 @@
     THIS SOFTWARE.
 */
 
-#ifndef DAC1_H
-#define DAC1_H
-
 /**
   Section: Included Files
 */
 
-#include <stdbool.h>
-#include <stdint.h>
+#include <xc.h>
+#include "../dac2.h"
 
 /**
-  Section: DAC1 APIs
+  Section: DAC2 APIs
 */
 
-/**
- * @ingroup dac1
- * @brief  This routine initializes the DAC1 and must be called only once, before any other DAC1 routine is called.
- * @param void
- * @return void
- */ 
-void DAC1_Initialize(void);
+void DAC2_Initialize(void) {
+ 
+    //DACPSS FVR; DACNSS VSS; DACOE DACOUT1 and DACOUT2 are Disabled; DACEN enabled; 
+    DAC2CON =  136;
 
-/**
- * @ingroup dac1
- * @brief  This routine pass the digital input data intoDAC1 voltage reference control register.
- * @param inputData - 8bit digital data to DAC1.
- * @return void
- */
-void DAC1_SetOutput(uint8_t inputData);
+    //DACR 250; 
+    DAC2DATL =  250; 
+}
 
-/**
- * @ingroup dac1
- * @brief  This routine reads the digital input data fed to DAC1 voltage reference control register.
- * @param void
- * @return uint8_t inputData - digital data fed to DAC1
- */
-uint8_t DAC1_GetOutput(void);
+void DAC2_SetOutput(uint8_t inputData) {
+ 
+    DAC2DATL =  inputData;
+}
 
-#endif // DAC1_H
+uint8_t DAC2_GetOutput(void) {
+ 
+    return DAC2DATL;
+}
 /**
  End of File
 */
-

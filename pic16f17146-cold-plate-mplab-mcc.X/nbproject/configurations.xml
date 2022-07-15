@@ -13,18 +13,25 @@
         <logicalFolder name="clc" displayName="clc" projectFiles="true">
           <itemPath>mcc_generated_files/clc/clc1.h</itemPath>
           <itemPath>mcc_generated_files/clc/clc2.h</itemPath>
+          <itemPath>mcc_generated_files/clc/clc3.h</itemPath>
         </logicalFolder>
         <logicalFolder name="comparator" displayName="comparator" projectFiles="true">
           <itemPath>mcc_generated_files/comparator/cmp1.h</itemPath>
         </logicalFolder>
         <logicalFolder name="dac" displayName="dac" projectFiles="true">
-          <itemPath>mcc_generated_files/dac/dac1.h</itemPath>
+          <itemPath>mcc_generated_files/dac/dac2.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="fvr" displayName="fvr" projectFiles="true">
+          <itemPath>mcc_generated_files/fvr/fvr.h</itemPath>
         </logicalFolder>
         <logicalFolder name="i2c_host" displayName="i2c_host" projectFiles="true">
           <itemPath>mcc_generated_files/i2c_host/i2c_host_interface.h</itemPath>
           <itemPath>mcc_generated_files/i2c_host/mssp1.h</itemPath>
           <itemPath>mcc_generated_files/i2c_host/i2c_host_event_types.h</itemPath>
           <itemPath>mcc_generated_files/i2c_host/i2c_host_types.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="nvm" displayName="nvm" projectFiles="true">
+          <itemPath>mcc_generated_files/nvm/nvm.h</itemPath>
         </logicalFolder>
         <logicalFolder name="opa" displayName="opa" projectFiles="true">
           <itemPath>mcc_generated_files/opa/opa1.h</itemPath>
@@ -39,6 +46,7 @@
           <itemPath>mcc_generated_files/system/system.h</itemPath>
           <itemPath>mcc_generated_files/system/clock.h</itemPath>
           <itemPath>mcc_generated_files/system/pins.h</itemPath>
+          <itemPath>mcc_generated_files/system/watchdog.h</itemPath>
         </logicalFolder>
         <logicalFolder name="timer" displayName="timer" projectFiles="true">
           <itemPath>mcc_generated_files/timer/timer_interface.h</itemPath>
@@ -55,9 +63,14 @@
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="f1" displayName="Peltier Control" projectFiles="true">
-        <itemPath>tempControl.h</itemPath>
         <itemPath>fanControl.h</itemPath>
+        <itemPath>NTC_ROM.h</itemPath>
+        <itemPath>peltierControl.h</itemPath>
+        <itemPath>tempMonitor.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="f2" displayName="User Interface" projectFiles="true">
+      </logicalFolder>
+      <itemPath>testing.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -78,6 +91,7 @@
           <logicalFolder name="src" displayName="src" projectFiles="true">
             <itemPath>mcc_generated_files/clc/src/clc2.c</itemPath>
             <itemPath>mcc_generated_files/clc/src/clc1.c</itemPath>
+            <itemPath>mcc_generated_files/clc/src/clc3.c</itemPath>
           </logicalFolder>
         </logicalFolder>
         <logicalFolder name="comparator" displayName="comparator" projectFiles="true">
@@ -87,12 +101,22 @@
         </logicalFolder>
         <logicalFolder name="dac" displayName="dac" projectFiles="true">
           <logicalFolder name="src" displayName="src" projectFiles="true">
-            <itemPath>mcc_generated_files/dac/src/dac1.c</itemPath>
+            <itemPath>mcc_generated_files/dac/src/dac2.c</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+        <logicalFolder name="fvr" displayName="fvr" projectFiles="true">
+          <logicalFolder name="src" displayName="src" projectFiles="true">
+            <itemPath>mcc_generated_files/fvr/src/fvr.c</itemPath>
           </logicalFolder>
         </logicalFolder>
         <logicalFolder name="i2c_host" displayName="i2c_host" projectFiles="true">
           <logicalFolder name="src" displayName="src" projectFiles="true">
             <itemPath>mcc_generated_files/i2c_host/src/mssp1.c</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+        <logicalFolder name="nvm" displayName="nvm" projectFiles="true">
+          <logicalFolder name="src" displayName="src" projectFiles="true">
+            <itemPath>mcc_generated_files/nvm/src/nvm.c</itemPath>
           </logicalFolder>
         </logicalFolder>
         <logicalFolder name="opa" displayName="opa" projectFiles="true">
@@ -113,6 +137,7 @@
             <itemPath>mcc_generated_files/system/src/clock.c</itemPath>
             <itemPath>mcc_generated_files/system/src/system.c</itemPath>
             <itemPath>mcc_generated_files/system/src/interrupt.c</itemPath>
+            <itemPath>mcc_generated_files/system/src/watchdog.c</itemPath>
           </logicalFolder>
         </logicalFolder>
         <logicalFolder name="timer" displayName="timer" projectFiles="true">
@@ -131,10 +156,15 @@
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="f1" displayName="Peltier Control" projectFiles="true">
-        <itemPath>tempControl.c</itemPath>
         <itemPath>fanControl.c</itemPath>
+        <itemPath>NTC_ROM.c</itemPath>
+        <itemPath>tempMonitor.c</itemPath>
+        <itemPath>peltierControl.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2" displayName="User Interface" projectFiles="true">
       </logicalFolder>
       <itemPath>main.c</itemPath>
+      <itemPath>testing.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -266,6 +296,73 @@
         <property key="program-the-device-with-default-config-words" value="true"/>
         <property key="remove-unused-sections" value="true"/>
       </HI-TECH-LINK>
+      <Tool>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="Freeze Peripherals" value="true"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UpdateOptions"
+                  value="ToolFirmwareOption.UseLatest"/>
+        <property key="ToolFirmwareToolPack"
+                  value="Press to select which tool pack to use"/>
+        <property key="communication.activationmode" value="nohv"/>
+        <property key="communication.interface"
+                  value="${communication.interface.default}"/>
+        <property key="communication.interface.jtag" value="2wire"/>
+        <property key="communication.speed" value="${communication.speed.default}"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="debugoptions.simultaneous.debug" value="false"/>
+        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="freeze.timers" value="false"/>
+        <property key="memories.aux" value="false"/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.configurationmemory2" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.exclude.configurationmemory" value="true"/>
+        <property key="memories.flashdata" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.instruction.ram.ranges"
+                  value="${memories.instruction.ram.ranges}"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges" value="0-3fff"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmerToGoFilePath"
+                  value="C:/Users/C62081/Documents/GIT Repos/pic16f17146-cold-plate-mplab-mcc/pic16f17146-cold-plate-mplab-mcc.X/debug/default/pic16f17146-cold-plate-mplab-mcc_ptg"/>
+        <property key="programmerToGoImageName"
+                  value="pic16f17146-cold-plate-mplab-mcc_ptg"/>
+        <property key="programoptions.donoteraseauxmem" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.ledbrightness" value="5"/>
+        <property key="programoptions.pgcconfig" value="pull down"/>
+        <property key="programoptions.pgcresistor.value" value="4.7"/>
+        <property key="programoptions.pgdconfig" value="pull down"/>
+        <property key="programoptions.pgdresistor.value" value="4.7"/>
+        <property key="programoptions.pgmentry.voltage" value="low"/>
+        <property key="programoptions.pgmspeed" value="Min"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges"
+                  value="${memories.dataflash.default}"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges" value="f000-f0ff"/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.program.otpconfig" value="false"/>
+        <property key="programoptions.programcalmem" value="false"/>
+        <property key="programoptions.programuserotp" value="false"/>
+        <property key="programoptions.testmodeentrymethod" value="VDDFirst"/>
+        <property key="ptgProgramImage" value="true"/>
+        <property key="ptgSendImage" value="true"/>
+        <property key="toolpack.updateoptions"
+                  value="toolpack.updateoptions.uselatestoolpack"/>
+        <property key="toolpack.updateoptions.packversion"
+                  value="Press to select which tool pack to use"/>
+        <property key="voltagevalue" value="5.0"/>
+      </Tool>
       <XC8-CO>
         <property key="coverage-enable" value=""/>
         <property key="stack-guidance" value="false"/>
@@ -285,10 +382,122 @@
         <property key="user-pack-device-support" value=""/>
         <property key="wpo-lto" value="false"/>
       </XC8-config-global>
-      <pkob4hybrid>
+      <pk4hybrid>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="Freeze Peripherals" value="true"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UpdateOptions"
+                  value="ToolFirmwareOption.UseLatest"/>
+        <property key="ToolFirmwareToolPack"
+                  value="Press to select which tool pack to use"/>
+        <property key="communication.activationmode" value="nohv"/>
+        <property key="communication.interface"
+                  value="${communication.interface.default}"/>
+        <property key="communication.interface.jtag" value="2wire"/>
+        <property key="communication.speed" value="${communication.speed.default}"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="debugoptions.simultaneous.debug" value="false"/>
+        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="freeze.timers" value="false"/>
+        <property key="memories.aux" value="false"/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.configurationmemory2" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.exclude.configurationmemory" value="true"/>
+        <property key="memories.flashdata" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.instruction.ram.ranges"
+                  value="${memories.instruction.ram.ranges}"/>
+        <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-3fff"/>
-        <property key="programmerToGoFilePath"
-                  value="C:/Users/C62081/Documents/GIT Repos/pic16f17146-cold-plate-mplab-mcc/pic16f17146-cold-plate-mplab-mcc.X/debug/default/pic16f17146-cold-plate-mplab-mcc_ptg"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmerToGoImageName"
+                  value="pic16f17146-cold-plate-mplab-mcc_ptg"/>
+        <property key="programoptions.donoteraseauxmem" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.ledbrightness" value="5"/>
+        <property key="programoptions.pgcconfig" value="pull down"/>
+        <property key="programoptions.pgcresistor.value" value="4.7"/>
+        <property key="programoptions.pgdconfig" value="pull down"/>
+        <property key="programoptions.pgdresistor.value" value="4.7"/>
+        <property key="programoptions.pgmentry.voltage" value="low"/>
+        <property key="programoptions.pgmspeed" value="Min"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges"
+                  value="${memories.dataflash.default}"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges" value="f000-f0ff"/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.program.otpconfig" value="false"/>
+        <property key="programoptions.programcalmem" value="false"/>
+        <property key="programoptions.programuserotp" value="false"/>
+        <property key="programoptions.testmodeentrymethod" value="VDDFirst"/>
+        <property key="ptgProgramImage" value="true"/>
+        <property key="ptgSendImage" value="true"/>
+        <property key="toolpack.updateoptions"
+                  value="toolpack.updateoptions.uselatestoolpack"/>
+        <property key="toolpack.updateoptions.packversion"
+                  value="Press to select which tool pack to use"/>
+        <property key="voltagevalue" value="5.0"/>
+      </pk4hybrid>
+      <pkob4hybrid>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="Freeze Peripherals" value="true"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UpdateOptions"
+                  value="ToolFirmwareOption.UseLatest"/>
+        <property key="ToolFirmwareToolPack"
+                  value="Press to select which tool pack to use"/>
+        <property key="communication.interface"
+                  value="${communication.interface.default}"/>
+        <property key="communication.interface.jtag" value="2wire"/>
+        <property key="communication.speed" value="${communication.speed.default}"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="debugoptions.simultaneous.debug" value="false"/>
+        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="freeze.timers" value="false"/>
+        <property key="memories.aux" value="false"/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.configurationmemory2" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.exclude.configurationmemory" value="true"/>
+        <property key="memories.flashdata" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.instruction.ram.ranges"
+                  value="${memories.instruction.ram.ranges}"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges" value="0-3fff"/>
+        <property key="programoptions.donoteraseauxmem" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.pgmentry.voltage" value="low"/>
+        <property key="programoptions.pgmspeed" value="Min"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges"
+                  value="${memories.dataflash.default}"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges" value="f000-f0ff"/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.program.otpconfig" value="false"/>
+        <property key="programoptions.programcalmem" value="false"/>
+        <property key="programoptions.programuserotp" value="false"/>
+        <property key="programoptions.testmodeentrymethod" value="VDDFirst"/>
+        <property key="toolpack.updateoptions"
+                  value="toolpack.updateoptions.uselatestoolpack"/>
+        <property key="toolpack.updateoptions.packversion"
+                  value="Press to select which tool pack to use"/>
       </pkob4hybrid>
     </conf>
   </confs>

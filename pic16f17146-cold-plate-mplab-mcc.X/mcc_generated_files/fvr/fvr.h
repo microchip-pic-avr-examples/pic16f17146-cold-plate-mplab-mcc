@@ -1,15 +1,16 @@
 /**
- * CMP1 Generated Driver File
+ * FVR Generated Driver API Header File
  * 
- * @file cmp1.c
+ * @file fvr.h
  * 
- * @ingroup cmp1
+ * @defgroup fvr FVR
  * 
- * @brief This is the generated driver implementation file for the CMP1 driver.
+ * @brief This file contains API prototypes and other datatypes for FVR module.
  *
- * @version CMP1 Driver Version 2.12.0
+ * @version FVR Driver Version 2.0.1
 */
- /*
+
+/*
 © [2022] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
@@ -30,41 +31,52 @@
     THIS SOFTWARE.
 */
 
- /**
-   Section: Included Files
- */
-
-#include <xc.h>
-#include "../cmp1.h"
+#ifndef FVR_H
+#define FVR_H
 
 /**
-  Section: CMP1 APIs
+  Section: Included Files
 */
 
-void CURRENT_SENSE_CMP_Initialize(void) 
-{
-    // CHYS enabled; CON enabled; CPOL not inverted; CSYNC asynchronous; 
-    CM1CON0 = 0x82;
+#include <stdbool.h>
+#include <stdint.h>
 
-    // CINTN no_intFlag; CINTP no_intFlag; 
-    CM1CON1 = 0x0;
-    
-    // CNCH OPA1OUT; 
-    CM1NCH = 0x5;
-    
-    // CPCH DAC2_OUT; 
-    CM1PCH = 0x5;    
-}
+#ifdef __cplusplus  // Provide C++ Compatibility
 
-bool CURRENT_SENSE_CMP_GetOutputStatus(void) 
-{
-  return CM1CON0bits.C1OUT; /* Note : As per datasheet, CxOUT bit in CMOUT register (if relevant) 
-                                                   is mirror copy of CMxCON0.OUT */
-}
+    extern "C" {
 
-void CURRENT_SENSE_CMP_ISR(void) 
-{
-    // Clear the CMP1 interrupt flag
-    PIR5bits.CM1IF = 0; 
-}
+#endif
 
+/**
+  Section: FVR APIs
+*/
+
+
+/**
+ * @ingroup fvr
+ * @brief This API initializes the FVR module and be called before any other FVR routines.
+ * @param void
+ * @return void
+ */
+ void FVR_Initialize(void);
+
+/**
+ * @ingroup fvr
+ * @brief This routine gets the FVR output ready status.
+ * @pre The FVR should have been initialized before calling this function.
+ * @param void
+ * @retval true if FVR module is ready for use.
+ * @retval false if FVR module is not ready for use.
+ */
+bool FVR_IsOutputReady(void);
+
+#ifdef __cplusplus  // Provide C++ Compatibility
+
+    }
+
+#endif
+
+#endif // FVR_H
+/**
+ End of File
+*/

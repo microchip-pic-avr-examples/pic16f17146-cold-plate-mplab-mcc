@@ -306,4 +306,20 @@ bool ADCC_HasErrorCrossedLowerThreshold(void);
 */
 uint8_t ADCC_GetConversionStageStatus(void);
 
+/**
+ * @ingroup adcc
+ * @brief This routine is used to set the callback for the ADTI Interrupt.
+ * @param Callback Function to be called
+ * @return none
+*/
+void ADCC_SetADTIInterruptHandler(void (* InterruptHandler)(void));
+
+/**
+ * @ingroup adcc
+ * @brief This routine is used to implement the Threshold ISR for the interrupt-driven implementations.
+ * @param none
+ * @return none
+*/
+void ADCC_ThresholdISR(void);
+
 #endif//ADCC_H

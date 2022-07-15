@@ -31,8 +31,11 @@
     THIS SOFTWARE.
 */
 #include "mcc_generated_files/system/system.h"
-#include "tempControl.h"
+#include "tempMonitor.h"
 #include "fanControl.h"
+#include "NTC_ROM.h"
+#include "testing.h"
+#include "peltierControl.h"
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -40,7 +43,8 @@
 static volatile bool timerActive = false;
 
 //This is called every 10ms from Timer 0
-void Timer_10ms_Callback(void)
+//DO NOT ADD BLOCKING CODE HERE
+void Timer0_10ms_Callback(void)
 {
     static uint8_t delayCounter = 1;
     
@@ -52,20 +56,19 @@ void Timer_10ms_Callback(void)
     
     if (delayCounter == 100)
     {
-        LED_ERROR_Toggle();
-        
         delayCounter = 0;
         timerActive = true;
         
         //Call these functions every second
         {
-            //Update Count
+            //Update RPMs
             fanControl_timerCallback();
+            
+            
+            tempMonitor_sampleIntTemp();
 
         }
         //End of 1s Period
-        
-        LED_ERROR_Toggle();
     }
     
     //Increment Counter
@@ -75,23 +78,24 @@ void Timer_10ms_Callback(void)
 int main(void)
 {
     SYSTEM_Initialize();
+    
     UART1_TransmitEnable();
     
-    printf("Start\r\n");
+    printf("Starting Up...\r\n");
     
     //Configure 10ms Callback
-    Timer0_OverflowCallbackRegister(&Timer_10ms_Callback);
-    
-    //Init Peltier Controls
-    tempControl_init();
+    Timer0_OverflowCallbackRegister(&Timer0_10ms_Callback);
+    ADCC_SetADTIInterruptHandler(&tempMonitor_loadResults);
     
     //Init Fan Controls
     fanControl_init();
+    
+    //Init Temp Monitor
+    tempMonitor_init();
 
-    // If using interrupts in PIC18 High/Low Priority Mode you need to enable the Global High and Low Interrupts 
-    // If using interrupts in PIC Mid-Range Compatibility Mode you need to enable the Global and Peripheral Interrupts 
-    // Use the following macros to: 
-
+    //Init Peltier Control
+    peltierControl_init();
+    
     // Enable the Global Interrupts 
     INTERRUPT_GlobalInterruptEnable(); 
 
@@ -101,14 +105,18 @@ int main(void)
     //Start Timer 0 (10ms)
     Timer0_Start();
     
+    //RUN ROM TEST PATTERN
+    NTC_ROM_Test();
+    
     while(1)
     {
         //Debug Print (1s)
-        if (timerActive == true)
+        if (timerActive)
         {
             timerActive = false;
             printf("Fan 1 RPM: %u\r\n", fanControl_getFan1RPM());
             printf("Fan 2 RPM: %u\r\n", fanControl_getFan2RPM());
+            printf("Int Temp: %u\r\n", tempMonitor_getLastIntTemp());
         }
     }    
 }

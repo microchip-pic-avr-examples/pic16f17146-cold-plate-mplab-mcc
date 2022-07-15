@@ -52,17 +52,17 @@ void FET_PWM_Initialize(void)
     //PWMERS External Reset Disabled; 
     PWM1ERS = 0x0;
 
-    //PWMCLK FOSC; 
-    PWM1CLK = 0x2;
+    //PWMCLK HFINTOSC; 
+    PWM1CLK = 0x3;
 
     //PWMLDS Autoload disabled; 
     PWM1LDS = 0x0;
 
-    //PWMPRL 212; 
-    PWM1PRL = 0xD4;
+    //PWMPRL 63; 
+    PWM1PRL = 0x3F;
 
-    //PWMPRH 0; 
-    PWM1PRH = 0x0;
+    //PWMPRH 1; 
+    PWM1PRH = 0x1;
 
     //PWMCPRE No prescale; 
     PWM1CPRE = 0x0;
@@ -79,14 +79,14 @@ void FET_PWM_Initialize(void)
     //PWMPOL1 disabled; PWMPOL2 disabled; PWMPPEN disabled; PWMMODE Left aligned mode; 
     PWM1S1CFG = 0x0;
 
-    //PWMS1P1L 106; 
-    PWM1S1P1L = 0x6A;
+    //PWMS1P1L 160; 
+    PWM1S1P1L = 0xA0;
 
     //PWMS1P1H 0; 
     PWM1S1P1H = 0x0;
 
-    //PWMS1P2L 106; 
-    PWM1S1P2L = 0x6A;
+    //PWMS1P2L 160; 
+    PWM1S1P2L = 0xA0;
 
     //PWMS1P2H 0; 
     PWM1S1P2H = 0x0;

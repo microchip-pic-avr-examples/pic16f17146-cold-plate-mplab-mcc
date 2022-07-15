@@ -31,14 +31,14 @@ void fanControl_init(void)
 void fanControl_start(void)
 {
     //Enable Fan PWM
-    //FAN_PWM_Enable();
+    FAN_PWM_Enable();
 }
 
 //Stop Cooling Fans
 void fanControl_stop(void)
 {
     //Disable Fan PWM
-    //FAN_PWM_Disable();
+    FAN_PWM_Disable();
 }
 
 //Returns the RPM of Fan 1
@@ -53,14 +53,14 @@ uint16_t fanControl_getFan2RPM(void)
     return fan2RPM;
 }
 
-//Every 10ms, call this function to update RPM
+//Call this function to update RPM
 void fanControl_timerCallback(void)
 {
     uint8_t cTimer2, cTimer4;
     
     //Read Current Pulse Counts
     cTimer2 = Timer2_Read();
-    cTimer4 = lastTimer2;
+    cTimer4 = Timer4_Read();
     
     //Compute RPM from number of pulses since last time
     if (cTimer2 < lastTimer2)
@@ -78,12 +78,12 @@ void fanControl_timerCallback(void)
     if (cTimer4 < lastTimer4)
     {
         //Overflow!
-        fan2RPM = FAN_SCALING_VALUE * ((0xFF - lastTimer4) + cTimer4 + 1);
+        fan2RPM = ((0xFF - lastTimer4) + cTimer4 + 1) * 60;
     }
     else
     {
         //No Overflow
-        fan2RPM = FAN_SCALING_VALUE * (cTimer4 - lastTimer4);
+        fan2RPM = (cTimer4 - lastTimer4) * 60;
     }
     
     //Update Last Counts

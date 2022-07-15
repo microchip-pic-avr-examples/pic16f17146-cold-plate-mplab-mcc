@@ -1,15 +1,17 @@
+
 /**
- * CMP1 Generated Driver File
+ * WWDT Generated Driver API Header File
  * 
- * @file cmp1.c
+ * @file wwdt.h
  * 
- * @ingroup cmp1
+ * @defgroup  wwdt WWDT
  * 
- * @brief This is the generated driver implementation file for the CMP1 driver.
+ * @brief This is the generated header file for the WWDT driver.
  *
- * @version CMP1 Driver Version 2.12.0
+ * @version WWDT Driver Version 2.0.0
 */
- /*
+
+/*
 © [2022] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
@@ -30,41 +32,30 @@
     THIS SOFTWARE.
 */
 
+#ifndef WATCHDOG_H
+#define WATCHDOG_H
+
  /**
    Section: Included Files
  */
 
 #include <xc.h>
-#include "../cmp1.h"
+#include <stdbool.h>
+#include <stdint.h>
+
+
 
 /**
-  Section: CMP1 APIs
+ * @ingroup wwdt
+ * @brief  Initializes the WWDT to the default states configured in the MCC GUI.
+ * @param none
+ * @return none
+ * 
+ */
+void WWDT_Initialize(void);
+
+
+#endif	/* WATCHDOG_H */
+/**
+ End of File
 */
-
-void CURRENT_SENSE_CMP_Initialize(void) 
-{
-    // CHYS enabled; CON enabled; CPOL not inverted; CSYNC asynchronous; 
-    CM1CON0 = 0x82;
-
-    // CINTN no_intFlag; CINTP no_intFlag; 
-    CM1CON1 = 0x0;
-    
-    // CNCH OPA1OUT; 
-    CM1NCH = 0x5;
-    
-    // CPCH DAC2_OUT; 
-    CM1PCH = 0x5;    
-}
-
-bool CURRENT_SENSE_CMP_GetOutputStatus(void) 
-{
-  return CM1CON0bits.C1OUT; /* Note : As per datasheet, CxOUT bit in CMOUT register (if relevant) 
-                                                   is mirror copy of CMxCON0.OUT */
-}
-
-void CURRENT_SENSE_CMP_ISR(void) 
-{
-    // Clear the CMP1 interrupt flag
-    PIR5bits.CM1IF = 0; 
-}
-

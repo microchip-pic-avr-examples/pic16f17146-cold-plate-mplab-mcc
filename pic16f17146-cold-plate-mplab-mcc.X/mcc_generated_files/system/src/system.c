@@ -47,18 +47,22 @@ void SYSTEM_Initialize(void)
     ADCC_Initialize();
     CLC1_Initialize();
     CLC2_Initialize();
+    CLC3_Initialize();
     CURRENT_SENSE_CMP_Initialize();
-    DAC1_Initialize();
+    DAC2_Initialize();
     EUSART1_Initialize();
     FAN_PWM_Initialize();
     FET_PWM_Initialize();
+    FVR_Initialize();
     I2C1_Host_Initialize();
+    NVM_Initialize();
     OPA1_Initialize();
     Timer0_Initialize();
     Timer1_Initialize();
     Timer2_Initialize();
     Timer3_Initialize();
     Timer4_Initialize();
+    WWDT_Initialize();
     INTERRUPT_Initialize();
 }
 

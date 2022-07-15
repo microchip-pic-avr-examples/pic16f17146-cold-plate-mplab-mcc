@@ -42,18 +42,18 @@
 
 //CONFIG2
 #pragma config MCLRE = EXTMCLR    // Master Clear Enable bit->If LVP = 0, MCLR pin is MCLR; If LVP = 1, RA3 pin function is MCLR
-#pragma config PWRTS = PWRT_OFF    // Power-up Timer Selection bits->PWRT is disabled
+#pragma config PWRTS = PWRT_64    // Power-up Timer Selection bits->PWRT set at 64 ms
 #pragma config LPBOREN = OFF    // Low-Power BOR Enable bit->ULPBOR disabled
 #pragma config BOREN = ON    // Brown-out Reset Enable bits->Brown-out Reset enabled, SBOREN bit is ignored
-#pragma config DACAUTOEN = OFF    // DAC Buffer Automatic Range Select Enable bit->DAC Buffer reference range is determined by the REFRNG bit
+#pragma config DACAUTOEN = ON    // DAC Buffer Automatic Range Select Enable bit->DAC Buffer reference range is automatically determined by module hardware
 #pragma config BORV = LO    // Brown-out Reset Voltage Selection bit->Brown-out Reset Voltage (VBOR) set to 1.9V
 #pragma config ZCD = OFF    // ZCD Disable bit->ZCD module is disabled; ZCD can be enabled by setting the ZCDSEN bit of ZCDCON
 #pragma config PPS1WAY = OFF    // PPSLOCKED One-Way Set Enable bit->The PPSLOCKED bit can be set and cleared as needed (unlocking sequence is required)
 #pragma config STVREN = ON    // Stack Overflow/Underflow Reset Enable bit->Stack Overflow or Underflow will cause a reset
 
 //CONFIG3
-#pragma config WDTCPS = WDTCPS_31    // WDT Period Select bits->Divider ratio 1:65536; software control of WDTPS
-#pragma config WDTE = SWDTEN    // WDT Operating Mode bits->WDT enabled/disabled by SEN bit
+#pragma config WDTCPS = WDTCPS_9    // WDT Period Select bits->Divider ratio 1:16384
+#pragma config WDTE = OFF    // WDT Operating Mode bits->WDT Disabled, SEN is ignored
 #pragma config WDTCWS = WDTCWS_7    // WDT Window Select bits->window always open (100%); software control; keyed access not required
 #pragma config WDTCCS = LFINTOSC    // WDT Input Clock Select bits->WDT reference clock is the 31.0 kHz LFINTOSC
 
