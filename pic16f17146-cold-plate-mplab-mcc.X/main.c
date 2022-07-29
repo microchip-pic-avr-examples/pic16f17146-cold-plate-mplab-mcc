@@ -36,6 +36,7 @@
 #include "NTC_ROM.h"
 #include "testing.h"
 #include "peltierControl.h"
+#include "utility.h"
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -51,7 +52,7 @@ void Timer0_10ms_Callback(void)
     
     //Call these functions every 10ms
     {
-        
+        tempMonitor_runStateMachine();
     }
     //End of 10ms Period
     
@@ -75,19 +76,15 @@ void Timer0_10ms_Callback(void)
     delayCounter++;
 }
 
-void testRead(void)
-{
-//    while (!ADCC_IsConversionDone());
-    tempMonitor_loadResults();
-}
-
 int main(void)
 {
-    SYSTEM_Initialize();
-    
+    SYSTEM_Initialize();    
     UART1_TransmitEnable();
        
-    //printf("Starting Up...\r\n");
+    printf("Starting Up...\r\n");
+    
+    //Print the Reset Registers
+    System_printResetRegisters();
     
     //Init Fan Controls
     fanControl_init();
@@ -102,7 +99,7 @@ int main(void)
     
     //Configure 10ms Callback
     Timer0_OverflowCallbackRegister(&Timer0_10ms_Callback);
-    ADCC_SetADTIInterruptHandler(&testRead);
+    ADCC_SetADTIInterruptHandler(&tempMonitor_loadResults);
     
     // Enable the Global Interrupts 
     INTERRUPT_GlobalInterruptEnable(); 
@@ -112,9 +109,6 @@ int main(void)
     
     //Start Timer 0 (10ms)
     Timer0_Start();
-    
-    //RUN ROM TEST PATTERN
-    //NTC_ROM_Test();
     
     FAN_PWM_Enable();
     
@@ -127,18 +121,10 @@ int main(void)
         {
             timerActive = false;
             printf("Fan 1 RPM: %u\r\n", fanControl_getFan1RPM());
-            printf("Fan 2 RPM: %u\r\n", fanControl_getFan2RPM());
-            
-//            ADSTATbits.MATH = 0b0;
-//            tempMonitor_sampleIntTemp();
-//            while (!ADSTATbits.MATH);    
-//            ADSTATbits.MATH = 0b0;
-//            
-//            tempMonitor_loadResults();
-            
+            printf("Fan 2 RPM: %u\r\n", fanControl_getFan2RPM());  
+            printf("Cold Plate Temp: %d\r\n", tempMonitor_getLastColdTemp());   
+            printf("Heatsink Temp: %d\r\n", tempMonitor_getLastHotTemp());   
             printf("Int Temp: %d\r\n", tempMonitor_getLastIntTemp());          
-            printf("ADC RES: 0x%x\r\n", ADRES);
-            printf("ADC FLTR: 0x%x\r\n", ADFLTR);
         }
     }    
 }

@@ -5,6 +5,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "utility.h"
+#include "NTC_ROM.h"
+
 static volatile int8_t coldTemp = INT8_MIN, hotTemp = INT8_MAX, intTemp = INT8_MAX;
 
 //DIA Fields from the Device
@@ -15,45 +18,102 @@ const int8_t testGain __at(0x3EF0) = 1;
 const int8_t testOffset __at(0x3EF1) = 2;
 const uint8_t test90C __at(0x3EF2) = 3;
 
-enum measurementState{
-    MEASUREMENT_IDLE = 0, SAMPLE_COLD, SAMPLE_HOT, SAMPLE_INT
+//Last Measurement
+enum currentMeasurement{
+    SAMPLE_IDLE = 0, SAMPLE_COLD, SAMPLE_HOT, SAMPLE_INT
 };
 
-static volatile enum measurementState state = MEASUREMENT_IDLE;
+//State Machine for Measurement
+enum measurementState {
+    MEAS_COLD, MEAS_HOT, MEAS_INT
+};
+
+static volatile enum currentMeasurement sampleState = SAMPLE_IDLE;
+static enum measurementState measState = MEAS_COLD;
 
 //Initializes the Temperature Monitors
 void tempMonitor_init(void)
 {
-    TS_GAIN = (int16_t) FLASH_Read(DIA_TSHR1);
-    TS_90C = (uint16_t) FLASH_Read(DIA_TSHR2);
-    TS_OFFSET = (int16_t) FLASH_Read(DIA_TSHR3);
+    TS_GAIN = (int16_t) DIA_readValue(DIA_TSHR1);
+    TS_90C = (uint16_t) DIA_readValue(DIA_TSHR2);
+    TS_OFFSET = (int16_t) DIA_readValue(DIA_TSHR3);
     
     if(TS_GAIN & 0x2000)
     {
         //Negative Value, sign extend
         TS_GAIN |= 0xC000;
     }
-
-    
+        
     if(TS_OFFSET & 0x2000)
     {
         //Negative Value, sign extend
         TS_OFFSET |= 0xC000;
     }
-//    printf("DIA_TSHR1 = 0x%x, DIA_TSHR2 = 0x%x, DIA_TSHR3 = 0x%x\r\n", DIA_TSHR1, DIA_TSHR2, DIA_TSHR3);
+    
+    //Print Values
     printf("TS_GAIN = 0x%x, TS_90C = 0x%x, TS_OFFSET = 0x%x\r\n", TS_GAIN, TS_90C, TS_OFFSET);
+}
+
+//Runs a state machine to measure temperature
+void tempMonitor_runStateMachine(void)
+{
+    switch (measState)
+    {
+        case MEAS_COLD:
+        {
+            tempMonitor_sampleCold();
+            measState = MEAS_HOT;
+            break;
+        }
+        case MEAS_HOT:
+        {
+            tempMonitor_sampleHot();
+            measState = MEAS_INT;
+            break;
+        }
+        case MEAS_INT:
+        {
+            tempMonitor_sampleIntTemp();
+            measState = MEAS_COLD;
+            break;
+        }
+        default:
+        {
+            
+        }
+    }
 }
 
 //Starts a temperature conversion for the Cold Plate NTC
 void tempMonitor_sampleCold(void)
 {
+    //Select 4.096V Reference
+    FVRCONbits.ADFVR = 0b11;
     
+    //~10us per bit
+    ADACQ = 100;
+    
+    //RA2 - 0b000010
+    ADCC_StartConversion(0b000010);
+    
+    //Update State
+    sampleState = SAMPLE_COLD;
 }
 
 //Starts a temperature conversion for the heatsink NTC
 void tempMonitor_sampleHot(void)
 {
+    //Select 4.096V Reference
+    FVRCONbits.ADFVR = 0b11;
     
+    //~10us per bit
+    ADACQ = 100;
+    
+    //RC0 - 0b010000
+    ADCC_StartConversion(0b010000);
+    
+    //Update State
+    sampleState = SAMPLE_HOT;
 }
 
 //Starts a temperature conversion using the internal temp sensor
@@ -68,14 +128,11 @@ void tempMonitor_sampleIntTemp(void)
     //2us per bit
     ADACQ = 25;
     
-    //Clear Math bit
-    ADSTATbits.MATH = 0b0;
-    
     //Start ADCC Conversion
     ADCC_StartConversion(channel_Temp);
     
     //Update State
-    state = SAMPLE_INT;
+    sampleState = SAMPLE_INT;
     
 }
 
@@ -84,14 +141,16 @@ void tempMonitor_loadResults(void)
 {
     uint16_t ADCvalue = ADCC_GetFilterValue();
     
-    switch(state)
+    switch(sampleState)
     {
         case SAMPLE_COLD:
         {
+            coldTemp = NTC_ROM_search(ADCvalue);
             break;
         }
         case SAMPLE_HOT:
         {
+            hotTemp = NTC_ROM_search(ADCvalue);
             break;
         }
         case SAMPLE_INT:
@@ -109,11 +168,11 @@ void tempMonitor_loadResults(void)
         }
         default:
         {
-            
+            //How did we get here?
         }
     }
     
-    state = MEASUREMENT_IDLE;
+    sampleState = SAMPLE_IDLE;
 }
 
 //Returns the last cold plate temperature

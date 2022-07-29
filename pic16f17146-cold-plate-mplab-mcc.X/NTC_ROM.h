@@ -14,6 +14,10 @@ extern "C" {
      * Ending Position is 104C (highest reading possible 103C)
      * 
      * Top Resistance is 27k
+     * 
+     * Note: First and last elements are not used by the search algorithm
+     * 
+     * Assumes VREF = 4.096V
      */
 
     const uint16_t NTC_values[] = {  4099, 4054, 4008, 3961, 3912, 3862, 3811, 3758, 3704, 3649, 3593,

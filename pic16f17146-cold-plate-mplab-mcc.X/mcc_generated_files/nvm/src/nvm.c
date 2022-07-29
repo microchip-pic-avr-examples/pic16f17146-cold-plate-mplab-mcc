@@ -82,7 +82,7 @@ flash_data_t FLASH_Read(flash_address_t address)
     NVMADRL = (uint8_t) address;
 
     //Access Program Flash Memory
-    NVMCON1bits.NVMREGS = ((address & 0x8000)) ? 1 : 0;    
+    NVMCON1bits.NVMREGS = 0;
     
     //Initiate Read
     NVMCON1bits.RD = 1;      

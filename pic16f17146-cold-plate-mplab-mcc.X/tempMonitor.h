@@ -10,6 +10,9 @@ extern "C" {
     //Initializes the Temperature Monitors
     void tempMonitor_init(void);
     
+    //Runs a state machine to measure temperature
+    void tempMonitor_runStateMachine(void);
+    
     //Starts a temperature conversion for the Cold Plate NTC
     void tempMonitor_sampleCold(void);
     
