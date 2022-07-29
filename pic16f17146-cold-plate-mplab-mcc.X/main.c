@@ -39,6 +39,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <xc.h>
 
 static volatile bool timerActive = false;
 
@@ -57,22 +58,27 @@ void Timer0_10ms_Callback(void)
     if (delayCounter == 100)
     {
         delayCounter = 0;
-        timerActive = true;
         
         //Call these functions every second
         {
             //Update RPMs
             fanControl_timerCallback();
-            
-            
             tempMonitor_sampleIntTemp();
 
         }
         //End of 1s Period
+        
+        timerActive = true;
     }
     
     //Increment Counter
     delayCounter++;
+}
+
+void testRead(void)
+{
+//    while (!ADCC_IsConversionDone());
+    tempMonitor_loadResults();
 }
 
 int main(void)
@@ -80,21 +86,23 @@ int main(void)
     SYSTEM_Initialize();
     
     UART1_TransmitEnable();
-    
-    printf("Starting Up...\r\n");
-    
-    //Configure 10ms Callback
-    Timer0_OverflowCallbackRegister(&Timer0_10ms_Callback);
-    ADCC_SetADTIInterruptHandler(&tempMonitor_loadResults);
+       
+    //printf("Starting Up...\r\n");
     
     //Init Fan Controls
     fanControl_init();
     
     //Init Temp Monitor
     tempMonitor_init();
-
+    
     //Init Peltier Control
     peltierControl_init();
+    
+    printf("Done initializing...\r\n");
+    
+    //Configure 10ms Callback
+    Timer0_OverflowCallbackRegister(&Timer0_10ms_Callback);
+    ADCC_SetADTIInterruptHandler(&testRead);
     
     // Enable the Global Interrupts 
     INTERRUPT_GlobalInterruptEnable(); 
@@ -106,17 +114,31 @@ int main(void)
     Timer0_Start();
     
     //RUN ROM TEST PATTERN
-    NTC_ROM_Test();
+    //NTC_ROM_Test();
+    
+    FAN_PWM_Enable();
     
     while(1)
     {
+        asm("CLRWDT");
+
         //Debug Print (1s)
         if (timerActive)
         {
             timerActive = false;
             printf("Fan 1 RPM: %u\r\n", fanControl_getFan1RPM());
             printf("Fan 2 RPM: %u\r\n", fanControl_getFan2RPM());
-            printf("Int Temp: %u\r\n", tempMonitor_getLastIntTemp());
+            
+//            ADSTATbits.MATH = 0b0;
+//            tempMonitor_sampleIntTemp();
+//            while (!ADSTATbits.MATH);    
+//            ADSTATbits.MATH = 0b0;
+//            
+//            tempMonitor_loadResults();
+            
+            printf("Int Temp: %d\r\n", tempMonitor_getLastIntTemp());          
+            printf("ADC RES: 0x%x\r\n", ADRES);
+            printf("ADC FLTR: 0x%x\r\n", ADFLTR);
         }
     }    
 }

@@ -56,6 +56,8 @@ uint16_t fanControl_getFan2RPM(void)
 //Call this function to update RPM
 void fanControl_timerCallback(void)
 {
+    //Note: From Noctua - 2 Pulses per RPM
+    
     uint8_t cTimer2, cTimer4;
     
     //Read Current Pulse Counts
@@ -66,24 +68,24 @@ void fanControl_timerCallback(void)
     if (cTimer2 < lastTimer2)
     {
         //Overflow!
-        fan1RPM = ((0xFF - lastTimer2) + cTimer2 + 1) * 60;
+        fan1RPM = ((0xFF - lastTimer2) + cTimer2 + 1) * 30;
     }
     else
     {
         //No Overflow
-        fan1RPM = (cTimer2 - lastTimer2) * 60;
+        fan1RPM = (cTimer2 - lastTimer2) * 30;
     }
     
     //Compute RPM from number of pulses since last time
     if (cTimer4 < lastTimer4)
     {
         //Overflow!
-        fan2RPM = ((0xFF - lastTimer4) + cTimer4 + 1) * 60;
+        fan2RPM = ((0xFF - lastTimer4) + cTimer4 + 1) * 30;
     }
     else
     {
         //No Overflow
-        fan2RPM = (cTimer4 - lastTimer4) * 60;
+        fan2RPM = (cTimer4 - lastTimer4) * 30;
     }
     
     //Update Last Counts
