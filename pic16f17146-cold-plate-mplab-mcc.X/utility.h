@@ -12,7 +12,20 @@ extern "C" {
     
     //Prints the Reset Registers to the UART
     void System_printResetRegisters(void);
+    
+    //Enables the WWDT
+    void WWDT_start(void);
+    
+    //Stops the WWDT
+    void WWDT_stop(void);
+    
+    //Arms a WWDT Reset
+    //Should not be called immediately before WWDT_reset
+    void WWDT_armReset(void);
 
+    //Resets the WWDT
+    void WWDT_reset(void);
+    
 #ifdef	__cplusplus
 }
 #endif

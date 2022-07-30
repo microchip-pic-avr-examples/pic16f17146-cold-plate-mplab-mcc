@@ -42,38 +42,48 @@
 #include <stdbool.h>
 #include <xc.h>
 
-static volatile bool timerActive = false;
+static volatile bool timerActive = false, selfCheck = false;
 
 //This is called every 10ms from Timer 0
 //DO NOT ADD BLOCKING CODE HERE
-void Timer0_10ms_Callback(void)
+void Timer0_1ms_Callback(void)
 {
-    static uint8_t delayCounter = 1;
+    static uint8_t counter10ms = 1;
+    static uint16_t counter1s = 1;
     
-    //Call these functions every 10ms
     {
+        //Call these functions every 1ms
+    }
+    
+    if (counter10ms == 10)
+    {
+        //Call these functions every 10ms
         tempMonitor_runStateMachine();
+        
+        counter10ms = 0;
     }
     //End of 10ms Period
     
-    if (delayCounter == 100)
+    if (counter1s == 1000)
     {
-        delayCounter = 0;
+        counter1s = 0;
         
         //Call these functions every second
-        {
-            //Update RPMs
-            fanControl_timerCallback();
-            tempMonitor_sampleIntTemp();
-
-        }
-        //End of 1s Period
         
+        //Update RPMs
+        fanControl_timerCallback();
+        
+        //Set flags
+        selfCheck = true;
         timerActive = true;
+        
+        //ARM WWDT
+        WWDT_armReset();
     }
     
-    //Increment Counter
-    delayCounter++;
+    //Increment Counters
+    counter1s++;
+    counter10ms++;
 }
 
 int main(void)
@@ -98,7 +108,7 @@ int main(void)
     printf("Done initializing...\r\n");
     
     //Configure 10ms Callback
-    Timer0_OverflowCallbackRegister(&Timer0_10ms_Callback);
+    Timer0_OverflowCallbackRegister(&Timer0_1ms_Callback);
     ADCC_SetADTIInterruptHandler(&tempMonitor_loadResults);
     
     // Enable the Global Interrupts 
@@ -113,12 +123,19 @@ int main(void)
     FAN_PWM_Enable();
     
     while(1)
-    {
-        asm("CLRWDT");
-
+    {        
+        //Note: This must occur every 250ms to 2s or WWDT will reset
+        if (selfCheck)
+        {
+            selfCheck = false;
+            
+            //Run Periodic Self-Check
+            peltierControl_periodicCheck();
+        }
+        
         //Debug Print (1s)
         if (timerActive)
-        {
+        {   
             timerActive = false;
             printf("Fan 1 RPM: %u\r\n", fanControl_getFan1RPM());
             printf("Fan 2 RPM: %u\r\n", fanControl_getFan2RPM());  

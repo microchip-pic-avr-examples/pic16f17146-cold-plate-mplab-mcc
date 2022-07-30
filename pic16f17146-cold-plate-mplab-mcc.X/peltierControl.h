@@ -23,7 +23,7 @@ extern "C" {
     
     //Performs a self-test of the Peltier element. This function will block when executing. 
     bool peltierControl_selfTest(void);
-    
+        
     //This function is used to check for faults and to adjust the regulator. 
     //If this function is not called, the device will RESET.
     //ONLY CALL THIS FUNCTION FROM MAIN

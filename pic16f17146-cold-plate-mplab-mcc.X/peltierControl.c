@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 #include "mcc_generated_files/system/system.h"
+#include "utility.h"
 
 //Init the Peltier Current Controller
 void peltierControl_init(void)
@@ -13,7 +14,10 @@ void peltierControl_init(void)
 }
 
 //Performs a self-calibration of the OPAMP. This function will block when executing. 
-void peltierControl_calibrateOPAMP(void);
+void peltierControl_calibrateOPAMP(void)
+{
+    
+}
 
 //Performs a self-test of the Peltier element. This function will block when executing. 
 bool peltierControl_selfTest(void)
@@ -26,7 +30,8 @@ bool peltierControl_selfTest(void)
 //ONLY CALL THIS FUNCTION FROM MAIN
 void peltierControl_periodicCheck(void)
 {
-    
+    //Clear the WWDT
+    WWDT_reset();
 }
 
 //Set the target temperature of the Cold Plate
@@ -38,13 +43,16 @@ void peltierControl_setTargetTemp(int8_t target)
 //Attempt to start the Peltier Regulator. Returns false if an error has occurred
 bool peltierControl_start(void)
 {
+    //Enable WWDT
+    WWDT_start();
     return false;
 }
 
 //Stop the Peltier Regulator
 void peltierControl_stop(void)
 {
-    
+    //Disable WWDT
+    WWDT_stop();
 }
 
 //Set the max current through the loop

@@ -52,9 +52,9 @@
 #pragma config STVREN = ON    // Stack Overflow/Underflow Reset Enable bit->Stack Overflow or Underflow will cause a reset
 
 //CONFIG3
-#pragma config WDTCPS = WDTCPS_9    // WDT Period Select bits->Divider ratio 1:16384
-#pragma config WDTE = OFF    // WDT Operating Mode bits->WDT Disabled, SEN is ignored
-#pragma config WDTCWS = WDTCWS_7    // WDT Window Select bits->window always open (100%); software control; keyed access not required
+#pragma config WDTCPS = WDTCPS_11    // WDT Period Select bits->Divider ratio 1:65536
+#pragma config WDTE = SWDTEN    // WDT Operating Mode bits->WDT enabled/disabled by SEN bit
+#pragma config WDTCWS = WDTCWS_5    // WDT Window Select bits->window delay = 25 percent of time; no software control; keyed access required
 #pragma config WDTCCS = LFINTOSC    // WDT Input Clock Select bits->WDT reference clock is the 31.0 kHz LFINTOSC
 
 //CONFIG4

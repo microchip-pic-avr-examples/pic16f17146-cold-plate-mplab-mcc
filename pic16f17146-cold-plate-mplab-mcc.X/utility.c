@@ -29,3 +29,29 @@ void System_printResetRegisters(void)
     PCON0 = 0x00;
     PCON1 = 0x00;
 }
+
+//Enables the WWDT
+void WWDT_start(void)
+{
+    WWDT_reset();
+    WDTCON0bits.WDTSEN = 0b1;
+}
+
+//Stops the WWDT
+void WWDT_stop(void)
+{
+    WDTCON0bits.WDTSEN = 0b0;
+}
+
+//Arms a WWDT Reset
+void WWDT_armReset(void)
+{
+    //Required to arm WWDT
+    volatile uint8_t t = WDTCON0;
+}
+
+//Resets the WWDT
+void WWDT_reset(void)
+{
+    asm("CLRWDT");
+}

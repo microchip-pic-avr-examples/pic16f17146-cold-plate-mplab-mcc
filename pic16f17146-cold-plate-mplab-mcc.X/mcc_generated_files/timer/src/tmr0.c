@@ -48,8 +48,8 @@ static void Timer0_DefaultOverflowCallback(void);
 
 void Timer0_Initialize(void)
 {
-    //TMR0H 154; 
-    TMR0H = 0x9A;
+    //TMR0H 14; 
+    TMR0H = 0xE;
 
     //TMR0L 0; 
     TMR0L = 0x0;
