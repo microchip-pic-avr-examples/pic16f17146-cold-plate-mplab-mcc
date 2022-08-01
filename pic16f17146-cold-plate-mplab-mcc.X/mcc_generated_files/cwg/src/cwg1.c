@@ -46,8 +46,8 @@ void CWG1_Initialize(void) {
     CWG1DBF = 0x0;
     // CWGSHUTDOWN No Auto-shutdown; CWGREN enabled; CWGLSBD logic 0; CWGLSAC logic 0; 
     CWG1AS0 = 0x68;
-    // AS0E disabled; AS1E disabled; AS2E disabled; AS4E disabled; AS5E disabled; AS6E disabled; AS7E disabled; 
-    CWG1AS1 = 0x0;
+    // AS0E disabled; AS1E disabled; AS2E disabled; AS4E enabled; AS5E disabled; AS6E disabled; AS7E disabled; 
+    CWG1AS1 = 0x10;
     // CWGOVRD low; CWGOVRC low; CWGOVRB low; CWGOVRA low; CWGSTRD disabled; CWGSTRC disabled; CWGSTRB disabled; CWGSTRA enabled; 
     CWG1STR = 0x1;
     // CWGIS PWM1_OUT1; 

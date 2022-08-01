@@ -53,6 +53,9 @@ void Timer0_1ms_Callback(void)
     
     {
         //Call these functions every 1ms
+        
+        //Try to force PWM Shutdown
+        OPA1CON0bits.OPA1SOC = 0b10;
     }
     
     if (counter10ms == 10)
@@ -60,7 +63,13 @@ void Timer0_1ms_Callback(void)
         //Call these functions every 10ms
         tempMonitor_runStateMachine();
         
+        OPA1CON0bits.OPA1SOC = 0b01;
+        
         counter10ms = 0;
+    }
+    else
+    {
+        counter10ms++;
     }
     //End of 10ms Period
     
@@ -80,10 +89,10 @@ void Timer0_1ms_Callback(void)
         //ARM WWDT
         WWDT_armReset();
     }
-    
-    //Increment Counters
-    counter1s++;
-    counter10ms++;
+    else
+    {
+        counter1s++;
+    }
 }
 
 int main(void)
@@ -110,6 +119,7 @@ int main(void)
     //Configure 10ms Callback
     Timer0_OverflowCallbackRegister(&Timer0_1ms_Callback);
     ADCC_SetADTIInterruptHandler(&tempMonitor_loadResults);
+    FET_PWM_Period_SetInterruptHandler(&peltierControl_adjustThreshold);
     
     // Enable the Global Interrupts 
     INTERRUPT_GlobalInterruptEnable(); 

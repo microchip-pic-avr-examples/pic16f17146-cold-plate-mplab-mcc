@@ -107,7 +107,7 @@ void FET_PWM_Initialize(void)
     PIE3bits.PWM1IE = 0;
     
     //PWM1_16BIT period interrupt enable bit
-    PIE3bits.PWM1PIE = 0;
+    PIE3bits.PWM1PIE = 1;
     
     //Set default interrupt handlers
     FET_PWM_Slice1Output1_SetInterruptHandler(FET_PWM_Slice1Output1_DefaultInterruptHandler);
