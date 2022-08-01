@@ -1,15 +1,14 @@
 /**
- * System Driver Source File
+ * CWG1 Generated Driver File
  * 
- * @file system.c
+ * @file cwg1.c
  * 
- * @ingroup systemdriver
+ * @ingroup  cwg1
  * 
- * @brief This is the generated driver implementation file for the System Driver.
+ * @brief This is the generated driver implementation file for the CWG1 driver.
  *
- * @version Driver Version 2.0.1
+ * @version CWG1 Driver Version 2.11.0
 */
-
 /*
 © [2022] Microchip Technology Inc. and its subsidiaries.
 
@@ -31,39 +30,39 @@
     THIS SOFTWARE.
 */
 
- /**
-   Section: Included Files
- */
-#include "../system.h"
+#include <xc.h>
+#include "../cwg1.h"
 
-/**
-  Section: Driver APIs
-*/
+void CWG1_Initialize(void) {
+    // CWGEN disabled; CWGMODE Steering mode; CWGLD Buffer_not_loaded; 
+    CWG1CON0 = 0x0;
+    // CWGCS HFINTOSC; 
+    CWG1CLKCON = 0x1;
+    // CWGPOLA non inverted; CWGPOLB non inverted; CWGPOLC non inverted; CWGPOLD non inverted; 
+    CWG1CON1 = 0x0;
+    // CWGDBR 0; 
+    CWG1DBR = 0x0;
+    // CWGDBF 0; 
+    CWG1DBF = 0x0;
+    // CWGSHUTDOWN No Auto-shutdown; CWGREN enabled; CWGLSBD logic 0; CWGLSAC logic 0; 
+    CWG1AS0 = 0x68;
+    // AS0E disabled; AS1E disabled; AS2E disabled; AS4E disabled; AS5E disabled; AS6E disabled; AS7E disabled; 
+    CWG1AS1 = 0x0;
+    // CWGOVRD low; CWGOVRC low; CWGOVRB low; CWGOVRA low; CWGSTRD disabled; CWGSTRC disabled; CWGSTRB disabled; CWGSTRA enabled; 
+    CWG1STR = 0x1;
+    // CWGIS PWM1_OUT1; 
+    CWG1ISM = 0x3;
+    
+}
 
-void SYSTEM_Initialize(void)
+
+void CWG1_AutoShutdownEventSet(void)
 {
-    CLOCK_Initialize();
-    PIN_MANAGER_Initialize();
-    ADCC_Initialize();
-    CLC1_Initialize();
-    CLC2_Initialize();
-    CLC3_Initialize();
-    CURRENT_SENSE_CMP_Initialize();
-    CWG1_Initialize();
-    DAC2_Initialize();
-    EUSART1_Initialize();
-    FAN_PWM_Initialize();
-    FET_PWM_Initialize();
-    FVR_Initialize();
-    I2C1_Host_Initialize();
-    NVM_Initialize();
-    OPA1_Initialize();
-    Timer0_Initialize();
-    Timer1_Initialize();
-    Timer2_Initialize();
-    Timer3_Initialize();
-    Timer4_Initialize();
-    WWDT_Initialize();
-    INTERRUPT_Initialize();
+    CWG1AS0bits.SHUTDOWN =1;
+}
+
+void CWG1_AutoShutdownEventClear(void)
+{
+    CWG1AS0bits.SHUTDOWN =0;
 }
 

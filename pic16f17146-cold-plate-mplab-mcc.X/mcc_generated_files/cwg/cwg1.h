@@ -1,15 +1,14 @@
 /**
- * System Driver Header File
+ * CWG1 Generated Driver API Header File
  * 
- * @file system.h
+ * @file cwg1.h
  * 
- * @defgroup systemdriver System Driver
+ * @defgroup  cwg1 CWG1
  * 
- * @brief This is the generated header file for the System Driver.
+ * @brief This is the generated header file for the CWG1 driver.
  *
- * @version Driver Version 2.0.1
+ * @version CWG1 Driver Version 2.11.0
 */
-
 /*
 © [2022] Microchip Technology Inc. and its subsidiaries.
 
@@ -31,48 +30,47 @@
     THIS SOFTWARE.
 */
 
-#ifndef SYSTEM_H
-#define	SYSTEM_H
 
-/**
-  Section: Included Files
-*/
+#ifndef CWG1_H
+ #define CWG1_H
+
 #include <xc.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include <conio.h>
-#include "config_bits.h"
-#include "../system/clock.h"
-#include "../system/pins.h"
-#include "../adcc/adcc.h"
-#include "../clc/clc1.h"
-#include "../clc/clc2.h"
-#include "../clc/clc3.h"
-#include "../comparator/cmp1.h"
-#include "../cwg/cwg1.h"
-#include "../dac/dac2.h"
-#include "../uart/eusart1.h"
-#include "../pwm/pwm2_16bit.h"
-#include "../pwm/pwm1_16bit.h"
-#include "../fvr/fvr.h"
-#include "../i2c_host/mssp1.h"
-#include "../nvm/nvm.h"
-#include "../opa/opa1.h"
-#include "../timer/tmr0.h"
-#include "../timer/tmr1.h"
-#include "../timer/tmr2.h"
-#include "../timer/tmr3.h"
-#include "../timer/tmr4.h"
-#include "../system/watchdog.h"
-#include "../system/interrupt.h"
 
 /**
- * @ingroup systemdriver
- * @brief This initializes the system module and must be called before any other API is called.
- * This routine should only be called once during system initialization.
- * @param None
- * @return None
-*/
-void SYSTEM_Initialize(void);
+ * @ingroup cwg1
+ * @brief  This routine configures the CWG1 specific control registers.
+ * @param none
+ * @return none
+ * 
+ */
+void CWG1_Initialize(void);
 
-#endif //SYSTEM_H
+
+/**
+ * @ingroup cwg1
+ * @brief This function forces the CWG into Shutdown state.
+ * 
+ * @pre CWG1_Initialize() function should have been called before calling this function.
+
+ * @param none
+ * @return none
+ * 
+ */
+void CWG1_AutoShutdownEventSet(void);
+
+/**
+ * @ingroup cwg1
+ * @brief This function is used to resume operation when auto-restart is disabled.
+ * 
+ * @pre  CWG1_Initialize() and CWG1_AutoShutdownEventSet() functions should have been called before calling this function.
+
+ * @param none
+ * @return none
+ * 
+ */
+void CWG1_AutoShutdownEventClear(void);
+
+
+#endif  // CWG1_H

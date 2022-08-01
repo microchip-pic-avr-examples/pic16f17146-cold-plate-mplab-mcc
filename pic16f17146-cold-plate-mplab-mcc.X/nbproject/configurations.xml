@@ -18,6 +18,9 @@
         <logicalFolder name="comparator" displayName="comparator" projectFiles="true">
           <itemPath>mcc_generated_files/comparator/cmp1.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="cwg" displayName="cwg" projectFiles="true">
+          <itemPath>mcc_generated_files/cwg/cwg1.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="dac" displayName="dac" projectFiles="true">
           <itemPath>mcc_generated_files/dac/dac2.h</itemPath>
         </logicalFolder>
@@ -98,6 +101,11 @@
         <logicalFolder name="comparator" displayName="comparator" projectFiles="true">
           <logicalFolder name="src" displayName="src" projectFiles="true">
             <itemPath>mcc_generated_files/comparator/src/cmp1.c</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+        <logicalFolder name="cwg" displayName="cwg" projectFiles="true">
+          <logicalFolder name="src" displayName="src" projectFiles="true">
+            <itemPath>mcc_generated_files/cwg/src/cwg1.c</itemPath>
           </logicalFolder>
         </logicalFolder>
         <logicalFolder name="dac" displayName="dac" projectFiles="true">
