@@ -34,8 +34,8 @@
 #include "../cwg1.h"
 
 void CWG1_Initialize(void) {
-    // CWGEN disabled; CWGMODE Steering mode; CWGLD Buffer_not_loaded; 
-    CWG1CON0 = 0x0;
+    // CWGEN disabled; CWGMODE Sync Steering mode; CWGLD Buffer_not_loaded; 
+    CWG1CON0 = 0x1;
     // CWGCS HFINTOSC; 
     CWG1CLKCON = 0x1;
     // CWGPOLA non inverted; CWGPOLB non inverted; CWGPOLC non inverted; CWGPOLD non inverted; 

@@ -25,6 +25,8 @@ void fanControl_init(void)
     
     //Fan 2 RPM Counter
     Timer4_Start();
+    
+    FAN_PWM_Enable();
 }
 
 //Start Cooling Fans

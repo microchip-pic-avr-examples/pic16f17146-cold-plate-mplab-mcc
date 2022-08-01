@@ -53,7 +53,7 @@ void Timer0_1ms_Callback(void)
     
     {
         //Call these functions every 1ms
-        peltierControl_setMaxCurrent(0xFF);
+        peltierControl_setMaxCurrent(counter10ms);
     }
     
     if (counter10ms == 10)
@@ -130,10 +130,6 @@ int main(void)
     //Start Timer 0 (10ms)
     Timer0_Start();
     
-    //Enable CWG
-    CWG1CON0bits.CWG1EN = 1;
-    
-    FAN_PWM_Enable();
     FET_PWM_Enable();
     
     while(1)

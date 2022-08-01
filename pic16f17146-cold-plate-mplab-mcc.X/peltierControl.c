@@ -10,6 +10,8 @@
 #define FET_PWM_DISABLE_PERIOD_INT() do { PIR3bits.PWM1PIF = 0; PIE3bits.PWM1PIE = 0; } while (0)
 #define FET_PWM_ENABLE_PERIOD_INT() do { PIR3bits.PWM1PIF = 0; PIE3bits.PWM1PIE = 1; } while (0)
 
+#define CWG_ENABLE() do { CWG1CON0bits.EN = 1; } while (0)
+
 //State machine for DAC updates
 enum CurrentLimitState {
     CURRENT_LIMIT_NO_CHANGE = 0, CURRENT_LIMIT_SET_DAC, CURRENT_LIMIT_SETTLE
@@ -23,6 +25,9 @@ void peltierControl_init(void)
 {    
     //Disable Period Interrupt for PWM
     FET_PWM_DISABLE_PERIOD_INT();
+    
+    //Enable CWG
+    CWG_ENABLE();
 }
 
 //Performs a self-calibration of the OPAMP. This function will block when executing. 
@@ -59,8 +64,8 @@ void peltierControl_adjustThreshold(void)
     {
         case CURRENT_LIMIT_SET_DAC:
         {
-            //Set OPAMP to Output VDD
-            OPA1_SetSoftwareOverride(0b10);
+            //Steer CWG to Logic-0
+            CWG1STRbits.CWG1STRA = 0;
             
             //Update DAC Value
             DAC2_SetOutput(newDACValue);
@@ -71,8 +76,8 @@ void peltierControl_adjustThreshold(void)
         }
         case CURRENT_LIMIT_SETTLE:
         {            
-            //Release OPAMP
-            OPA1_SetSoftwareOverride(0b00);
+            //Release CWG
+            CWG1STRbits.CWG1STRA = 1;
             
             //Update State
             dacUpdateState = CURRENT_LIMIT_NO_CHANGE;
@@ -112,7 +117,14 @@ void peltierControl_stop(void)
 //Set the max current through the loop
 void peltierControl_setMaxCurrent(uint8_t lim)
 {
-    newDACValue = lim;
+    static uint8_t counter = 10;
+    newDACValue = counter;
+    
+    counter++;
+    
+    if (counter == 0)
+        counter = 10;
+    
     dacUpdateState = CURRENT_LIMIT_SET_DAC;
     FET_PWM_ENABLE_PERIOD_INT();
 }

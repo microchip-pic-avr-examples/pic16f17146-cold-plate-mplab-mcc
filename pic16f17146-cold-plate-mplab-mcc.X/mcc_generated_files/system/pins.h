@@ -129,26 +129,6 @@
 #define IO_RB4_SetAnalogMode()      do { ANSELBbits.ANSB4 = 1; } while(0)
 #define IO_RB4_SetDigitalMode()     do { ANSELBbits.ANSB4 = 0; } while(0)
 
-// get/set IO_RB5 aliases
-#define RB5_IN0_TRIS                 TRISBbits.TRISB5
-#define RB5_IN0_LAT                  LATBbits.LATB5
-#define RB5_IN0_PORT                 PORTBbits.RB5
-#define RB5_IN0_WPU                  WPUBbits.WPUB5
-#define RB5_IN0_OD                   ODCONBbits.ODCB5
-#define RB5_IN0_ANS                  ANSELBbits.ANSB5
-#define RB5_IN0_SetHigh()            do { LATBbits.LATB5 = 1; } while(0)
-#define RB5_IN0_SetLow()             do { LATBbits.LATB5 = 0; } while(0)
-#define RB5_IN0_Toggle()             do { LATBbits.LATB5 = ~LATBbits.LATB5; } while(0)
-#define RB5_IN0_GetValue()           PORTBbits.RB5
-#define RB5_IN0_SetDigitalInput()    do { TRISBbits.TRISB5 = 1; } while(0)
-#define RB5_IN0_SetDigitalOutput()   do { TRISBbits.TRISB5 = 0; } while(0)
-#define RB5_IN0_SetPullup()          do { WPUBbits.WPUB5 = 1; } while(0)
-#define RB5_IN0_ResetPullup()        do { WPUBbits.WPUB5 = 0; } while(0)
-#define RB5_IN0_SetPushPull()        do { ODCONBbits.ODCB5 = 0; } while(0)
-#define RB5_IN0_SetOpenDrain()       do { ODCONBbits.ODCB5 = 1; } while(0)
-#define RB5_IN0_SetAnalogMode()      do { ANSELBbits.ANSB5 = 1; } while(0)
-#define RB5_IN0_SetDigitalMode()     do { ANSELBbits.ANSB5 = 0; } while(0)
-
 // get/set IO_RB6 aliases
 #define IO_RB6_TRIS                 TRISBbits.TRISB6
 #define IO_RB6_LAT                  LATBbits.LATB6

@@ -76,8 +76,8 @@ void FET_PWM_Initialize(void)
     //PWMS1P1IE disabled; PWMS1P2IE disabled; 
     PWM1GIE = 0x0;
 
-    //PWMPOL1 disabled; PWMPOL2 disabled; PWMPPEN disabled; PWMMODE Left aligned mode; 
-    PWM1S1CFG = 0x0;
+    //PWMPOL1 disabled; PWMPOL2 disabled; PWMPPEN disabled; PWMMODE Right aligned mode; 
+    PWM1S1CFG = 0x1;
 
     //PWMS1P1L 160; 
     PWM1S1P1L = 0xA0;

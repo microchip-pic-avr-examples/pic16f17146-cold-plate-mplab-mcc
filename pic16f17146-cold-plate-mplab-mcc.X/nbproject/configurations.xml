@@ -70,6 +70,7 @@
         <itemPath>NTC_ROM.h</itemPath>
         <itemPath>peltierControl.h</itemPath>
         <itemPath>tempMonitor.h</itemPath>
+        <itemPath>currentSense.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="User Interface" projectFiles="true">
       </logicalFolder>
@@ -169,6 +170,7 @@
         <itemPath>NTC_ROM.c</itemPath>
         <itemPath>tempMonitor.c</itemPath>
         <itemPath>peltierControl.c</itemPath>
+        <itemPath>currentSense.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="User Interface" projectFiles="true">
       </logicalFolder>
