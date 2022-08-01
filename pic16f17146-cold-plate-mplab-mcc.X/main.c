@@ -53,18 +53,14 @@ void Timer0_1ms_Callback(void)
     
     {
         //Call these functions every 1ms
-        
-        //Try to force PWM Shutdown
-        OPA1CON0bits.OPA1SOC = 0b10;
+        peltierControl_setMaxCurrent(0xFF);
     }
     
     if (counter10ms == 10)
     {
         //Call these functions every 10ms
         tempMonitor_runStateMachine();
-        
-        OPA1CON0bits.OPA1SOC = 0b01;
-        
+
         counter10ms = 0;
     }
     else
@@ -118,7 +114,11 @@ int main(void)
     
     //Configure 10ms Callback
     Timer0_OverflowCallbackRegister(&Timer0_1ms_Callback);
+    
+    //Setup ADC Results Callback
     ADCC_SetADTIInterruptHandler(&tempMonitor_loadResults);
+    
+    //Setup DAC Settling Time Callback
     FET_PWM_Period_SetInterruptHandler(&peltierControl_adjustThreshold);
     
     // Enable the Global Interrupts 

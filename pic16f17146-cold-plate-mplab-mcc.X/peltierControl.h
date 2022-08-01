@@ -32,6 +32,10 @@ extern "C" {
     //Set the target temperature of the Cold Plate
     void peltierControl_setTargetTemp(int8_t target);
     
+    //This function directly modifies the current threshold in the loop.
+    //DO NOT CALL DIRECTLY
+    void peltierControl_adjustThreshold(void);
+    
     //Attempt to start the Peltier Regulator. Returns false if an error has occurred
     bool peltierControl_start(void);
     
