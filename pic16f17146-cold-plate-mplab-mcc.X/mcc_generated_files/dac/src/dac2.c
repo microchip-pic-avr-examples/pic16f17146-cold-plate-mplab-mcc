@@ -46,8 +46,8 @@ void DAC2_Initialize(void) {
     //DACPSS FVR; DACNSS VSS; DACOE DACOUT1 and DACOUT2 are Disabled; DACEN enabled; 
     DAC2CON =  136;
 
-    //DACR 250; 
-    DAC2DATL =  250; 
+    //DACR 125; 
+    DAC2DATL =  125; 
 }
 
 void DAC2_SetOutput(uint8_t inputData) {

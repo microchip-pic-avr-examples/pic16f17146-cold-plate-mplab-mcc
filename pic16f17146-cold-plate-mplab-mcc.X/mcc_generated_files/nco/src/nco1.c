@@ -1,15 +1,14 @@
 /**
- * I2C Generated Driver Interface Header File
+ * NCO1 Generated Driver File
+ * 
+ * @file nco1.c
+ * 
+ * @ingroup  nco1
+ * 
+ * @brief This is the generated driver implementation file for the NCO1 driver.
  *
- * @file i2c_host_interface.h
- *
- * @defgroup i2c_host_interface I2C_HOST_INTERFACE
- *
- * @brief This file contains other data types for I2C module.
- *
- * @version I2C Driver Version 2.1.0
- */
-
+ * @version NCO1 Driver Version 2.0.1
+*/
 /*
 © [2022] Microchip Technology Inc. and its subsidiaries.
 
@@ -31,35 +30,40 @@
     THIS SOFTWARE.
 */
 
-#ifndef I2C_HOST_INTERFACE_H
-#define I2C_HOST_INTERFACE_H
 
-/**
-  Section: Included Files
- */
-#include <stdbool.h>
-#include <stdint.h>
 #include <xc.h>
-#include "i2c_host_types.h"
+#include "../nco1.h"
 
-/**
- * @ingroup i2c_host_interface
- * @strcut i2c_host_interface_t
- * @brief Structure containing the function pointers of I2C drivers.
- */
-typedef struct
+void NCO1_Initialize(void){
+
+    //NPWS 1_clk; NCKS CLC3_OUT; 
+    NCO1CLK = 0xD;
+    //NCOACC 0x0; 
+    NCO1ACCU = 0x0;
+    //NCOACC 0x0; 
+    NCO1ACCH = 0x0;
+    //NCOACC 0x0; 
+    NCO1ACCL = 0x0;
+    //NCOINC 0; 
+    NCO1INCU = 0x0;
+    //NCOINC 0; 
+    NCO1INCH = 0x0;
+    //NCOINC 0; 
+    NCO1INCL = 0x0;
+    //NEN disabled; NPOL active_hi; NPFM FDC_mode; 
+    NCO1CON = 0x0;
+}
+ 
+void NCO1_ISR(void)
 {
-    void (*Initialize)(void);
-    void (*Deinitialize)(void);
-    bool (*Write)(uint16_t address, uint8_t *data, size_t dataLength);
-    bool (*Read)(uint16_t address, uint8_t *data, size_t dataLength);
-    bool (*WriteRead)(uint16_t address, uint8_t *writeData, size_t writeLength, uint8_t *readData, size_t readLength);
-    bool (*TransferSetup)(i2c_host_transfer_setup_t* setup, uint32_t srcClkFreq);
-    i2c_host_error_t (*ErrorGet)(void);
-    bool (*IsBusy)(void);
-    void (*CallbackRegister)(void (*callback)(void));
-    void (*Tasks)(void);
-} i2c_host_interface_t;
+   // Clear the NCO interrupt flag
+    PIR4bits.NCO1IF = 0;
+}
 
-#endif // end of I2C_HOST_INTERFACE_H
-
+bool NCO1_GetOutputStatus(void) 
+{
+	return (NCO1CONbits.OUT);
+}
+/**
+ End of File
+*/

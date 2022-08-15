@@ -40,20 +40,20 @@ void CLC3_Initialize(void)
     
     // SLCT 0x2; 
     CLCSELECT = 0x2;
-    // LCG1POL not_inverted; LCG2POL inverted; LCG3POL not_inverted; LCG4POL not_inverted; LCPOL not_inverted; 
-    CLCnPOL = 0x2;
-    // LCD1S C1_OUT; 
-    CLCnSEL0 = 0x1F;
-    // LCD2S C1_OUT; 
-    CLCnSEL1 = 0x1F;
+    // LCG1POL not_inverted; LCG2POL not_inverted; LCG3POL not_inverted; LCG4POL not_inverted; LCPOL not_inverted; 
+    CLCnPOL = 0x0;
+    // LCD1S HFINTOSC; 
+    CLCnSEL0 = 0x5;
+    // LCD2S CWG1A_OUT; 
+    CLCnSEL1 = 0x2D;
     // LCD3S C1_OUT; 
     CLCnSEL2 = 0x1F;
     // LCD4S C1_OUT; 
     CLCnSEL3 = 0x1F;
     // LCG1D1N disabled; LCG1D1T enabled; LCG1D2N disabled; LCG1D2T disabled; LCG1D3N disabled; LCG1D3T disabled; LCG1D4N disabled; LCG1D4T disabled; 
     CLCnGLS0 = 0x2;
-    // LCG2D1N disabled; LCG2D1T disabled; LCG2D2N disabled; LCG2D2T disabled; LCG2D3N disabled; LCG2D3T disabled; LCG2D4N disabled; LCG2D4T disabled; 
-    CLCnGLS1 = 0x0;
+    // LCG2D1N disabled; LCG2D1T disabled; LCG2D2N disabled; LCG2D2T enabled; LCG2D3N disabled; LCG2D3T disabled; LCG2D4N disabled; LCG2D4T disabled; 
+    CLCnGLS1 = 0x8;
     // LCG3D1N disabled; LCG3D1T disabled; LCG3D2N disabled; LCG3D2T disabled; LCG3D3N disabled; LCG3D3T disabled; LCG3D4N disabled; LCG3D4T disabled; 
     CLCnGLS2 = 0x0;
     // LCG4D1N disabled; LCG4D1T disabled; LCG4D2N disabled; LCG4D2T disabled; LCG4D3N disabled; LCG4D3T disabled; LCG4D4N disabled; LCG4D4T disabled; 

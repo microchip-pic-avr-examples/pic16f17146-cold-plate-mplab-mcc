@@ -27,11 +27,8 @@
         <logicalFolder name="fvr" displayName="fvr" projectFiles="true">
           <itemPath>mcc_generated_files/fvr/fvr.h</itemPath>
         </logicalFolder>
-        <logicalFolder name="i2c_host" displayName="i2c_host" projectFiles="true">
-          <itemPath>mcc_generated_files/i2c_host/i2c_host_interface.h</itemPath>
-          <itemPath>mcc_generated_files/i2c_host/mssp1.h</itemPath>
-          <itemPath>mcc_generated_files/i2c_host/i2c_host_event_types.h</itemPath>
-          <itemPath>mcc_generated_files/i2c_host/i2c_host_types.h</itemPath>
+        <logicalFolder name="nco" displayName="nco" projectFiles="true">
+          <itemPath>mcc_generated_files/nco/nco1.h</itemPath>
         </logicalFolder>
         <logicalFolder name="nvm" displayName="nvm" projectFiles="true">
           <itemPath>mcc_generated_files/nvm/nvm.h</itemPath>
@@ -76,6 +73,8 @@
       </logicalFolder>
       <itemPath>testing.h</itemPath>
       <itemPath>utility.h</itemPath>
+      <itemPath>config.h</itemPath>
+      <itemPath>settings.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -119,9 +118,9 @@
             <itemPath>mcc_generated_files/fvr/src/fvr.c</itemPath>
           </logicalFolder>
         </logicalFolder>
-        <logicalFolder name="i2c_host" displayName="i2c_host" projectFiles="true">
+        <logicalFolder name="nco" displayName="nco" projectFiles="true">
           <logicalFolder name="src" displayName="src" projectFiles="true">
-            <itemPath>mcc_generated_files/i2c_host/src/mssp1.c</itemPath>
+            <itemPath>mcc_generated_files/nco/src/nco1.c</itemPath>
           </logicalFolder>
         </logicalFolder>
         <logicalFolder name="nvm" displayName="nvm" projectFiles="true">
@@ -177,6 +176,7 @@
       <itemPath>main.c</itemPath>
       <itemPath>testing.c</itemPath>
       <itemPath>utility.c</itemPath>
+      <itemPath>settings.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -235,21 +235,21 @@
         <property key="default-bitfield-type" value="true"/>
         <property key="default-char-type" value="true"/>
         <property key="define-macros" value=""/>
-        <property key="disable-optimizations" value="true"/>
+        <property key="disable-optimizations" value="false"/>
         <property key="extra-include-directories" value=""/>
         <property key="favor-optimization-for" value="-speed,+space"/>
         <property key="garbage-collect-data" value="true"/>
         <property key="garbage-collect-functions" value="true"/>
         <property key="identifier-length" value="255"/>
         <property key="local-generation" value="false"/>
-        <property key="operation-mode" value="pro"/>
+        <property key="operation-mode" value="std"/>
         <property key="opt-xc8-compiler-strict_ansi" value="false"/>
         <property key="optimization-assembler" value="true"/>
         <property key="optimization-assembler-files" value="false"/>
         <property key="optimization-debug" value="false"/>
         <property key="optimization-invariant-enable" value="false"/>
         <property key="optimization-invariant-value" value="16"/>
-        <property key="optimization-level" value="-O0"/>
+        <property key="optimization-level" value="-O2"/>
         <property key="optimization-speed" value="false"/>
         <property key="optimization-stable-enable" value="false"/>
         <property key="preprocess-assembler" value="true"/>
@@ -490,8 +490,6 @@
                   value="${memories.instruction.ram.ranges}"/>
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-3fff"/>
-        <property key="programmerToGoFilePath"
-                  value="C:/Users/C62081/Documents/GIT Repos/pic16f17146-cold-plate-mplab-mcc/pic16f17146-cold-plate-mplab-mcc.X/debug/default/pic16f17146-cold-plate-mplab-mcc_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.pgmentry.voltage" value="low"/>

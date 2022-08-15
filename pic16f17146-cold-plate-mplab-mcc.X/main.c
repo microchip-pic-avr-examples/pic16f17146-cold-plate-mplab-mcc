@@ -37,6 +37,7 @@
 #include "testing.h"
 #include "peltierControl.h"
 #include "utility.h"
+#include "currentSense.h"
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -53,14 +54,13 @@ void Timer0_1ms_Callback(void)
     
     {
         //Call these functions every 1ms
-        peltierControl_setMaxCurrent(counter10ms);
     }
     
     if (counter10ms == 10)
     {
         //Call these functions every 10ms
         tempMonitor_runStateMachine();
-
+        peltierControl_calculateDutyCycle();
         counter10ms = 0;
     }
     else
@@ -107,9 +107,12 @@ int main(void)
     //Init Temp Monitor
     tempMonitor_init();
     
+    //Init Current Sense Circuit
+    currentSense_init();
+    
     //Init Peltier Control
     peltierControl_init();
-    
+        
     printf("Done initializing...\r\n");
     
     //Configure 10ms Callback
@@ -126,11 +129,13 @@ int main(void)
 
     // Enable the Peripheral Interrupts 
     INTERRUPT_PeripheralInterruptEnable(); 
-    
+        
     //Start Timer 0 (10ms)
     Timer0_Start();
     
     FET_PWM_Enable();
+    fanControl_start();
+    peltierControl_start();
     
     while(1)
     {        
@@ -151,7 +156,8 @@ int main(void)
             printf("Fan 2 RPM: %u\r\n", fanControl_getFan2RPM());  
             printf("Cold Plate Temp: %d\r\n", tempMonitor_getLastColdTemp());   
             printf("Heatsink Temp: %d\r\n", tempMonitor_getLastHotTemp());   
-            printf("Int Temp: %d\r\n", tempMonitor_getLastIntTemp());          
+            printf("Int Temp: %d\r\n", tempMonitor_getLastIntTemp());
+            printf("Average Duty Cycle: %d%%\r\n", peltierControl_getAverageDutyCycle());
         }
     }    
 }

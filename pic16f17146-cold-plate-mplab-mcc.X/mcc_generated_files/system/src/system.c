@@ -55,7 +55,7 @@ void SYSTEM_Initialize(void)
     FAN_PWM_Initialize();
     FET_PWM_Initialize();
     FVR_Initialize();
-    I2C1_Host_Initialize();
+    NCO1_Initialize();
     NVM_Initialize();
     OPA1_Initialize();
     Timer0_Initialize();

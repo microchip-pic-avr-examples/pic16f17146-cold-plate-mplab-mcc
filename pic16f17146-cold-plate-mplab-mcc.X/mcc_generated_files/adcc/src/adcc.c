@@ -116,7 +116,7 @@ void ADCC_StartConversion(adcc_channel_t channel)
     ADPCH = channel;
   
     // Turn on the ADC module
-    ADCON0bits.ADON = 1;
+    //ADCON0bits.ADON = 1;
 
     // Start the conversion
     ADCON0bits.ADGO = 1;

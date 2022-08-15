@@ -1,15 +1,14 @@
 /**
- * I2C Generated Driver Types Header File
+ * NCO1 Generated Driver API Header File
+ * 
+ * @file nco1.h
+ * 
+ * @defgroup  nco1 NCO1
+ * 
+ * @brief This is the generated header file for the NCO1 driver.
  *
- * @file i2c_host_types.h
- *
- * @ingroup i2c_host_interface
- *
- * @brief This file contains other data types for I2C module.
- *
- * @version I2C Driver Version 2.1.0
- */
-
+ * @version NCO1 Driver Version 2.0.1
+*/
 /*
 © [2022] Microchip Technology Inc. and its subsidiaries.
 
@@ -31,30 +30,57 @@
     THIS SOFTWARE.
 */
 
-#ifndef I2C_HOST_TYPES_H
-#define	I2C_HOST_TYPES_H
+
+#ifndef NCO1_H
+#define NCO1_H
+
+#include <xc.h>
+#include <stdbool.h>
+#include <stdint.h>
+
+#ifdef __cplusplus  // Provide C++ Compatibility
+
+    extern "C" {
+
+#endif
 
 /**
- * @ingroup i2c_host_interface
- * @enum  i2c_host_error_t
- * @brief Enumeration for I2C errors
+ * @ingroup nco1
+ * @brief  This routine initializes the NCO1_Initialize. Initializes the NCO1_Initialize
+ * @param none
+ * @return none
+ * 
  */
-typedef enum
-{
-    I2C_ERROR_NONE,             /**< No Error */
-    I2C_ERROR_ADDR_NACK,        /**< Client returned Address NACK */
-    I2C_ERROR_DATA_NACK,        /**< Client returned Data NACK */
-    I2C_ERROR_BUS_COLLISION,    /**< Bus Collision Error */
-} i2c_host_error_t;
+void NCO1_Initialize(void);
+
 
 /**
- * @ingroup i2c_host_interface
- * @struct i2c_host_transfer_setup_t
- * @brief Structure for i2c clock change
+ * @ingroup nco1
+ * @brief This routine is used to implement the ISR for the interrupt-driven implementations.
+ * @param none
+ * @return none
  */
-typedef struct
-{
-  uint32_t clkSpeed;            /**< I2C Clock Speed */
-} i2c_host_transfer_setup_t;
+void NCO1_ISR(void);
+;
 
-#endif // end of I2C_HOST_TYPES_H
+/**
+ * @ingroup nco1
+ * @brief This routine returns the NCO1 output status.
+ * @pre NCO1_Initialize() function should have been called before calling this function.
+ * @param none
+ * @retval 1 - Indicates output is high.
+ * @retval 0 - Indicates output is low.
+ * 
+ */
+bool NCO1_GetOutputStatus(void);
+
+#ifdef __cplusplus  // Provide C++ Compatibility
+
+    }
+
+#endif
+
+#endif  //NCO1_H
+/**
+ End of File
+*/

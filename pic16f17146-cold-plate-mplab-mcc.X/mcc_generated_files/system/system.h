@@ -55,7 +55,7 @@
 #include "../pwm/pwm2_16bit.h"
 #include "../pwm/pwm1_16bit.h"
 #include "../fvr/fvr.h"
-#include "../i2c_host/mssp1.h"
+#include "../nco/nco1.h"
 #include "../nvm/nvm.h"
 #include "../opa/opa1.h"
 #include "../timer/tmr0.h"
