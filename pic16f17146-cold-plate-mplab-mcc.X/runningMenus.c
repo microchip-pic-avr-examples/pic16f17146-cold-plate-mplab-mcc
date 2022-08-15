@@ -28,7 +28,7 @@ void runningMenus_runningSetup(void){
     
 }
 
-void runningMenus_runningUpdate(void){
+void runningMenus_runningUpdate(int16_t moves){
     enum RUNNING_MSGS {NEW_STATS1, STATS1, NEW_STATS2, STATS2};
     static enum RUNNING_MSGS msg = STATS1;
     static int8_t counter10s = 0;

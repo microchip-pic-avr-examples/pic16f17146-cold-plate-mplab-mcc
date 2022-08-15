@@ -14,7 +14,7 @@ extern "C" {
     
 // STANDBY
 void settingMenus_standbySetup(void);
-void settingMenus_standbyUpdate(void);
+void settingMenus_standbyUpdate(int16_t moves);
 
 // TEMPERATURE
 void settingMenus_temperatureSetup(void);
@@ -46,7 +46,7 @@ void settingMenus_setIsCelsius(bool celsius);
 
 // ABOUT
 void settingMenus_aboutSetup(void);
-void settingMenus_aboutUpdate(void);
+void settingMenus_aboutUpdate(int16_t moves);
 
 // START
 void settingMenus_startSetup(void);

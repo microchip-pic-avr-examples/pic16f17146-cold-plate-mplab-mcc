@@ -14,7 +14,7 @@ void settingMenus_standbySetup(void){
 }
 
 // update dynamic elements on the STANDBY scene
-void settingMenus_standbyUpdate(void){
+void settingMenus_standbyUpdate(int16_t moves){
     char temp_buff[4];
     OLED_command(line_address[2] + 14);
     sprintf(temp_buff, "%d", tempMonitor_getLastColdTemp());
@@ -204,7 +204,7 @@ void settingMenus_aboutSetup(void){
     OLED_writeString("    Josh Booth");
 }
 
-void settingMenus_aboutUpdate(void){}
+void settingMenus_aboutUpdate(int16_t moves){}
 
 
 // START
