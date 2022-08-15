@@ -78,8 +78,8 @@ void Timer3_Initialize(void)
     PIR2bits.TMR3IF = 0;
     PIR2bits.TMR3GIF = 0;
     
-    //TMRON disabled; TRD16 disabled; nTSYNC synchronize; TCKPS 1:1; 
-    T3CON = 0x0;
+    //TMRON enabled; TRD16 disabled; nTSYNC synchronize; TCKPS 1:1; 
+    T3CON = 0x1;
 }
 
 void Timer3_Start(void)
