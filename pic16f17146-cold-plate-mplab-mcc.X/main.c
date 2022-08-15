@@ -38,29 +38,45 @@
 #include "peltierControl.h"
 #include "utility.h"
 #include "currentSense.h"
+#include "OLED.h"
+#include "UI.h"
+#include "mssp1_host.h"
 
 #include <stdint.h>
 #include <stdbool.h>
 #include <xc.h>
 
-static volatile bool timerActive = false, selfCheck = false;
+static volatile bool timerActive = false, selfCheck = false, dispRefresh = false;
 
 //This is called every 10ms from Timer 0
 //DO NOT ADD BLOCKING CODE HERE
 void Timer0_1ms_Callback(void)
 {
     static uint8_t counter10ms = 1;
+    static uint8_t counter100ms = 1;
     static uint16_t counter1s = 1;
     
     {
         //Call these functions every 1ms
+        
+        //Software PWM
+        if(UI_getState() == STANDBY){
+            encoderControl_IncrementPWM();
+        }
     }
+        
     
     if (counter10ms == 10)
     {
         //Call these functions every 10ms
         tempMonitor_runStateMachine();
         peltierControl_calculateDutyCycle();
+        
+        if(UI_getState() == STANDBY){
+            encoderControl_breatheLED();
+        }
+
+        
         counter10ms = 0;
     }
     else
@@ -68,6 +84,16 @@ void Timer0_1ms_Callback(void)
         counter10ms++;
     }
     //End of 10ms Period
+    
+    if (counter100ms == 100)
+    {
+        counter100ms = 0;
+        dispRefresh = true;
+    }
+    else
+    {
+        counter100ms++;
+    }
     
     if (counter1s == 1000)
     {
@@ -96,6 +122,10 @@ int main(void)
     SYSTEM_Initialize();    
     UART1_TransmitEnable();
        
+    // init i2c
+    initI2CPins();
+    MSSP_HostInit();
+    
     printf("Starting Up...\r\n");
     
     //Print the Reset Registers
@@ -133,6 +163,10 @@ int main(void)
     //Start Timer 0 (10ms)
     Timer0_Start();
     
+    //Init OLED Display
+    OLED_init();
+    UI_setup();
+    
     FET_PWM_Enable();
     fanControl_start();
     peltierControl_start();
@@ -159,5 +193,39 @@ int main(void)
             printf("Int Temp: %d\r\n", tempMonitor_getLastIntTemp());
             printf("Average Duty Cycle: %d%%\r\n", peltierControl_getAverageDutyCycle());
         }
+        
+        if(dispRefresh){ // update UI every 100ms
+            switch(UI_getState()){
+                case STANDBY:
+                    UI_handleStateInput(MENU, false, settingMenus_standbyUpdate);
+                    break;
+                case MENU:
+                    UI_handleStateInput(navMenu_getSelected(), true, navMenu_update);
+                    break;
+                case SET_TEMPERATURE:
+                    UI_handleStateInput(MENU, true, settingMenus_temperatureUpdate);
+                    break;
+                case CHANGE_UNITS:
+                    UI_handleStateInput(MENU, true, settingMenus_changeUnitsUpdate);
+                    break;
+                case START:
+                    UI_handleStateInput(RUNNING, true, settingMenus_startUpdate);
+                    break;
+                case LIMIT_CURRENT:
+                    UI_handleStateInput(MENU, true, settingMenus_currentUpdate);
+                    break;
+                case ABOUT:
+                    UI_handleStateInput(MENU, false, settingMenus_aboutUpdate);
+                    break;
+                case RUNNING:
+                    UI_handleStateInput(STANDBY, false, runningMenus_runningUpdate);
+                    break;
+                case DEMO_MODE_TOGGLE:
+                    UI_handleStateInput(MENU, true, settingMenus_demoModeToggleUpdate);
+                    break;
+            }
+            dispRefresh = false;
+        }
+
     }    
 }

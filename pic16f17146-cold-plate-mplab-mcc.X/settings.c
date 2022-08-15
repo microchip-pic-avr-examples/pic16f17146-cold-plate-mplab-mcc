@@ -1,5 +1,5 @@
 #include "settings.h"
-#include "mcc_generated_files/nvm/nvm.h"
+#include "mcc_generated_files/system/system.h"
 
 #include <xc.h>
 #include <stdint.h>

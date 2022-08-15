@@ -17,7 +17,7 @@ static CURRENT_SENSE_GAIN systemGain = UNITY;
 void currentSense_init(void)
 {
     //Set gain to 16x
-    currentSense_setConfiguration(GAIN_16);
+    currentSense_setConfiguration(GAIN_8);
     
     //Select VSS as a negative source
     OPA1_SetNegativeSource(OPA1_Vss);
