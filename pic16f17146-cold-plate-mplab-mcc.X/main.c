@@ -223,6 +223,8 @@ int main(void)
                 case DEMO_MODE_TOGGLE:
                     UI_handleStateInput(MENU, true, settingMenus_demoModeToggleUpdate);
                     break;
+                case ERROR: // NO IMPLEMENTATION YET
+                    break;
             }
             dispRefresh = false;
         }

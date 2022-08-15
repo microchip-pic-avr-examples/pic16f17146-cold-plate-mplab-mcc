@@ -57,7 +57,7 @@ void settingMenus_temperatureSetup(void){
 
 void settingMenus_temperatureUpdate(int16_t moves){
     // keeps target temp within in + max temp range
-    target_temp = (target_temp+moves <= settingMenus_getMinTemp()) ? settingMenus_getMinTemp() : (target_temp+moves >= settingMenus_getMaxTemp()) ? settingMenus_getMaxTemp() : target_temp+moves;
+    target_temp = (target_temp+moves <= settingMenus_getMinTemp()) ? settingMenus_getMinTemp() : (target_temp+moves >= settingMenus_getMaxTemp()) ? settingMenus_getMaxTemp() : (int8_t)(target_temp + moves);
     settingMenus_setTargetTemp(target_temp); // save new target temperature
     
     char disp_string[20];
@@ -118,7 +118,7 @@ void settingMenus_currentSetup(void){
 }
 
 void settingMenus_currentUpdate(int16_t moves){
-    float current_adjustment = moves*0.5; // each move is 0.1 A.
+    float current_adjustment = (float)(moves*0.5); // each move is 0.1 A.
     float new_limit = settingMenus_getCurrentLimit() + current_adjustment;
     new_limit = (new_limit <= 0) ? 0 : (new_limit >= settingMenus_getMaxCurrentLimit()) ? settingMenus_getMaxCurrentLimit() : new_limit;
     settingMenus_setCurrentLimit(new_limit);
