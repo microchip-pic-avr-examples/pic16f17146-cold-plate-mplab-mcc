@@ -51,7 +51,7 @@ void runningMenus_runningUpdate(void){
         case STATS1: // only update changing values
             // FAN 1 RPM
             OLED_command(line_address[0]+10);
-            sprintf(disp_buff, "%d, %d", fanControl_getFan1RPM(), fanControl_getFan1RPM());
+            sprintf(disp_buff, "%d, %d", fanControl_getFan1RPM(), fanControl_getFan2RPM());
             OLED_writeString(disp_buff);
 
             // Avg. Current
