@@ -63,7 +63,7 @@ void PIN_MANAGER_Initialize(void)
     */
     WPUA = 0x0;
     WPUB = 0x0;
-    WPUC = 0x48;
+    WPUC = 0x4A;
   
 
     /**

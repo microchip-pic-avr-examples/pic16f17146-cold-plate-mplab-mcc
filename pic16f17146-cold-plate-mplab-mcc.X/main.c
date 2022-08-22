@@ -41,6 +41,7 @@
 #include "OLED.h"
 #include "UI.h"
 #include "mssp1_host.h"
+#include "settings.h"
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -128,6 +129,9 @@ int main(void)
     
     printf("Starting Up...\r\n");
     
+    //Init and Verify Settings / EEPROM
+    settings_init();
+    
     //Print the Reset Registers
     System_printResetRegisters();
     
@@ -167,8 +171,10 @@ int main(void)
     OLED_init();
     UI_setup();
     
-    FET_PWM_Enable();
+    //Start Fan Controller
     fanControl_start();
+    
+    //Start Peltier Controller
     peltierControl_start();
     
     while(1)

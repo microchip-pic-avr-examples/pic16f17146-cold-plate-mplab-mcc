@@ -48,6 +48,7 @@ void SYSTEM_Initialize(void)
     CLC1_Initialize();
     CLC2_Initialize();
     CLC3_Initialize();
+    CRC_Initialize();
     CURRENT_SENSE_CMP_Initialize();
     CWG1_Initialize();
     DAC2_Initialize();
@@ -56,7 +57,6 @@ void SYSTEM_Initialize(void)
     FET_PWM_Initialize();
     FVR_Initialize();
     NCO1_Initialize();
-    NVM_Initialize();
     OPA1_Initialize();
     Timer0_Initialize();
     Timer1_Initialize();

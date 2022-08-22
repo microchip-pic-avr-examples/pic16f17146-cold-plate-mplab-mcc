@@ -52,6 +52,8 @@ void peltierControl_init(void)
     NCO1CONbits.EN = 1;
     
     DAC2_SetOutput(255);    
+    
+    FET_PWM_Enable();
 }
 
 //Performs a self-test of the Peltier element. This function will block when executing. 
@@ -196,6 +198,8 @@ bool peltierControl_start(void)
 {
     peltierOn = true;
     
+    CWG1STRbits.CWG1STRA = 1;
+    
     //Enable WWDT
     WWDT_start();
     return false;
@@ -205,6 +209,8 @@ bool peltierControl_start(void)
 void peltierControl_stop(void)
 {    
     peltierOn = false;
+    
+    CWG1STRbits.CWG1STRA = 0;
     
     //Disable WWDT
     WWDT_stop();

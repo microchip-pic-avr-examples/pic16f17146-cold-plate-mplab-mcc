@@ -18,6 +18,9 @@
         <logicalFolder name="comparator" displayName="comparator" projectFiles="true">
           <itemPath>mcc_generated_files/comparator/cmp1.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="crc" displayName="crc" projectFiles="true">
+          <itemPath>mcc_generated_files/crc/crc.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="cwg" displayName="cwg" projectFiles="true">
           <itemPath>mcc_generated_files/cwg/cwg1.h</itemPath>
         </logicalFolder>
@@ -29,9 +32,6 @@
         </logicalFolder>
         <logicalFolder name="nco" displayName="nco" projectFiles="true">
           <itemPath>mcc_generated_files/nco/nco1.h</itemPath>
-        </logicalFolder>
-        <logicalFolder name="nvm" displayName="nvm" projectFiles="true">
-          <itemPath>mcc_generated_files/nvm/nvm.h</itemPath>
         </logicalFolder>
         <logicalFolder name="opa" displayName="opa" projectFiles="true">
           <itemPath>mcc_generated_files/opa/opa1.h</itemPath>
@@ -110,6 +110,11 @@
             <itemPath>mcc_generated_files/comparator/src/cmp1.c</itemPath>
           </logicalFolder>
         </logicalFolder>
+        <logicalFolder name="crc" displayName="crc" projectFiles="true">
+          <logicalFolder name="src" displayName="src" projectFiles="true">
+            <itemPath>mcc_generated_files/crc/src/crc.c</itemPath>
+          </logicalFolder>
+        </logicalFolder>
         <logicalFolder name="cwg" displayName="cwg" projectFiles="true">
           <logicalFolder name="src" displayName="src" projectFiles="true">
             <itemPath>mcc_generated_files/cwg/src/cwg1.c</itemPath>
@@ -128,11 +133,6 @@
         <logicalFolder name="nco" displayName="nco" projectFiles="true">
           <logicalFolder name="src" displayName="src" projectFiles="true">
             <itemPath>mcc_generated_files/nco/src/nco1.c</itemPath>
-          </logicalFolder>
-        </logicalFolder>
-        <logicalFolder name="nvm" displayName="nvm" projectFiles="true">
-          <logicalFolder name="src" displayName="src" projectFiles="true">
-            <itemPath>mcc_generated_files/nvm/src/nvm.c</itemPath>
           </logicalFolder>
         </logicalFolder>
         <logicalFolder name="opa" displayName="opa" projectFiles="true">
@@ -210,7 +210,7 @@
         <targetDevice>PIC16F17146</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>noID</platformTool>
+        <platformTool>pkob4hybrid</platformTool>
         <languageToolchain>XC8</languageToolchain>
         <languageToolchainVersion>2.40</languageToolchainVersion>
         <platform>3</platform>
@@ -394,7 +394,7 @@
       </Tool>
       <XC8-CO>
         <property key="coverage-enable" value=""/>
-        <property key="stack-guidance" value="true"/>
+        <property key="stack-guidance" value="false"/>
       </XC8-CO>
       <XC8-config-global>
         <property key="advanced-elf" value="true"/>
