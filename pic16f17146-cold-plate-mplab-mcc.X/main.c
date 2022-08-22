@@ -129,11 +129,11 @@ int main(void)
     
     printf("Starting Up...\r\n");
     
-    //Init and Verify Settings / EEPROM
-    settings_init();
-    
     //Print the Reset Registers
     System_printResetRegisters();
+    
+    //Init and Verify Settings / EEPROM
+    settings_init();
     
     //Init Fan Controls
     fanControl_init();
@@ -198,6 +198,7 @@ int main(void)
             printf("Heatsink Temp: %d\r\n", tempMonitor_getLastHotTemp());   
             printf("Int Temp: %d\r\n", tempMonitor_getLastIntTemp());
             printf("Average Duty Cycle: %d%%\r\n", peltierControl_getAverageDutyCycle());
+            currentSense_printCalibration();
         }
         
         if(dispRefresh){ // update UI every 100ms

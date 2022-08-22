@@ -15,29 +15,34 @@ void settings_init(void)
     CRCCON2bits.DLEN = 7;
     CRCCON0bits.EN = 1;
     
+    
+    uint8_t memVersion = settings_getSetting(SETTINGS_EEPROM_VERSION);
+    
     //Check for valid EEPROM markers
-    
-//    if (!settings_isValid())
-//    {
-//        //Invalid EEPROM
-//        settings_writeDefaults();
-//        printf("EEPROM not valid - settings reset.\r\n");
-//    }
-
-    uint8_t checksum = settings_verifyCRC();
-    
-    //printf("CRC Checksum = 0x%x\r\n", checksum);
-    
-    //Verify checksum
-    if (checksum != 0x00)
+    if (!memVersion)
     {
-        //Failed CRC
-        printf("CRC Checksum failed validation - settings reset.\r\n");
+        //Invalid EEPROM
         settings_writeDefaults();
+        printf("EEPROM Version ID Mismatch - Settings Reset.\r\n");
     }
     else
     {
-        printf("Memory Checksum OK.\r\n");
+        printf("EEPROM Version ID = 0x%x\r\n", memVersion);
+        
+        uint8_t checksum = settings_verifyCRC();
+        //printf("CRC Checksum = 0x%x\r\n", checksum);
+
+        //Verify checksum
+        if (checksum != 0x00)
+        {
+            //Failed CRC
+            printf("CRC Checksum failed validation - settings reset.\r\n");
+            settings_writeDefaults();
+        }
+        else
+        {
+            printf("Memory Checksum OK.\r\n");
+        }
     }
 }
 

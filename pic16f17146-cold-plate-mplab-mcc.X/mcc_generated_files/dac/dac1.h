@@ -1,15 +1,14 @@
 /**
- * System Driver Header File
+ * DAC1 Generated Driver API Header File
  * 
- * @file system.h
+ * @file dac1.h
  * 
- * @defgroup systemdriver System Driver
+ * @defgroup  dac1 DAC1
  * 
- * @brief This is the generated header file for the System Driver.
+ * @brief This is the generated header file for the DAC1 driver using PIC10 / PIC12 / PIC16 / PIC18 MCUs
  *
- * @version Driver Version 2.0.1
+ * @version DAC1 Driver Version 2.1.0
 */
-
 /*
 © [2022] Microchip Technology Inc. and its subsidiaries.
 
@@ -31,49 +30,46 @@
     THIS SOFTWARE.
 */
 
-#ifndef SYSTEM_H
-#define	SYSTEM_H
+#ifndef DAC1_H
+#define DAC1_H
 
 /**
   Section: Included Files
 */
-#include <xc.h>
-#include <stdint.h>
+
 #include <stdbool.h>
-#include <conio.h>
-#include "config_bits.h"
-#include "../system/clock.h"
-#include "../system/pins.h"
-#include "../adcc/adcc.h"
-#include "../clc/clc1.h"
-#include "../clc/clc2.h"
-#include "../clc/clc3.h"
-#include "../crc/crc.h"
-#include "../comparator/cmp1.h"
-#include "../cwg/cwg1.h"
-#include "../dac/dac1.h"
-#include "../dac/dac2.h"
-#include "../uart/eusart1.h"
-#include "../pwm/pwm2_16bit.h"
-#include "../pwm/pwm1_16bit.h"
-#include "../fvr/fvr.h"
-#include "../nco/nco1.h"
-#include "../opa/opa1.h"
-#include "../timer/tmr0.h"
-#include "../timer/tmr1.h"
-#include "../timer/tmr2.h"
-#include "../timer/tmr3.h"
-#include "../timer/tmr4.h"
-#include "../system/watchdog.h"
-#include "../system/interrupt.h"
+#include <stdint.h>
 
 /**
- * @ingroup systemdriver
- * @brief This initializes the system module and must be called before any other API is called.
- * This routine should only be called once during system initialization.
- * @param None
- * @return None
+  Section: DAC1 APIs
 */
-void SYSTEM_Initialize(void);
 
-#endif //SYSTEM_H
+/**
+ * @ingroup dac1
+ * @brief  This routine initializes the DAC1 and must be called only once, before any other DAC1 routine is called.
+ * @param void
+ * @return void
+ */ 
+void DAC1_Initialize(void);
+
+/**
+ * @ingroup dac1
+ * @brief  This routine pass the digital input data intoDAC1 voltage reference control register.
+ * @param inputData - 8bit digital data to DAC1.
+ * @return void
+ */
+void DAC1_SetOutput(uint8_t inputData);
+
+/**
+ * @ingroup dac1
+ * @brief  This routine reads the digital input data fed to DAC1 voltage reference control register.
+ * @param void
+ * @return uint8_t inputData - digital data fed to DAC1
+ */
+uint8_t DAC1_GetOutput(void);
+
+#endif // DAC1_H
+/**
+ End of File
+*/
+
