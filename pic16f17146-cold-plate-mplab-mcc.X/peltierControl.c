@@ -214,10 +214,7 @@ bool peltierControl_start(void)
     
     //Clear Errors
     error = PELTIER_ERROR_NONE;
-    
-    //Configure Minimum Current Detector
-    DAC2_SetOutput(255);
-    
+        
     //Disable Steering
     CWG1STRbits.CWG1STRA = 1;
     

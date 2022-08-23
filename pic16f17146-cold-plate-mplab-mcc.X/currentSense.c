@@ -27,6 +27,9 @@ void currentSense_init(void)
     
     //Select VSS as a negative source
     OPA1_SetNegativeSource(OPA1_Vss);
+    
+    //Reset Minimum Current Detector
+    DAC2_SetOutput(POWER_DETECT_MINIMUM);
 }
 
 //Runs current sense - self calibration
@@ -35,7 +38,7 @@ void currentSense_selfCalibrate(void)
 {
     //2.048V for VREF DAC
     //~100mV output
-    DAC1_SetOutput(13);
+    DAC2_SetOutput(13);
     
     //Set VDD as ADC Reference
     ADREFbits.PREF = 0b00;
@@ -52,8 +55,8 @@ void currentSense_selfCalibrate(void)
      */
     
     //First, configure OPAMP
-    //Select DAC1
-    OPA1_SetPositiveChannel(OPA1_posChannel_DAC1);
+    //Select the DAC
+    OPA1_SetPositiveChannel(OPA1_posChannel_DAC2);
     
     //Select Unity Gain
     currentSense_setConfiguration(UNITY);
@@ -83,6 +86,9 @@ void currentSense_selfCalibrate(void)
     //Return OPAMP to Input Pin
     OPA1_SetPositiveChannel(OPA1_posChannel_OPA1IN);
         
+    //Reset Minimum Current Detector
+    DAC2_SetOutput(POWER_DETECT_MINIMUM);
+    
     //Set VREF as ADC Reference
     ADREFbits.PREF = 0b11;
     

@@ -416,7 +416,6 @@
         <property key="stack-type" value="compiled"/>
         <property key="user-pack-device-support" value=""/>
         <property key="wpo-lto" value="false"/>
-        <appendMe value="-xassembler-with-cpp  "/>
       </XC8-config-global>
       <pk4hybrid>
         <property key="AutoSelectMemRanges" value="auto"/>
@@ -742,7 +741,6 @@
         <property key="stack-type" value="compiled"/>
         <property key="user-pack-device-support" value=""/>
         <property key="wpo-lto" value="false"/>
-        <appendMe value="-xassembler-with-cpp  "/>
       </XC8-config-global>
       <pk4hybrid>
         <property key="AutoSelectMemRanges" value="auto"/>
