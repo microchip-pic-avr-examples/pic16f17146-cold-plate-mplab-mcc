@@ -164,6 +164,10 @@ int main(void)
     // Enable the Peripheral Interrupts 
     INTERRUPT_PeripheralInterruptEnable(); 
         
+    //Run Self-Calibration for OPAMP
+    //Must be run before Timer0 starts!
+    currentSense_selfCalibrate();
+    
     //Start Timer 0 (10ms)
     Timer0_Start();
     

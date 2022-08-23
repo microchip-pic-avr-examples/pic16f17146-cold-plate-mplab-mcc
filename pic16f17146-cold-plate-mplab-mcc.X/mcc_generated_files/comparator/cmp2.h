@@ -1,16 +1,15 @@
 /**
- * System Driver Source File
+ * CMP2 Generated Driver API Header File
  * 
- * @file system.c
+ * @file cmp2.h
  * 
- * @ingroup systemdriver
+ * @defgroup cmp2 CMP2
  * 
- * @brief This is the generated driver implementation file for the System Driver.
+ * @brief This file contains API prototypes and other datatypes for the CMP2 module.
  *
- * @version Driver Version 2.0.1
-*/
-
-/*
+ * @version CMP2 Driver Version 2.12.0
+*/ 
+ /*
 © [2022] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
@@ -31,42 +30,45 @@
     THIS SOFTWARE.
 */
 
+#ifndef CMP2_H
+#define CMP2_H
+
  /**
    Section: Included Files
  */
-#include "../system.h"
+
+#include <stdint.h>
+#include <stdbool.h>
 
 /**
-  Section: Driver APIs
+  Section: CMP2 APIs
 */
 
-void SYSTEM_Initialize(void)
-{
-    CLOCK_Initialize();
-    PIN_MANAGER_Initialize();
-    ADCC_Initialize();
-    CLC1_Initialize();
-    CLC2_Initialize();
-    CLC3_Initialize();
-    CLC4_Initialize();
-    CMP2_Initialize();
-    CRC_Initialize();
-    CURRENT_SENSE_CMP_Initialize();
-    CWG1_Initialize();
-    DAC1_Initialize();
-    DAC2_Initialize();
-    EUSART1_Initialize();
-    FAN_PWM_Initialize();
-    FET_PWM_Initialize();
-    FVR_Initialize();
-    NCO1_Initialize();
-    OPA1_Initialize();
-    Timer0_Initialize();
-    Timer1_Initialize();
-    Timer2_Initialize();
-    Timer3_Initialize();
-    Timer4_Initialize();
-    WWDT_Initialize();
-    INTERRUPT_Initialize();
-}
+/**
+ * @ingroup cmp2
+ * @brief This routine initializes the CMP2 and must be called before any other CMP2 routine is called.
+ * This routine should only be called once during system initialization.
+ * @param void
+ * @return void
+ */
+void CMP2_Initialize(void);
 
+/**
+ * @ingroup cmp2
+ * @brief This routine gets the CMP2 output status.
+ * @pre CMP2_Initialize() should have been called prior to calling this function.
+ * @param void
+ * @return bool - true if the CMP2 output is high, false if the output is low
+ */
+bool CMP2_GetOutputStatus(void);
+
+/**
+ * @ingroup cmp2
+ * @brief This routine is used to implement the ISR for the interrupt-driven implementations.
+ * @param void
+ * @return void
+ */
+void CMP2_ISR(void);
+
+
+#endif // CMP2_H

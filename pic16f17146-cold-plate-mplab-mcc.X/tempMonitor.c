@@ -168,7 +168,7 @@ void tempMonitor_loadResults(void)
         }
         default:
         {
-            //How did we get here?
+            //Not a temperature value
         }
     }
     

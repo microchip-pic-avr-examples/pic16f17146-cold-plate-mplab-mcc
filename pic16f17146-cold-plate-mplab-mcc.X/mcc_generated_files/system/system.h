@@ -48,6 +48,8 @@
 #include "../clc/clc1.h"
 #include "../clc/clc2.h"
 #include "../clc/clc3.h"
+#include "../clc/clc4.h"
+#include "../comparator/cmp2.h"
 #include "../crc/crc.h"
 #include "../comparator/cmp1.h"
 #include "../cwg/cwg1.h"

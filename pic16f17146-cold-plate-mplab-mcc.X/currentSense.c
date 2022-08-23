@@ -25,18 +25,12 @@ void currentSense_init(void)
     
     //Select VSS as a negative source
     OPA1_SetNegativeSource(OPA1_Vss);
-        
-    //Self-Calibrate
-    currentSense_selfCalibrate();
 }
 
 //Runs current sense - self calibration
 //Blocking Code
 void currentSense_selfCalibrate(void)
 {
-    //Disable ADC Interrupts    
-    PIE6bits.ADTIE = 0;
-
     //2.048V for VREF DAC
     //~100mV output
     DAC1_SetOutput(13);
@@ -64,7 +58,10 @@ void currentSense_selfCalibrate(void)
     
     //Measure the DAC at 1x
     ADCC_StartConversion(channel_OPA1OUT);
-    while (!ADCC_IsConversionDone());
+    while (!ADCC_IsConversionDone())
+    {
+        asm("SLEEP");
+    }
     uint16_t unityGainResult = ADCC_GetFilterValue();
 
     //Measure with Gain
@@ -72,7 +69,10 @@ void currentSense_selfCalibrate(void)
         
     //Measure the OPAMP with gain
     ADCC_StartConversion(channel_OPA1OUT);
-    while (!ADCC_IsConversionDone());
+    while (!ADCC_IsConversionDone())
+    {
+        asm("SLEEP");
+    }
     uint16_t gainResult = ADCC_GetFilterValue();
 
     //Calculate Gain
@@ -80,22 +80,19 @@ void currentSense_selfCalibrate(void)
     
     //Return OPAMP to Input Pin
     OPA1_SetPositiveChannel(OPA1_posChannel_OPA1IN);
-    
+        
     //Set VREF as ADC Reference
     ADREFbits.PREF = 0b11;
     
     //Clear Flag
     PIR6bits.ADTIF = 0;
-    
-    //Re-enable Interrupts
-    PIE6bits.ADTIE = 1;
 }
 
 //Sets the current limit of the demo
 //Units are 100s of mA (e.g.: 100mA = 1, 1A = 10, etc...)
 void currentSense_setCurrentLimit(uint8_t limit)
 {
-    DAC2_SetOutput(limit);
+    DAC1_SetOutput(limit);
 }
 
 //Sets the gain of the current sense amplifier

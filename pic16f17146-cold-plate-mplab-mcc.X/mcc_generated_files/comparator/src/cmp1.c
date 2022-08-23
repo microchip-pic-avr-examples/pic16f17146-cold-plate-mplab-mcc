@@ -52,8 +52,8 @@ void CURRENT_SENSE_CMP_Initialize(void)
     // CNCH OPA1OUT; 
     CM1NCH = 0x5;
     
-    // CPCH DAC2_OUT; 
-    CM1PCH = 0x5;    
+    // CPCH DAC1_OUT; 
+    CM1PCH = 0x4;    
 }
 
 bool CURRENT_SENSE_CMP_GetOutputStatus(void) 
