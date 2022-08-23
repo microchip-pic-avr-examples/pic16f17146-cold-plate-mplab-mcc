@@ -25,10 +25,10 @@ void settingMenus_standbySetup(void){
 void settingMenus_standbyUpdate(int16_t moves){
     char temp_buff[4];
     OLED_command(line_address[2] + 14);
-    sprintf(temp_buff, "%d  ", tempMonitor_getLastColdTemp());
+    sprintf(temp_buff, "%d", tempMonitor_getLastColdTemp());
     OLED_writeString(temp_buff);
     OLED_data(0b00000000); // degrees symbol
-    OLED_writeString("C  ");
+    OLED_writeString("C ");
     
 }
 
