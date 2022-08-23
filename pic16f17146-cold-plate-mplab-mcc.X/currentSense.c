@@ -3,11 +3,13 @@
 #include "mcc_generated_files/adcc/adcc.h"
 #include "mcc_generated_files/dac/dac1.h"
 #include "mcc_generated_files/dac/dac2.h"
+#include "config.h"
 
 #include <xc.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <math.h>
 
 //1x, 2x, 4x, 8x, 16x Gains + OFFSET
 static float OPAMPGain = 8.0;
@@ -92,7 +94,8 @@ void currentSense_selfCalibrate(void)
 //Units are 100s of mA (e.g.: 100mA = 1, 1A = 10, etc...)
 void currentSense_setCurrentLimit(uint8_t limit)
 {
-    DAC1_SetOutput(limit);
+    uint8_t dacCode = floorf(DAC_FORMULA_CONSTANT * OPAMPGain * limit);
+    DAC1_SetOutput(dacCode);
 }
 
 //Sets the gain of the current sense amplifier

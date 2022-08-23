@@ -23,7 +23,7 @@ uint16_t DIA_readValue(uint16_t address)
 //Prints the Reset Registers to the UART
 void System_printResetRegisters(void)
 {
-    printf("PCON0: 0x%x\r\nPCON1: 0x%x\r\n", PCON0, PCON1);
+    printf("PCON0: 0x%x, PCON1: 0x%x\r\n", PCON0, PCON1);
     
     //Clear Values
     PCON0 = 0x00;

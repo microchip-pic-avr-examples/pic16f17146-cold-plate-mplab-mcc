@@ -43,8 +43,8 @@
 
 void CMP2_Initialize(void) 
 {
-    // CHYS disabled; CON enabled; CPOL not inverted; CSYNC asynchronous; 
-    CM2CON0 = 0x80;
+    // CHYS enabled; CON enabled; CPOL inverted; CSYNC asynchronous; 
+    CM2CON0 = 0x92;
 
     // CINTN no_intFlag; CINTP no_intFlag; 
     CM2CON1 = 0x0;

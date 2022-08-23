@@ -11,8 +11,9 @@ extern "C" {
 
 //Settings    
 typedef enum{
-    SETTINGS_EEPROM_VERSION = 0, SETTINGS_LAST_TEMP, SETTINGS_CURRENT_LIMIT,
-            SETTINGS_TEMP_UNIT, SETTINGS_CRC
+    SETTINGS_EEPROM_VERSION = 0, SETTINGS_LAST_SET_TEMP, SETTINGS_CURRENT_LIMIT,
+            SETTINGS_TEMP_UNIT, SETTINGS_MAX_INT_TEMP, SETTINGS_MAX_HEATSINK_TEMP,
+            SETTINGS_CRC
 } UserSetting;    
    
 //Where to start scanning
@@ -22,7 +23,7 @@ typedef enum{
 #define SETTINGS_EEPROM_STOP (SETTINGS_EEPROM_START + SETTINGS_CRC)
     
 //EEPROM Version ID
-#define COMPILED_EEPROM_VERSION 0x01
+#define COMPILED_EEPROM_VERSION 0x02
     
     //Init Settings (Check for validity)
     void settings_init(void);

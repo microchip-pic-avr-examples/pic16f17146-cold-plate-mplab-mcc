@@ -53,9 +53,9 @@ static volatile bool timerActive = false, selfCheck = false, dispRefresh = false
 //DO NOT ADD BLOCKING CODE HERE
 void Timer0_1ms_Callback(void)
 {
-    static uint8_t counter10ms = 1;
-    static uint8_t counter100ms = 1;
-    static uint16_t counter1s = 1;
+    static volatile uint8_t counter10ms = 1;
+    static volatile uint8_t counter100ms = 1;
+    static volatile uint16_t counter1s = 1;
     
     {
         //Call these functions every 1ms
@@ -77,7 +77,6 @@ void Timer0_1ms_Callback(void)
             encoderControl_breatheLED();
         }
 
-        
         counter10ms = 0;
     }
     else
@@ -108,9 +107,6 @@ void Timer0_1ms_Callback(void)
         //Set flags
         selfCheck = true;
         timerActive = true;
-        
-        //ARM WWDT
-        WWDT_armReset();
     }
     else
     {
@@ -178,6 +174,8 @@ int main(void)
     //Start Fan Controller
     fanControl_start();
     
+    currentSense_setCurrentLimit(80);
+    
     //Start Peltier Controller
     peltierControl_start();
     
@@ -187,7 +185,7 @@ int main(void)
         if (selfCheck)
         {
             selfCheck = false;
-            
+                        
             //Run Periodic Self-Check
             peltierControl_periodicCheck();
         }
@@ -202,41 +200,40 @@ int main(void)
             printf("Heatsink Temp: %d\r\n", tempMonitor_getLastHotTemp());   
             printf("Int Temp: %d\r\n", tempMonitor_getLastIntTemp());
             printf("Average Duty Cycle: %d%%\r\n", peltierControl_getAverageDutyCycle());
-            currentSense_printCalibration();
         }
         
-        if(dispRefresh){ // update UI every 100ms
-            switch(UI_getState()){
-                case STANDBY:
-                    UI_handleStateInput(MENU, false, settingMenus_standbyUpdate);
-                    break;
-                case MENU:
-                    UI_handleStateInput(navMenu_getSelected(), true, navMenu_update);
-                    break;
-                case SET_TEMPERATURE:
-                    UI_handleStateInput(MENU, true, settingMenus_temperatureUpdate);
-                    break;
-                case CHANGE_UNITS:
-                    UI_handleStateInput(MENU, true, settingMenus_changeUnitsUpdate);
-                    break;
-                case START:
-                    UI_handleStateInput(RUNNING, true, settingMenus_startUpdate);
-                    break;
-                case LIMIT_CURRENT:
-                    UI_handleStateInput(MENU, true, settingMenus_currentUpdate);
-                    break;
-                case ABOUT:
-                    UI_handleStateInput(MENU, false, settingMenus_aboutUpdate);
-                    break;
-                case RUNNING:
-                    UI_handleStateInput(STANDBY, false, runningMenus_runningUpdate);
-                    break;
-                case DEMO_MODE_TOGGLE:
-                    UI_handleStateInput(MENU, true, settingMenus_demoModeToggleUpdate);
-                    break;
-            }
-            dispRefresh = false;
-        }
+//        if(dispRefresh){ // update UI every 100ms
+//            switch(UI_getState()){
+//                case STANDBY:
+//                    UI_handleStateInput(MENU, false, settingMenus_standbyUpdate);
+//                    break;
+//                case MENU:
+//                    UI_handleStateInput(navMenu_getSelected(), true, navMenu_update);
+//                    break;
+//                case SET_TEMPERATURE:
+//                    UI_handleStateInput(MENU, true, settingMenus_temperatureUpdate);
+//                    break;
+//                case CHANGE_UNITS:
+//                    UI_handleStateInput(MENU, true, settingMenus_changeUnitsUpdate);
+//                    break;
+//                case START:
+//                    UI_handleStateInput(RUNNING, true, settingMenus_startUpdate);
+//                    break;
+//                case LIMIT_CURRENT:
+//                    UI_handleStateInput(MENU, true, settingMenus_currentUpdate);
+//                    break;
+//                case ABOUT:
+//                    UI_handleStateInput(MENU, false, settingMenus_aboutUpdate);
+//                    break;
+//                case RUNNING:
+//                    UI_handleStateInput(STANDBY, false, runningMenus_runningUpdate);
+//                    break;
+//                case DEMO_MODE_TOGGLE:
+//                    UI_handleStateInput(MENU, true, settingMenus_demoModeToggleUpdate);
+//                    break;
+//            }
+//            dispRefresh = false;
+//        }
 
     }    
 }

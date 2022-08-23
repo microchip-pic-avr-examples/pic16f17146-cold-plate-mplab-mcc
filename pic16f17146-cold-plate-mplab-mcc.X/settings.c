@@ -49,19 +49,21 @@ void settings_init(void)
 //Erases EEPROM and writes default values in
 void settings_writeDefaults(void)
 {
+    printf("Clearing EEPROM Settings\r\n");
+    
     //Write Defaults
-    settings_writeValue(SETTINGS_LAST_TEMP, DEFAULT_TEMPERATURE_SETTING);
+    settings_writeValue(SETTINGS_LAST_SET_TEMP, DEFAULT_LAST_TEMP_SETTING);
     settings_writeValue(SETTINGS_CURRENT_LIMIT, DEFAULT_CURRENT_LIMIT);
     
-    //Write EEPROM Version ID Last
+    //Write EEPROM Version ID
     settings_writeValue(SETTINGS_EEPROM_VERSION, COMPILED_EEPROM_VERSION);
-    
-    //Write a placeholder 0x00 to CRC    
+
+    //Calculate new checksum
     uint8_t newChecksum = settings_calculateCRC();
     
     printf("Calculated new checksum = 0x%x\r\n", newChecksum);
     
-    //Write the CRC Value
+    //Write the new CRC Value
     settings_writeValue(SETTINGS_CRC, newChecksum);
 }
 
