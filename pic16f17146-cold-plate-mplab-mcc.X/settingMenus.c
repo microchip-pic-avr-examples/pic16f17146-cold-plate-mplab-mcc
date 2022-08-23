@@ -11,16 +11,25 @@ void settingMenus_standbySetup(void){
 
     OLED_command(line_address[2]);
     OLED_writeString("  Plate Temp: ");
+    
+    bool demoMode = false; // TODO: change for real demo mode function
+    if(demoMode == true){
+        OLED_command(line_address[3]);
+        OLED_writeString("   Demo Mode On     ");
+    }
+    
+    settingMenus_standbyUpdate(0);
 }
 
 // update dynamic elements on the STANDBY scene
 void settingMenus_standbyUpdate(int16_t moves){
     char temp_buff[4];
     OLED_command(line_address[2] + 14);
-    sprintf(temp_buff, "%d", tempMonitor_getLastColdTemp());
+    //sprintf(temp_buff, "%d", tempMonitor_getLastColdTemp());
+    sprintf(temp_buff, "10");
     OLED_writeString(temp_buff);
     OLED_data(0b00000000); // degrees symbol
-    OLED_writeString("C");
+    OLED_writeString("C  ");
     
 }
 
@@ -35,7 +44,7 @@ void settingMenus_temperatureSetup(void){
     max_temp = settingMenus_getMaxTemp();
     
     char disp_string[20];
-    sprintf(disp_string, "  %d          %d", min_temp, max_temp);
+
     
     OLED_clear();
     
@@ -48,6 +57,7 @@ void settingMenus_temperatureSetup(void){
     OLED_writeString("  Min   Set   Max  ");
     
     OLED_command(line_address[3]);
+    sprintf(disp_string, "  %d          %d", min_temp, max_temp);
     OLED_writeString(disp_string);
     
     OLED_command(line_address[3]+8);

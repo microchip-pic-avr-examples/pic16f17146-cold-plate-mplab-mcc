@@ -10,7 +10,6 @@ void OLED_command(uint8_t cmd_byte){
     send_data[0] = 0b10000000;
     send_data[1] = cmd_byte;
     MSSP_WriteBlock(OLED_CONTROLLER_ADDR, send_data, 2);
-
 }
 
 void OLED_data(uint8_t cmd_byte){

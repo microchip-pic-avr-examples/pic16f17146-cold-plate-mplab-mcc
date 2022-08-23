@@ -54,13 +54,14 @@ void UI_setup(void){
 
 // when in a UI state, this handles reading encoder input, updating only the
 // needed info on the OLED, and moving to the next UI state
-void UI_handleStateInput(UI_STATE exit_state, bool getEncoder, void (*ui_update)(int16_t)){
+void UI_handleStateInput(UI_STATE exit_state, void (*ui_update)(int16_t)){
     if(!BUTTON_GetValue()){ // button press means move to different UI state
         while(!BUTTON_GetValue()); // wait for button to be released
         UI_setState(exit_state); // set state
         UI_setup(); // populate OLED
-    } else if (getEncoder){
+    } else {
         (*ui_update)(encoderControl_getMoves());
     }
+    
 
 }
