@@ -10,11 +10,11 @@ extern "C" {
 #include <stdbool.h>
     
 //EEPROM Version ID
-#define COMPILED_EEPROM_VERSION 0x01
+#define COMPILED_EEPROM_VERSION 0x02
     
 typedef enum{
     SETTINGS_EEPROM_VERSION = 0, SETTINGS_LAST_TEMP, SETTINGS_CURRENT_LIMIT,
-            SETTINGS_TEMP_UNIT
+            SETTINGS_TEMP_UNIT, SETTINGS_DEMO_MODE
 } UserSetting;    
     
     //Init Settings (Check for validity)

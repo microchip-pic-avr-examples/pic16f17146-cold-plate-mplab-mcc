@@ -8,6 +8,9 @@ extern "C" {
 //Lowest allowed temperature in demo mode
 #define DEMO_TEMP_LIMIT_LOW 5
 
+//Lowest allowed temperature in not demo mode
+#define TEMP_LIMIT_LOW -20
+    
 //Maximum allowed temperature to set
 #define TEMP_LIMIT_MAX 25
     
@@ -21,6 +24,7 @@ extern "C" {
 #define DEFAULT_TEMPERATURE_SETTING 10
 #define DEFAULT_CURRENT_LIMIT 4
 #define DEFAULT_TEMP_HYSTER 5
+#define DEFAULT_DEMO_MODE 1 // default to demo mode on
     
 #ifdef	__cplusplus
 }
