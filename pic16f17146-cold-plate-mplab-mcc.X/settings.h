@@ -13,6 +13,7 @@ extern "C" {
 typedef enum{
     SETTINGS_EEPROM_VERSION = 0, SETTINGS_LAST_SET_TEMP, SETTINGS_CURRENT_LIMIT,
             SETTINGS_TEMP_UNIT, SETTINGS_MAX_INT_TEMP, SETTINGS_MAX_HEATSINK_TEMP,
+            SETTINGS_DEMO_MODE, SETTINGS_HYSTER_OVER, SETTINGS_HYSTER_UNDER,
             SETTINGS_CRC
 } UserSetting;    
    
@@ -46,10 +47,13 @@ typedef enum{
     //Writes a setting to memory and updates the checksum.
     void settings_writeSetting(UserSetting setting, uint8_t value);
     
-    //Utility Function - DO NOT CALL
+    //Utility Function
     //Writes [VALUE] to [WRITE]. Does not update checksum
     void settings_writeValue(UserSetting setting, uint8_t value);
 
+    //Write the CRC value with new values from EEPROM
+    void settings_writeCRC(void);
+    
 #ifdef	__cplusplus
 }
 #endif

@@ -1,6 +1,7 @@
 #include "NTC_ROM.h"
 
 #include <stdint.h>
+
 //Returns the nearest temperature to the input value. Returns INT8_MIN / INT8_MAX if out of range
 //Executes in O(log(NTC_VALUE_SIZE)) time
 int8_t NTC_ROM_search(uint16_t meas)

@@ -96,7 +96,9 @@ void peltierControl_periodicCheck(void)
         
         if (error != PELTIER_ERROR_NONE)
         {
+#ifdef DEBUG_PRINT
             printf("Peltier Control Error, Code 0x%x\r\n", error);
+#endif
             peltierControl_stop();
         }
         else
@@ -222,8 +224,9 @@ bool peltierControl_start(void)
     WWDT_start();
     
     //TODO: Add Sanity Checking
-    
+#ifdef DEBUG_PRINT
     printf("-- PELTIER ON --\r\n");
+#endif
     return true;
 }
 
@@ -238,7 +241,9 @@ void peltierControl_stop(void)
     //Disable WWDT
     WWDT_stop();
     
+#ifdef DEBUG_PRINT
     printf("-- PELTIER OFF --\r\n");
+#endif
 }
 
 //Set the max current through the loop

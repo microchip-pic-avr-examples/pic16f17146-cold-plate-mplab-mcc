@@ -23,11 +23,15 @@ void settings_init(void)
     {
         //Invalid EEPROM
         settings_writeDefaults();
+#ifdef DEBUG_PRINT
         printf("EEPROM Version ID Mismatch - Settings Reset.\r\n");
+#endif
     }
     else
     {
+#ifdef DEBUG_PRINT
         printf("EEPROM Version ID = 0x%x\r\n", memVersion);
+#endif
         
         uint8_t checksum = settings_verifyCRC();
         //printf("CRC Checksum = 0x%x\r\n", checksum);
@@ -36,12 +40,16 @@ void settings_init(void)
         if (checksum != 0x00)
         {
             //Failed CRC
+#ifdef DEBUG_PRINT
             printf("CRC Checksum failed validation - settings reset.\r\n");
+#endif
             settings_writeDefaults();
         }
         else
         {
+#ifdef DEBUG_PRINT
             printf("Memory Checksum OK.\r\n");
+#endif
         }
     }
 }
@@ -49,7 +57,9 @@ void settings_init(void)
 //Erases EEPROM and writes default values in
 void settings_writeDefaults(void)
 {
+#ifdef DEBUG_PRINT
     printf("Clearing EEPROM Settings\r\n");
+#endif
     
     //Write Defaults
     settings_writeValue(SETTINGS_LAST_SET_TEMP, DEFAULT_LAST_TEMP_SETTING);
@@ -60,9 +70,9 @@ void settings_writeDefaults(void)
 
     //Calculate new checksum
     uint8_t newChecksum = settings_calculateCRC();
-    
+#ifdef DEBUG_PRINT
     printf("Calculated new checksum = 0x%x\r\n", newChecksum);
-    
+#endif
     //Write the new CRC Value
     settings_writeValue(SETTINGS_CRC, newChecksum);
 }
@@ -145,4 +155,11 @@ void settings_writeSetting(UserSetting setting, uint8_t value)
 void settings_writeValue(UserSetting setting, uint8_t value)
 {
     eeprom_write(setting, value);
+}
+
+//Write the CRC value with new values from EEPROM
+void settings_writeCRC(void)
+{
+    //Write the CRC Value
+    settings_writeValue(SETTINGS_CRC, settings_calculateCRC());
 }

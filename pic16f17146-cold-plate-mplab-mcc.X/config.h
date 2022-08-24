@@ -5,14 +5,28 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
+    
+//If defined, telemetry will be sent via UART
+#define DEBUG_TELEMETRY 
+    
+//If defined, PRINTF will send messages
+//#define DEBUG_PRINT
+    
 //Lowest allowed temperature in demo mode
 #define DEMO_TEMP_LIMIT_LOW 5
 
+//Lowest Temperature Limit Possible
+#define TEMP_LIMIT_LOW -13
+    
 //Maximum allowed temperature to set
 #define TEMP_LIMIT_MAX 25
     
 //Minimum Current Limit
 #define CURRENT_LIMIT_MIN 1
+    
+//Maximum Current Limit
+#define CURRENT_LIMIT_MAX 10
     
 //Threshold to detect power
 //~100mA per bit
@@ -48,6 +62,12 @@ extern "C" {
 //Will turn off at SET_POINT + OVER and on again at SET_POINT + UNDER
 #define DEFAULT_TEMP_HYSTER_OVER 5
 #define DEFAULT_TEMP_HYSTER_UNDER 5
+    
+//Demo mode is on by default
+#define DEFAULT_DEMO_MODE true
+    
+//Default to Celsius
+#define DEFAULT_TEMP_UNIT 'C'
     
 #ifdef	__cplusplus
 }

@@ -13,7 +13,9 @@ void NTC_ROM_Test(void)
 {
     //Test the NTC ROM Search Algorithms
     
+#ifdef DEBUG_PRINT
     printf("Running NTC ROM Test Pattern...\r\n");
+#endif
     uint16_t testValues[NTC_ROM_TEST_SIZE];
     
     testValues[0] = 824;    //40C Exactly (starting point)
@@ -34,7 +36,9 @@ void NTC_ROM_Test(void)
     for (uint8_t i = 0; i < NTC_ROM_TEST_SIZE; i++)
     {
         tempOut = NTC_ROM_search(testValues[i]);
+#ifdef DEBUG_PRINT
         printf("Test %u - Temperature at value %u: %dC\r\n", i, testValues[i], tempOut);
+#endif
 
     }
 }

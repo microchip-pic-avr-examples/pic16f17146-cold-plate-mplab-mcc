@@ -47,7 +47,7 @@
 #include <stdbool.h>
 #include <xc.h>
 
-static volatile bool timerActive = false, selfCheck = false, dispRefresh = false;
+static volatile bool selfCheck = false, dispRefresh = false;
 
 //This is called every 10ms from Timer 0
 //DO NOT ADD BLOCKING CODE HERE
@@ -106,7 +106,6 @@ void Timer0_1ms_Callback(void)
         
         //Set flags
         selfCheck = true;
-        timerActive = true;
     }
     else
     {
@@ -123,7 +122,9 @@ int main(void)
     initI2CPins();
     MSSP_HostInit();
     
+#ifdef DEBUG_PRINT
     printf("Starting Up...\r\n");
+#endif
     
     //Print the Reset Registers
     System_printResetRegisters();
@@ -143,7 +144,9 @@ int main(void)
     //Init Peltier Control
     peltierControl_init();
         
+#ifdef DEBUG_PRINT
     printf("Done initializing...\r\n");
+#endif
     
     //Configure 10ms Callback
     Timer0_OverflowCallbackRegister(&Timer0_1ms_Callback);
@@ -188,18 +191,15 @@ int main(void)
                         
             //Run Periodic Self-Check
             peltierControl_periodicCheck();
-        }
-        
-        //Debug Print (1s)
-        if (timerActive)
-        {   
-            timerActive = false;
+            
+#ifdef DEBUG_TELEMETRY
             printf("Fan 1 RPM: %u\r\n", fanControl_getFan1RPM());
             printf("Fan 2 RPM: %u\r\n", fanControl_getFan2RPM());  
             printf("Cold Plate Temp: %d\r\n", tempMonitor_getLastColdTemp());   
             printf("Heatsink Temp: %d\r\n", tempMonitor_getLastHotTemp());   
             printf("Int Temp: %d\r\n", tempMonitor_getLastIntTemp());
-            printf("Average Duty Cycle: %d%%\r\n", peltierControl_getAverageDutyCycle());
+            printf("Average Duty Cycle: %d%%\r\n", peltierControl_getAverageDutyCycle());            
+#endif
         }
         
 //        if(dispRefresh){ // update UI every 100ms
