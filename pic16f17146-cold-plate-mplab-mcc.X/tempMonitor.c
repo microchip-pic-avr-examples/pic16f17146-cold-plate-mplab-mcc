@@ -1,5 +1,6 @@
 #include "tempMonitor.h"
 #include "mcc_generated_files/system/system.h"
+#include "config.h"
 
 #include <xc.h>
 #include <stdint.h>
@@ -50,8 +51,11 @@ void tempMonitor_init(void)
         TS_OFFSET |= 0xC000;
     }
     
+#ifdef DEBUG_PRINT
     //Print Values
     printf("TS_GAIN = 0x%x, TS_90C = 0x%x, TS_OFFSET = 0x%x\r\n", TS_GAIN, TS_90C, TS_OFFSET);
+#endif
+    
 }
 
 //Runs a state machine to measure temperature
@@ -168,7 +172,7 @@ void tempMonitor_loadResults(void)
         }
         default:
         {
-            //How did we get here?
+            //Not a temperature value
         }
     }
     

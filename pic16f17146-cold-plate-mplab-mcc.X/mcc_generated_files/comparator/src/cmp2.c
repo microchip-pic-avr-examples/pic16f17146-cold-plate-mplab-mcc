@@ -1,16 +1,15 @@
 /**
- * System Driver Source File
+ * CMP2 Generated Driver File
  * 
- * @file system.c
+ * @file cmp2.c
  * 
- * @ingroup systemdriver
+ * @ingroup cmp2
  * 
- * @brief This is the generated driver implementation file for the System Driver.
+ * @brief This is the generated driver implementation file for the CMP2 driver.
  *
- * @version Driver Version 2.0.1
+ * @version CMP2 Driver Version 2.12.0
 */
-
-/*
+ /*
 © [2022] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
@@ -34,39 +33,38 @@
  /**
    Section: Included Files
  */
-#include "../system.h"
+
+#include <xc.h>
+#include "../cmp2.h"
 
 /**
-  Section: Driver APIs
+  Section: CMP2 APIs
 */
 
-void SYSTEM_Initialize(void)
+void CMP2_Initialize(void) 
 {
-    CLOCK_Initialize();
-    PIN_MANAGER_Initialize();
-    ADCC_Initialize();
-    CLC1_Initialize();
-    CLC2_Initialize();
-    CLC3_Initialize();
-    CLC4_Initialize();
-    CMP2_Initialize();
-    CRC_Initialize();
-    CURRENT_SENSE_CMP_Initialize();
-    CWG1_Initialize();
-    DAC1_Initialize();
-    DAC2_Initialize();
-    EUSART1_Initialize();
-    FAN_PWM_Initialize();
-    FET_PWM_Initialize();
-    FVR_Initialize();
-    NCO1_Initialize();
-    OPA1_Initialize();
-    Timer0_Initialize();
-    Timer1_Initialize();
-    Timer2_Initialize();
-    Timer3_Initialize();
-    Timer4_Initialize();
-    WWDT_Initialize();
-    INTERRUPT_Initialize();
+    // CHYS enabled; CON enabled; CPOL inverted; CSYNC asynchronous; 
+    CM2CON0 = 0x92;
+
+    // CINTN no_intFlag; CINTP no_intFlag; 
+    CM2CON1 = 0x0;
+    
+    // CNCH OPA1OUT; 
+    CM2NCH = 0x5;
+    
+    // CPCH DAC2_OUT; 
+    CM2PCH = 0x5;    
+}
+
+bool CMP2_GetOutputStatus(void) 
+{
+  return CM2CON0bits.C2OUT; /* Note : As per datasheet, CxOUT bit in CMOUT register (if relevant) 
+                                                   is mirror copy of CMxCON0.OUT */
+}
+
+void CMP2_ISR(void) 
+{
+    // Clear the CMP2 interrupt flag
+    PIR5bits.CM2IF = 0; 
 }
 

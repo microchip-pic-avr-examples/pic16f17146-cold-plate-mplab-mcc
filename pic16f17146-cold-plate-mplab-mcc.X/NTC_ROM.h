@@ -29,14 +29,14 @@ extern "C" {
     482, 466, 451, 436, 422, 408, 395, 382, 370, 358, 347, 335, 325, 315, 305, 295,
     286, 277, 268, 260, 252, 244, 236, 229, 222, 215, 209, 203, 196, 191, 185, 179,
     174, 169, 164, 159, 155, 150, 146, 142, 138, 134, 130, 126, 123, 119, 116, 113, 110 };
-    
+     
 //Temperatures are in C
 #define NTC_START_TEMP -24
 #define NTC_STOP_TEMP 104
 
-//How many elements are in the array
+//How many elements can be accessed in the array (note: 1 extra element is in the array)
 #define NTC_VALUE_SIZE (NTC_STOP_TEMP - NTC_START_TEMP)    
-    
+        
     //Returns the nearest temperature to the input value. Returns INT8_MIN / INT8_MAX if out of range
     //Executes in O(log(NTC_VALUE_SIZE)) time
     int8_t NTC_ROM_search(uint16_t meas);

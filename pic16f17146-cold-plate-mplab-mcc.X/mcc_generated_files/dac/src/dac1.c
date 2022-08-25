@@ -1,15 +1,14 @@
 /**
- * System Driver Source File
+ * DAC1 Generated Driver File
  * 
- * @file system.c
+ * @file dac1.c
  * 
- * @ingroup systemdriver
+ * @ingroup dac1
  * 
- * @brief This is the generated driver implementation file for the System Driver.
+ * @brief This is the generated driver implementation file for the DAC1 driver using PIC10 / PIC12 / PIC16 / PIC18 MCUs
  *
- * @version Driver Version 2.0.1
+ * @version DAC1 Driver Version 2.1.0
 */
-
 /*
 © [2022] Microchip Technology Inc. and its subsidiaries.
 
@@ -31,42 +30,35 @@
     THIS SOFTWARE.
 */
 
- /**
-   Section: Included Files
- */
-#include "../system.h"
-
 /**
-  Section: Driver APIs
+  Section: Included Files
 */
 
-void SYSTEM_Initialize(void)
-{
-    CLOCK_Initialize();
-    PIN_MANAGER_Initialize();
-    ADCC_Initialize();
-    CLC1_Initialize();
-    CLC2_Initialize();
-    CLC3_Initialize();
-    CLC4_Initialize();
-    CMP2_Initialize();
-    CRC_Initialize();
-    CURRENT_SENSE_CMP_Initialize();
-    CWG1_Initialize();
-    DAC1_Initialize();
-    DAC2_Initialize();
-    EUSART1_Initialize();
-    FAN_PWM_Initialize();
-    FET_PWM_Initialize();
-    FVR_Initialize();
-    NCO1_Initialize();
-    OPA1_Initialize();
-    Timer0_Initialize();
-    Timer1_Initialize();
-    Timer2_Initialize();
-    Timer3_Initialize();
-    Timer4_Initialize();
-    WWDT_Initialize();
-    INTERRUPT_Initialize();
+#include <xc.h>
+#include "../dac1.h"
+
+/**
+  Section: DAC1 APIs
+*/
+
+void DAC1_Initialize(void) {
+ 
+    //DACPSS FVR; DACNSS VSS; DACOE DACOUT1 and DACOUT2 are Disabled; DACEN enabled; 
+    DAC1CON =  136;
+
+    //DACR 125; 
+    DAC1DATL =  125; 
 }
 
+void DAC1_SetOutput(uint8_t inputData) {
+ 
+    DAC1DATL =  inputData;
+}
+
+uint8_t DAC1_GetOutput(void) {
+ 
+    return DAC1DATL;
+}
+/**
+ End of File
+*/

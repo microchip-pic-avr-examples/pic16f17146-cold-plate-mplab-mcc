@@ -1,15 +1,14 @@
 /**
- * System Driver Source File
+ * DAC1 Generated Driver API Header File
  * 
- * @file system.c
+ * @file dac1.h
  * 
- * @ingroup systemdriver
+ * @defgroup  dac1 DAC1
  * 
- * @brief This is the generated driver implementation file for the System Driver.
+ * @brief This is the generated header file for the DAC1 driver using PIC10 / PIC12 / PIC16 / PIC18 MCUs
  *
- * @version Driver Version 2.0.1
+ * @version DAC1 Driver Version 2.1.0
 */
-
 /*
 © [2022] Microchip Technology Inc. and its subsidiaries.
 
@@ -31,42 +30,46 @@
     THIS SOFTWARE.
 */
 
- /**
-   Section: Included Files
- */
-#include "../system.h"
+#ifndef DAC1_H
+#define DAC1_H
 
 /**
-  Section: Driver APIs
+  Section: Included Files
 */
 
-void SYSTEM_Initialize(void)
-{
-    CLOCK_Initialize();
-    PIN_MANAGER_Initialize();
-    ADCC_Initialize();
-    CLC1_Initialize();
-    CLC2_Initialize();
-    CLC3_Initialize();
-    CLC4_Initialize();
-    CMP2_Initialize();
-    CRC_Initialize();
-    CURRENT_SENSE_CMP_Initialize();
-    CWG1_Initialize();
-    DAC1_Initialize();
-    DAC2_Initialize();
-    EUSART1_Initialize();
-    FAN_PWM_Initialize();
-    FET_PWM_Initialize();
-    FVR_Initialize();
-    NCO1_Initialize();
-    OPA1_Initialize();
-    Timer0_Initialize();
-    Timer1_Initialize();
-    Timer2_Initialize();
-    Timer3_Initialize();
-    Timer4_Initialize();
-    WWDT_Initialize();
-    INTERRUPT_Initialize();
-}
+#include <stdbool.h>
+#include <stdint.h>
+
+/**
+  Section: DAC1 APIs
+*/
+
+/**
+ * @ingroup dac1
+ * @brief  This routine initializes the DAC1 and must be called only once, before any other DAC1 routine is called.
+ * @param void
+ * @return void
+ */ 
+void DAC1_Initialize(void);
+
+/**
+ * @ingroup dac1
+ * @brief  This routine pass the digital input data intoDAC1 voltage reference control register.
+ * @param inputData - 8bit digital data to DAC1.
+ * @return void
+ */
+void DAC1_SetOutput(uint8_t inputData);
+
+/**
+ * @ingroup dac1
+ * @brief  This routine reads the digital input data fed to DAC1 voltage reference control register.
+ * @param void
+ * @return uint8_t inputData - digital data fed to DAC1
+ */
+uint8_t DAC1_GetOutput(void);
+
+#endif // DAC1_H
+/**
+ End of File
+*/
 

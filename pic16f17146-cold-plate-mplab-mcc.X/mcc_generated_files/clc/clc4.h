@@ -1,15 +1,14 @@
 /**
- * System Driver Source File
+ * CLC4 Generated Driver API Header File
  * 
- * @file system.c
+ * @file clc4.h
  * 
- * @ingroup systemdriver
+ * @defgroup  clc4 CLC4
  * 
- * @brief This is the generated driver implementation file for the System Driver.
+ * @brief This is the generated header file for the CLC4 driver.
  *
- * @version Driver Version 2.0.1
+ * @version CLC4 Driver Version 1.0.1
 */
-
 /*
 © [2022] Microchip Technology Inc. and its subsidiaries.
 
@@ -31,42 +30,34 @@
     THIS SOFTWARE.
 */
 
- /**
-   Section: Included Files
- */
-#include "../system.h"
+#ifndef CLC4_H
+ #define CLC4_H
+
+#include <xc.h>
+#include <stdint.h>
+#include <stdbool.h>
 
 /**
-  Section: Driver APIs
-*/
+ * @ingroup clc4
+ * @brief  Initializes the CLC4. This routine configures the CLC4 specific control registers.
+ * @param none
+ * @return none
+ * 
+ */
+void CLC4_Initialize(void);
 
-void SYSTEM_Initialize(void)
-{
-    CLOCK_Initialize();
-    PIN_MANAGER_Initialize();
-    ADCC_Initialize();
-    CLC1_Initialize();
-    CLC2_Initialize();
-    CLC3_Initialize();
-    CLC4_Initialize();
-    CMP2_Initialize();
-    CRC_Initialize();
-    CURRENT_SENSE_CMP_Initialize();
-    CWG1_Initialize();
-    DAC1_Initialize();
-    DAC2_Initialize();
-    EUSART1_Initialize();
-    FAN_PWM_Initialize();
-    FET_PWM_Initialize();
-    FVR_Initialize();
-    NCO1_Initialize();
-    OPA1_Initialize();
-    Timer0_Initialize();
-    Timer1_Initialize();
-    Timer2_Initialize();
-    Timer3_Initialize();
-    Timer4_Initialize();
-    WWDT_Initialize();
-    INTERRUPT_Initialize();
-}
+
+/**
+ * @ingroup clc4
+ * @brief This routine returns output pin status of the CLC module.
+ * @param  none
+ * @retval true - if pin Status is true.
+ * @retval false - if pin Status is false.
+ */
+bool CLC4_OutputStatusGet(void);
+
+#endif  // CLC4_H
+/**
+ End of File
+*/
 

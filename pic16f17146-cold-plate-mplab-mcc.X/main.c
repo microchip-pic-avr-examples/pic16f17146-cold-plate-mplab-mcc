@@ -41,20 +41,22 @@
 #include "OLED.h"
 #include "UI.h"
 #include "mssp1_host.h"
+#include "settings.h"
+#include "config.h"
 
 #include <stdint.h>
 #include <stdbool.h>
 #include <xc.h>
 
-static volatile bool timerActive = false, selfCheck = false, dispRefresh = false;
+static volatile bool selfCheck = false, dispRefresh = false;
 
 //This is called every 10ms from Timer 0
 //DO NOT ADD BLOCKING CODE HERE
 void Timer0_1ms_Callback(void)
 {
-    static uint8_t counter10ms = 1;
-    static uint8_t counter100ms = 1;
-    static uint16_t counter1s = 1;
+    static volatile uint8_t counter10ms = 1;
+    static volatile uint8_t counter100ms = 1;
+    static volatile uint16_t counter1s = 1;
     
     {
         //Call these functions every 1ms
@@ -76,7 +78,6 @@ void Timer0_1ms_Callback(void)
             encoderControl_breatheLED();
         }
 
-        
         counter10ms = 0;
     }
     else
@@ -106,10 +107,6 @@ void Timer0_1ms_Callback(void)
         
         //Set flags
         selfCheck = true;
-        timerActive = true;
-        
-        //ARM WWDT
-        WWDT_armReset();
     }
     else
     {
@@ -126,10 +123,15 @@ int main(void)
     initI2CPins();
     MSSP_HostInit();
     
+#ifdef DEBUG_PRINT
     printf("Starting Up...\r\n");
+#endif
     
     //Print the Reset Registers
     System_printResetRegisters();
+    
+    //Init and Verify Settings / EEPROM
+    settings_init();
     
     //Init Fan Controls
     fanControl_init();
@@ -143,7 +145,9 @@ int main(void)
     //Init Peltier Control
     peltierControl_init();
         
+#ifdef DEBUG_PRINT
     printf("Done initializing...\r\n");
+#endif
     
     //Configure 10ms Callback
     Timer0_OverflowCallbackRegister(&Timer0_1ms_Callback);
@@ -160,6 +164,10 @@ int main(void)
     // Enable the Peripheral Interrupts 
     INTERRUPT_PeripheralInterruptEnable(); 
         
+    //Run Self-Calibration for OPAMP
+    //Must be run before Timer0 starts!
+    currentSense_selfCalibrate();
+    
     //Start Timer 0 (10ms)
     Timer0_Start();
     
@@ -167,8 +175,12 @@ int main(void)
     OLED_init();
     UI_setup();
     
-    FET_PWM_Enable();
+    //Start Fan Controller
     fanControl_start();
+    
+    currentSense_setCurrentLimit(80);
+    
+    //Start Peltier Controller
     peltierControl_start();
     
     while(1)
@@ -177,21 +189,18 @@ int main(void)
         if (selfCheck)
         {
             selfCheck = false;
-            
+                        
             //Run Periodic Self-Check
             peltierControl_periodicCheck();
-        }
-        
-        //Debug Print (1s)
-        if (timerActive)
-        {   
-            timerActive = false;
+            
+#ifdef DEBUG_TELEMETRY
             printf("Fan 1 RPM: %u\r\n", fanControl_getFan1RPM());
             printf("Fan 2 RPM: %u\r\n", fanControl_getFan2RPM());  
             printf("Cold Plate Temp: %d\r\n", tempMonitor_getLastColdTemp());   
             printf("Heatsink Temp: %d\r\n", tempMonitor_getLastHotTemp());   
             printf("Int Temp: %d\r\n", tempMonitor_getLastIntTemp());
-            printf("Average Duty Cycle: %d%%\r\n", peltierControl_getAverageDutyCycle());
+            printf("Average Duty Cycle: %d%%\r\n", peltierControl_getAverageDutyCycle());            
+#endif
         }
         
         if(dispRefresh){ // update UI every 100ms

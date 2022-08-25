@@ -54,7 +54,7 @@
 //CONFIG3
 #pragma config WDTCPS = WDTCPS_11    // WDT Period Select bits->Divider ratio 1:65536
 #pragma config WDTE = SWDTEN    // WDT Operating Mode bits->WDT enabled/disabled by SEN bit
-#pragma config WDTCWS = WDTCWS_5    // WDT Window Select bits->window delay = 25 percent of time; no software control; keyed access required
+#pragma config WDTCWS = WDTCWS_6    // WDT Window Select bits->window always open (100%); no software control; keyed access required
 #pragma config WDTCCS = LFINTOSC    // WDT Input Clock Select bits->WDT reference clock is the 31.0 kHz LFINTOSC
 
 //CONFIG4

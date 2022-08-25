@@ -1,4 +1,5 @@
 #include "settingMenus.h"
+#include "config.h"
 
 // STANDBY OLED FUNTIONS
 

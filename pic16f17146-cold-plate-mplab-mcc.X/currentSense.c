@@ -1,38 +1,45 @@
 #include "currentSense.h"
 #include "mcc_generated_files/opa/opa1.h"
 #include "mcc_generated_files/adcc/adcc.h"
+#include "mcc_generated_files/dac/dac1.h"
+#include "mcc_generated_files/dac/dac2.h"
+#include "config.h"
 
 #include <xc.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <math.h>
 
 //1x, 2x, 4x, 8x, 16x Gains + OFFSET
-static float OPAMPGain16 = 16.0;
+static float OPAMPGain = 8.0;
 static int16_t OPAMPOffset = 0.0;
 
-static CURRENT_SENSE_GAIN systemGain = UNITY;
+static CurrentSenseGain systemGain = UNITY;
+
+#define SYSTEM_GAIN GAIN_8
 
 //Init Current Sense System
 void currentSense_init(void)
 {
-    //Set gain to 16x
-    currentSense_setConfiguration(GAIN_8);
+    //Set gain
+    currentSense_setConfiguration(SYSTEM_GAIN);
     
     //Select VSS as a negative source
     OPA1_SetNegativeSource(OPA1_Vss);
-        
-    //Self-Calibrate
-    //currentSense_selfCalibrate();
+    
+    //Reset Minimum Current Detector
+    DAC2_SetOutput(POWER_DETECT_MINIMUM);
 }
 
 //Runs current sense - self calibration
 //Blocking Code
 void currentSense_selfCalibrate(void)
 {
-    //Disable ADC Interrupts    
-    PIE6bits.ADTIE = 0;
-
+    //2.048V for VREF DAC
+    //~100mV output
+    DAC2_SetOutput(13);
+    
     //Set VDD as ADC Reference
     ADREFbits.PREF = 0b00;
         
@@ -41,42 +48,69 @@ void currentSense_selfCalibrate(void)
     
     /* To find gain...
      * 
-     * Connect the resistor ladder as voltage divider
-     * Measure the Output Voltage in Unity Gain
+     * Measure Output of OPAMP at UG
+     * Measure Output of OPAMP at Gain ???
+     * 
+     * Divide Output @ Gain/UG to find Gain
      */
     
-    //16x
-    //Find Gain Error
-    currentSense_setConfiguration(MEASURE_GAIN_16);
-        
-    //Measure the OPAMP at 16x
+    //First, configure OPAMP
+    //Select the DAC
+    OPA1_SetPositiveChannel(OPA1_posChannel_DAC2);
+    
+    //Select Unity Gain
+    currentSense_setConfiguration(UNITY);
+    
+    //Measure the DAC at 1x
     ADCC_StartConversion(channel_OPA1OUT);
-    while (!ADCC_IsConversionDone());
-    uint16_t opampResult = ADCC_GetFilterValue();
+    while (!ADCC_IsConversionDone())
+    {
+        asm("SLEEP");
+    }
+    uint16_t unityGainResult = ADCC_GetFilterValue();
+
+    //Measure with Gain
+    currentSense_setConfiguration(SYSTEM_GAIN);
+        
+    //Measure the OPAMP with gain
+    ADCC_StartConversion(channel_OPA1OUT);
+    while (!ADCC_IsConversionDone())
+    {
+        asm("SLEEP");
+    }
+    uint16_t gainResult = ADCC_GetFilterValue();
 
     //Calculate Gain
-    OPAMPGain16 = (float)(4096.0 / opampResult);
+    OPAMPGain = (((float)gainResult) / unityGainResult);
     
     //Return OPAMP to Input Pin
-    currentSense_setConfiguration(GAIN_16);
+    OPA1_SetPositiveChannel(OPA1_posChannel_OPA1IN);
+        
+    //Reset Minimum Current Detector
+    DAC2_SetOutput(POWER_DETECT_MINIMUM);
     
     //Set VREF as ADC Reference
     ADREFbits.PREF = 0b11;
     
     //Clear Flag
     PIR6bits.ADTIF = 0;
-    
-    //Re-enable Interrupts
-    PIE6bits.ADTIE = 1;
+}
+
+//Sets the current limit of the demo
+//Units are 100s of mA (e.g.: 100mA = 1, 1A = 10, etc...)
+void currentSense_setCurrentLimit(uint8_t limit)
+{
+    uint8_t dacCode = floorf(DAC_FORMULA_CONSTANT * OPAMPGain * limit);
+    DAC1_SetOutput(dacCode);
 }
 
 //Sets the gain of the current sense amplifier
-void currentSense_setConfiguration(CURRENT_SENSE_GAIN gain)
+void currentSense_setConfiguration(CurrentSenseGain gain)
 {
-    //Force the OPAMP to VDD
-    OPA1CON0bits.SOC = 0b10;
+    //Set to VDD
+    OPA1_SetSoftwareOverride(0x02);
     
-    if (((systemGain == UNITY) || (systemGain == MEASURE_GAIN_16)) && (gain != UNITY))
+    if ((systemGain == UNITY) && (gain != UNITY))
     {
         //Disable Unity Gain
         OPA1_DisableSoftwareUnityGain();
@@ -89,9 +123,6 @@ void currentSense_setConfiguration(CURRENT_SENSE_GAIN gain)
         
         //Select Ladder for input
         OPA1_SetNegativeChannel(OPA1_negChannel_GSEL);
-
-        //Select analog input
-        OPA1_SetPositiveChannel(OPA1_posChannel_OPA1IN);
     }
     
     switch (gain)
@@ -131,38 +162,19 @@ void currentSense_setConfiguration(CURRENT_SENSE_GAIN gain)
             OPA1_SetResistorLadder(OPA1_R2byR1_is_15);
             break;
         }
-        case MEASURE_GAIN_16:
-        {
-            //Configures the resistor ladder as a voltage divider, and the OPAMP as a unity gain buffer
-            //Nominal Output = VDD/16
-//            
-//            //Enable Unity Gain
-//            OPA1_EnableSoftwareUnityGain();
-//
-//            //Connect VDD to Resistor Ladder
-//            OPA1CON3bits.FMS = 0b01;
-//
-//            //Set Gain
-//            OPA1_SetResistorLadder(OPA1_R2byR1_is_15);
-//
-//            //Disconnect Resistor Ladder from In-
-//            OPA1_SetNegativeChannel(OPA1_negChannel_No_Connection);
-//            
-//            //Select GSEL as In+
-//            OPA1_SetPositiveChannel(OPA1_posChannel_GSEL);
-            break;
-        }
     }
     
     //Update Current Gain
     systemGain = gain;
     
-    //Return the OPAMP to normal operation
-    OPA1CON0bits.SOC = 0b00;
+    //Set to VDD
+    OPA1_SetSoftwareOverride(0x00);
 }
 
 //Prints OPAMP Calibration to UART
 void currentSense_printCalibration(void)
 {
-    printf("OPAMP Offset: 0x%x\r\nOPAMP Gain at 16x: %2.4f\r\n", OPAMPOffset, OPAMPGain16);
+#ifdef DEBUG_PRINT
+    printf("OPAMP Offset: 0x%x\r\nOPAMP Gain: %2.4f\r\n", OPAMPOffset, OPAMPGain);
+#endif
 }

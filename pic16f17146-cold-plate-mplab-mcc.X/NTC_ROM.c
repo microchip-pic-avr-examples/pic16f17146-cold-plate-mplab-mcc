@@ -13,7 +13,7 @@ int8_t NTC_ROM_search(uint16_t meas)
     }
     
     //Return Range Error (too hot)
-    if (meas <= NTC_values[NTC_VALUE_SIZE - 1])
+    if (meas <= NTC_values[NTC_VALUE_SIZE])
     {
         return INT8_MAX;
     }

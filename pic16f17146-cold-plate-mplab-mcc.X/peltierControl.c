@@ -9,6 +9,8 @@
 #include "utility.h"
 #include "fanControl.h"
 #include "tempMonitor.h"
+#include "settings.h"
+#include "config.h"
 
 #define FET_PWM_DISABLE_PERIOD_INT() do { PIR3bits.PWM1PIF = 0; PIE3bits.PWM1PIE = 0; } while (0)
 #define FET_PWM_ENABLE_PERIOD_INT() do { PIR3bits.PWM1PIF = 0; PIE3bits.PWM1PIE = 1; } while (0)
@@ -35,8 +37,6 @@ static PeltierError error = PELTIER_ERROR_NONE;
 
 //Target Peltier Temperature
 static int8_t targetTemp = 0;
-static int8_t maxHeatsinkTemp = 0;
-static int8_t maxIntTemp = 0;
 
 //Init the Peltier Current Controller
 void peltierControl_init(void)
@@ -50,8 +50,10 @@ void peltierControl_init(void)
     //For freq. counting, increment is 1
     NCO1INC = 1;
     NCO1CONbits.EN = 1;
-    
-    DAC2_SetOutput(255);    
+        
+    //Enable Int. PWM Signal for CWG
+    //Does not go to output yet
+    FET_PWM_Enable();
 }
 
 //Performs a self-test of the Peltier element. This function will block when executing. 
@@ -64,7 +66,7 @@ bool peltierControl_selfTest(void)
 //If this function is not called, the device will RESET.
 //ONLY CALL THIS FUNCTION FROM MAIN
 void peltierControl_periodicCheck(void)
-{
+{    
     //Clear the WWDT
     WWDT_reset();    
     
@@ -75,17 +77,33 @@ void peltierControl_periodicCheck(void)
         {
             //Fan Error!
             error = PELTIER_FAN1_ERROR;
-            peltierControl_stop();
         }
-        if (tempMonitor_getLastHotTemp() > 0x00)
+        if (tempMonitor_getLastHotTemp() > settings_getSetting(SETTINGS_MAX_HEATSINK_TEMP))
         {
             //Overheat - Heatsink
             error = PELTIER_HEATSINK_OVERHEAT;
+        }
+        if (tempMonitor_getLastIntTemp() > settings_getSetting(SETTINGS_MAX_INT_TEMP))
+        {
+            //Overheat - Int. Temperature
+            error = PELTIER_INT_OVERHEAT;
+        }
+        if (!CLC4_OutputStatusGet())
+        {
+            //Power Error - CWG is ON, but no current is running
+            error = PELTIER_POWER_ERROR;
+        }
+        
+        if (error != PELTIER_ERROR_NONE)
+        {
+#ifdef DEBUG_PRINT
+            printf("Peltier Control Error, Code 0x%x\r\n", error);
+#endif
             peltierControl_stop();
         }
-        if (tempMonitor_getLastIntTemp() > 0x00)
+        else
         {
-            error = PELTIER_INT_OVERHEAT;
+            //No errors - system OK
             
         }
     }
@@ -160,7 +178,7 @@ void peltierControl_adjustThreshold(void)
             CWG1STRbits.CWG1STRA = 0;
             
             //Update DAC Value
-            DAC2_SetOutput(newDACValue);
+            DAC1_SetOutput(newDACValue);
             
             //Update State
             dacUpdateState = CURRENT_LIMIT_SETTLE;            
@@ -196,9 +214,20 @@ bool peltierControl_start(void)
 {
     peltierOn = true;
     
+    //Clear Errors
+    error = PELTIER_ERROR_NONE;
+        
+    //Disable Steering
+    CWG1STRbits.CWG1STRA = 1;
+    
     //Enable WWDT
     WWDT_start();
-    return false;
+    
+    //TODO: Add Sanity Checking
+#ifdef DEBUG_PRINT
+    printf("-- PELTIER ON --\r\n");
+#endif
+    return true;
 }
 
 //Stop the Peltier Regulator
@@ -206,8 +235,15 @@ void peltierControl_stop(void)
 {    
     peltierOn = false;
     
+    //Re-enable Steering
+    CWG1STRbits.CWG1STRA = 0;
+    
     //Disable WWDT
     WWDT_stop();
+    
+#ifdef DEBUG_PRINT
+    printf("-- PELTIER OFF --\r\n");
+#endif
 }
 
 //Set the max current through the loop
