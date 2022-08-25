@@ -7,6 +7,8 @@
 
 #include "config.h"
 
+static uint8_t settingsCache[SETTINGS_CRC];
+
 //Init Settings (Check for validity)
 void settings_init(void)
 {
@@ -15,11 +17,10 @@ void settings_init(void)
     CRCCON2bits.DLEN = 7;
     CRCCON0bits.EN = 1;
     
-    
-    uint8_t memVersion = settings_getSetting(SETTINGS_EEPROM_VERSION);
+    uint8_t memVersion = settings_getSettingFromEEPROM(SETTINGS_EEPROM_VERSION);
     
     //Check for valid EEPROM markers
-    if (!memVersion)
+    if (memVersion != SETTINGS_EEPROM_VERSION)
     {
         //Invalid EEPROM
         settings_writeDefaults();
@@ -52,6 +53,18 @@ void settings_init(void)
 #endif
         }
     }
+    
+    //Load the settings
+    settings_loadFromEEPROM();
+}
+
+void settings_loadFromEEPROM()
+{
+    //Load all data
+    for (uint8_t i = 0; i < SETTINGS_CRC; i++)
+    {
+        settingsCache[i] = eeprom_read(i);
+    }
 }
 
 //Erases EEPROM and writes default values in
@@ -62,8 +75,14 @@ void settings_writeDefaults(void)
 #endif
     
     //Write Defaults
-    settings_writeValue(SETTINGS_LAST_SET_TEMP, DEFAULT_LAST_TEMP_SETTING);
     settings_writeValue(SETTINGS_CURRENT_LIMIT, DEFAULT_CURRENT_LIMIT);
+    settings_writeValue(SETTINGS_TEMP_UNIT, DEFAULT_TEMP_UNIT);
+    settings_writeValue(SETTINGS_MAX_INT_TEMP, DEFAULT_MAX_INT_SETTING);
+    settings_writeValue(SETTINGS_MAX_HEATSINK_TEMP, DEFAULT_MAX_HOT_SETTINGS);
+    settings_writeValue(SETTINGS_DEMO_MODE, DEFAULT_DEMO_MODE);
+    settings_writeValue(SETTINGS_LAST_SET_TEMP, DEFAULT_LAST_TEMP_SETTING);
+    settings_writeValue(SETTINGS_HYSTER_OVER, DEFAULT_TEMP_HYSTER_OVER);
+    settings_writeValue(SETTINGS_HYSTER_UNDER, DEFAULT_TEMP_HYSTER_UNDER);
     
     //Write EEPROM Version ID
     settings_writeValue(SETTINGS_EEPROM_VERSION, COMPILED_EEPROM_VERSION);
@@ -81,9 +100,14 @@ void settings_writeDefaults(void)
 //Returns true if the settings are valid
 bool settings_isValid(void)
 {
-    if (settings_getSetting(SETTINGS_EEPROM_VERSION) != COMPILED_EEPROM_VERSION)
+    if (settings_getSettingFromEEPROM(SETTINGS_EEPROM_VERSION) != COMPILED_EEPROM_VERSION)
     {
         //Invalid EEPROM
+        return false;
+    }
+    if (settings_verifyCRC() != 0x00)
+    {
+        //Invalid CRC
         return false;
     }
     return true;
@@ -136,9 +160,20 @@ uint8_t settings_verifyCRC(void)
 }
 
 //Returns the value at [READ]
-uint8_t settings_getSetting(UserSetting setting)
+uint8_t settings_getSettingFromEEPROM(UserSetting setting)
 {
     return eeprom_read(setting);
+}
+
+//Returns the cached value
+uint8_t settings_getSetting(UserSetting setting)
+{
+    if (setting >= SETTINGS_CRC)
+    {
+        return 0x00;
+    }
+    
+    return settingsCache[setting];
 }
 
 //Writes a setting to memory and updates the checksum.

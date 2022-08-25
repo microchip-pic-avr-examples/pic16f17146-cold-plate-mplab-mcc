@@ -6,6 +6,7 @@
 #include <stdbool.h>
 
 #include "NTC_ROM.h"
+#include "config.h"
 
 #define NTC_ROM_TEST_SIZE 10
 

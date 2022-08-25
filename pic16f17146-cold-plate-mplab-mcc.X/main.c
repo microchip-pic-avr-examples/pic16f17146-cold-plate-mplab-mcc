@@ -42,6 +42,7 @@
 #include "UI.h"
 #include "mssp1_host.h"
 #include "settings.h"
+#include "config.h"
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -202,38 +203,38 @@ int main(void)
 #endif
         }
         
-//        if(dispRefresh){ // update UI every 100ms
-//            switch(UI_getState()){
-//                case STANDBY:
-//                    UI_handleStateInput(MENU, false, settingMenus_standbyUpdate);
-//                    break;
-//                case MENU:
-//                    UI_handleStateInput(navMenu_getSelected(), true, navMenu_update);
-//                    break;
-//                case SET_TEMPERATURE:
-//                    UI_handleStateInput(MENU, true, settingMenus_temperatureUpdate);
-//                    break;
-//                case CHANGE_UNITS:
-//                    UI_handleStateInput(MENU, true, settingMenus_changeUnitsUpdate);
-//                    break;
-//                case START:
-//                    UI_handleStateInput(RUNNING, true, settingMenus_startUpdate);
-//                    break;
-//                case LIMIT_CURRENT:
-//                    UI_handleStateInput(MENU, true, settingMenus_currentUpdate);
-//                    break;
-//                case ABOUT:
-//                    UI_handleStateInput(MENU, false, settingMenus_aboutUpdate);
-//                    break;
-//                case RUNNING:
-//                    UI_handleStateInput(STANDBY, false, runningMenus_runningUpdate);
-//                    break;
-//                case DEMO_MODE_TOGGLE:
-//                    UI_handleStateInput(MENU, true, settingMenus_demoModeToggleUpdate);
-//                    break;
-//            }
-//            dispRefresh = false;
-//        }
+        if(dispRefresh){ // update UI every 100ms
+            switch(UI_getState()){
+                case STANDBY:
+                    UI_handleStateInput(MENU, false, settingMenus_standbyUpdate);
+                    break;
+                case MENU:
+                    UI_handleStateInput(navMenu_getSelected(), true, navMenu_update);
+                    break;
+                case SET_TEMPERATURE:
+                    UI_handleStateInput(MENU, true, settingMenus_temperatureUpdate);
+                    break;
+                case CHANGE_UNITS:
+                    UI_handleStateInput(MENU, true, settingMenus_changeUnitsUpdate);
+                    break;
+                case START:
+                    UI_handleStateInput(RUNNING, true, settingMenus_startUpdate);
+                    break;
+                case LIMIT_CURRENT:
+                    UI_handleStateInput(MENU, true, settingMenus_currentUpdate);
+                    break;
+                case ABOUT:
+                    UI_handleStateInput(MENU, false, settingMenus_aboutUpdate);
+                    break;
+                case RUNNING:
+                    UI_handleStateInput(STANDBY, false, runningMenus_runningUpdate);
+                    break;
+                case DEMO_MODE_TOGGLE:
+                    UI_handleStateInput(MENU, true, settingMenus_demoModeToggleUpdate);
+                    break;
+            }
+            dispRefresh = false;
+        }
 
     }    
 }

@@ -11,7 +11,7 @@ extern "C" {
 #define DEBUG_TELEMETRY 
     
 //If defined, PRINTF will send messages
-//#define DEBUG_PRINT
+#define DEBUG_PRINT
     
 //Lowest allowed temperature in demo mode
 #define DEMO_TEMP_LIMIT_LOW 5
@@ -47,28 +47,28 @@ extern "C" {
     
 //-- Default Values used for resetting EEPROM -- 
 //Some settings are only accessible in developer mode
-    
+        
 //Default Peltier Current Limit
 #define DEFAULT_CURRENT_LIMIT 4
     
-//Default Plate Set Point
-#define DEFAULT_LAST_TEMP_SETTING 10
-    
+//Default to Celsius
+#define DEFAULT_TEMP_UNIT 'C'
+        
 //Default Temperature Limits
 #define DEFAULT_MAX_INT_SETTING 70
 #define DEFAULT_MAX_HOT_SETTINGS 80
+    
+//Demo mode is on by default
+#define DEFAULT_DEMO_MODE true
+    
+//Default Plate Set Point
+#define DEFAULT_LAST_TEMP_SETTING 10
     
 //Default Temperature Hysteresis
 //Will turn off at SET_POINT + OVER and on again at SET_POINT + UNDER
 #define DEFAULT_TEMP_HYSTER_OVER 5
 #define DEFAULT_TEMP_HYSTER_UNDER 5
-    
-//Demo mode is on by default
-#define DEFAULT_DEMO_MODE true
-    
-//Default to Celsius
-#define DEFAULT_TEMP_UNIT 'C'
-    
+        
 #ifdef	__cplusplus
 }
 #endif
