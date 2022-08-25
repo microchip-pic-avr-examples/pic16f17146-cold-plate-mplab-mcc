@@ -13,7 +13,7 @@ void settingMenus_standbySetup(void){
     OLED_command(line_address[2]);
     OLED_writeString("  Plate Temp: ");
     
-    if(settings_getValue(SETTINGS_DEMO_MODE)){
+    if(settings_getSetting(SETTINGS_DEMO_MODE)){
         OLED_command(line_address[3]);
         OLED_writeString("   Demo Mode On     ");
     }
@@ -52,11 +52,11 @@ void settingMenus_temperatureSetup(void){
     OLED_writeString("  Min   Set   Max  ");
     
     OLED_command(line_address[3]);
-    sprintf(disp_string, "  %d          %d", settings_getValue(SETTINGS_DEMO_MODE) ? DEMO_TEMP_LIMIT_LOW : TEMP_LIMIT_LOW, TEMP_LIMIT_MAX);
+    sprintf(disp_string, "  %d          %d", settings_getSetting(SETTINGS_DEMO_MODE) ? DEMO_TEMP_LIMIT_LOW : TEMP_LIMIT_LOW, TEMP_LIMIT_MAX);
     OLED_writeString(disp_string);
     
     OLED_command(line_address[3]+8);
-    target_temp = settings_getValue(SETTINGS_LAST_TEMP); // read EEPROM to get this value
+    target_temp = settings_getSetting(SETTINGS_LAST_SET_TEMP); // read EEPROM to get this value
     sprintf(disp_string, "%3d", target_temp);
     OLED_writeString(disp_string);
 }
@@ -66,7 +66,7 @@ void settingMenus_temperatureUpdate(int16_t moves){
     char disp_string[20];
     
     // keeps target temp within in + max temp range
-    int8_t min_temp = settings_getValue(SETTINGS_DEMO_MODE) ? DEMO_TEMP_LIMIT_LOW : TEMP_LIMIT_LOW;
+    int8_t min_temp = settings_getSetting(SETTINGS_DEMO_MODE) ? DEMO_TEMP_LIMIT_LOW : TEMP_LIMIT_LOW;
     target_temp = (target_temp+moves <= min_temp) ? min_temp : (target_temp+moves >= TEMP_LIMIT_MAX) ? TEMP_LIMIT_MAX : (int8_t)(target_temp + moves);
     
     sprintf(disp_string, "%3d", target_temp);
@@ -84,7 +84,7 @@ int8_t settingMenus_getTargetTemp(void){
 // CHANGE UNITS
 static float current_limit = 0;
 void settingMenus_currentSetup(void){
-    current_limit = settings_getValue(SETTINGS_CURRENT_LIMIT);
+    current_limit = settings_getSetting(SETTINGS_CURRENT_LIMIT);
        
     OLED_clear();
     
@@ -122,9 +122,9 @@ float settingMenus_getCurrentLimit(void){
 }
 
 // CHANGE UNITS
-uint8_t temp_unit = CELSIUS;
+uint8_t temp_unit = 'C';
 void settingMenus_changeUnitsSetup(void){
-    temp_unit = settings_getValue(SETTINGS_TEMP_UNIT);
+    temp_unit = settings_getSetting(SETTINGS_TEMP_UNIT);
     OLED_clear();
     
     OLED_command(line_address[0]);
@@ -132,9 +132,9 @@ void settingMenus_changeUnitsSetup(void){
     
     OLED_command(line_address[2]);
 
-    if(temp_unit == CELSIUS){
+    if(temp_unit == 'C'){
         OLED_writeString("      Celsius   ");
-    } else if(temp_unit == FAHRENHEIT){
+    } else if(temp_unit == 'F'){
         OLED_writeString("     Fahrenheit ");
     }
     
@@ -143,11 +143,11 @@ void settingMenus_changeUnitsSetup(void){
 void settingMenus_changeUnitsUpdate(int16_t moves){
     moves = moves % 2;
     if(moves){
-        temp_unit = (temp_unit == CELSIUS) ? FAHRENHEIT : CELSIUS;
+        temp_unit = (temp_unit == 'C') ? 'F' : 'C';
         OLED_command(line_address[2]);
-        if(temp_unit == CELSIUS){
+        if(temp_unit == 'C'){
             OLED_writeString("      Celsius   ");
-        } else if(temp_unit == FAHRENHEIT){
+        } else if(temp_unit == 'F'){
             OLED_writeString("     Fahrenheit ");
         }
     }
@@ -191,7 +191,7 @@ void settingMenus_startSetup(void){
     OLED_writeString("Target Temp: ");
     
     char disp_string[20];
-    sprintf(disp_string, "%4d", settings_getValue(SETTINGS_LAST_TEMP));
+    sprintf(disp_string, "%4d", settings_getSetting(SETTINGS_LAST_SET_TEMP));
     OLED_writeString(disp_string);
     
     OLED_data(0b00000000);
@@ -199,7 +199,7 @@ void settingMenus_startSetup(void){
     
     OLED_command(line_address[1]);
     OLED_writeString("Current lim: ");
-    sprintf(disp_string, "%4.1f A", settings_getValue(SETTINGS_LAST_TEMP));
+    sprintf(disp_string, "%4.1f A", settings_getSetting(SETTINGS_LAST_SET_TEMP));
     OLED_writeString(disp_string);
 
 }
@@ -216,7 +216,7 @@ uint8_t demo_mode = 0;
 
 // DEMO MODE
 void settingMenus_demoModeToggleSetup(void){
-    demo_mode = settings_getValue(SETTINGS_DEMO_MODE);
+    demo_mode = settings_getSetting(SETTINGS_DEMO_MODE);
     OLED_clear();
     
     OLED_command(line_address[0]);
@@ -247,7 +247,7 @@ void settingMenus_demoModeToggleUpdate(int16_t moves){
                 OLED_command(line_address[3]);
                 if(((value[0]*100)+(value[1]*10)+value[2]) == PASSCODE){
                     // toggle demo mode
-                    if(settings_getValue(SETTINGS_DEMO_MODE)){
+                    if(settings_getSetting(SETTINGS_DEMO_MODE)){
                         OLED_writeString(" Demo Mode Disabled  ");
                         demo_mode = 0;
                     } else {
