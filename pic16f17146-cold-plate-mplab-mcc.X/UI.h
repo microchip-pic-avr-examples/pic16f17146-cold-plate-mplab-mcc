@@ -20,6 +20,7 @@ void UI_setState(UI_STATE new_state);
 UI_STATE UI_getLastState(void);
 void UI_setup(void);
 void UI_handleStateInput(UI_STATE exit_state, void (*ui_update)(int16_t));
+void UI_updateEEPROM(void);
 
     
 #ifdef	__cplusplus

@@ -25,6 +25,7 @@ void settings_writeDefaults(void)
     setting_writeValue(SETTINGS_LAST_TEMP, DEFAULT_TEMPERATURE_SETTING);
     setting_writeValue(SETTINGS_CURRENT_LIMIT, DEFAULT_CURRENT_LIMIT);
     setting_writeValue(SETTINGS_DEMO_MODE, DEFAULT_DEMO_MODE);
+    setting_writeValue(SETTINGS_TEMP_UNIT, DEFAULT_TEMP_UNIT);
     
     //Write EEPROM Version ID Last
     setting_writeValue(SETTINGS_EEPROM_VERSION, COMPILED_EEPROM_VERSION);
