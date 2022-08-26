@@ -20,13 +20,14 @@ void settings_init(void)
     uint8_t memVersion = settings_getSettingFromEEPROM(SETTINGS_EEPROM_VERSION);
     
     //Check for valid EEPROM markers
-    if (memVersion != SETTINGS_EEPROM_VERSION)
+    if (memVersion != COMPILED_EEPROM_VERSION)
     {
-        //Invalid EEPROM
-        settings_writeDefaults();
+
 #ifdef DEBUG_PRINT
         printf("EEPROM Version ID Mismatch - Settings Reset.\r\n");
 #endif
+        //Invalid EEPROM
+        settings_writeDefaults();
     }
     else
     {
@@ -35,8 +36,10 @@ void settings_init(void)
 #endif
         
         uint8_t checksum = settings_verifyCRC();
-        //printf("CRC Checksum = 0x%x\r\n", checksum);
-
+#ifdef DEBUG_PRINT
+        printf("CRC Checksum = 0x%x\r\n", checksum);
+#endif
+        
         //Verify checksum
         if (checksum != 0x00)
         {
@@ -50,12 +53,27 @@ void settings_init(void)
         {
 #ifdef DEBUG_PRINT
             printf("Memory Checksum OK.\r\n");
+            
 #endif
         }
     }
     
     //Load the settings
     settings_loadFromEEPROM();
+    
+#ifdef DEBUG_PRINT
+    printf("Settings cached:\r\n");
+    printf("EEPROM VERSION: %d\r\n", settingsCache[SETTINGS_EEPROM_VERSION]);
+    printf("Current limit: %d\r\n", settingsCache[SETTINGS_CURRENT_LIMIT]);
+    printf("Temp Unit: %d\r\n", settingsCache[SETTINGS_TEMP_UNIT]);
+    printf("Max int temp: %d\r\n", settingsCache[SETTINGS_MAX_INT_TEMP]);
+    printf("Max heatsink temp: %d\r\n", settingsCache[SETTINGS_MAX_HEATSINK_TEMP]);
+    printf("Settings demo mode: %d\r\n", settingsCache[SETTINGS_DEMO_MODE]);
+    printf("Last set temp: %d\r\n", settingsCache[SETTINGS_LAST_SET_TEMP]);
+    printf("settings hyster over: %d\r\n", settingsCache[SETTINGS_HYSTER_OVER]);
+    printf("settings hyster under: %d\r\n", settingsCache[SETTINGS_HYSTER_UNDER]);
+    printf("settings CRC: %d\r\n", settingsCache[SETTINGS_HYSTER_UNDER]);
+#endif
 }
 
 void settings_loadFromEEPROM()
@@ -179,6 +197,9 @@ uint8_t settings_getSetting(UserSetting setting)
 //Writes a setting to memory and updates the checksum.
 void settings_writeSetting(UserSetting setting, uint8_t value)
 {
+    //Update Cache
+    settingsCache[setting] = value;
+    
     //Write the setting to memory
     settings_writeValue(setting, value);
     
@@ -189,6 +210,8 @@ void settings_writeSetting(UserSetting setting, uint8_t value)
 //Writes [VALUE] to [WRITE]
 void settings_writeValue(UserSetting setting, uint8_t value)
 {
+    settingsCache[setting] = value; // update cache
+    
     eeprom_write(setting, value);
 }
 

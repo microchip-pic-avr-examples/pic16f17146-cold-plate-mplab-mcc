@@ -172,6 +172,7 @@ int main(void)
     Timer0_Start();
     
     //Init OLED Display
+    settingMenus_populateSettings();
     OLED_init();
     UI_setup();
     
