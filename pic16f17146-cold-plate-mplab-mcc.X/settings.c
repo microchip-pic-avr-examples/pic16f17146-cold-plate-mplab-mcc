@@ -20,7 +20,7 @@ void settings_init(void)
     uint8_t memVersion = settings_getSettingFromEEPROM(SETTINGS_EEPROM_VERSION);
     
     //Check for valid EEPROM markers
-    if (memVersion != SETTINGS_EEPROM_VERSION)
+    if (memVersion != COMPILED_EEPROM_VERSION)
     {
         //Invalid EEPROM
         settings_writeDefaults();

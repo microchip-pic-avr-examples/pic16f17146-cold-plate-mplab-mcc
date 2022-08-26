@@ -72,16 +72,26 @@ void UI_handleStateInput(UI_STATE exit_state, void (*ui_update)(int16_t)){
 
 //Check if current value is different than what is in EEPROM
 void UI_updateEEPROM(void){
-    if(settings_getValue(SETTINGS_LAST_TEMP) != settingMenus_getTargetTemp()){
-        setting_writeValue(SETTINGS_LAST_TEMP, settingMenus_getTargetTemp());
+    bool changed = false;
+    if(settings_getSetting(SETTINGS_LAST_SET_TEMP) != (uint8_t)settingMenus_getTargetTemp()){
+        settings_writeValue(SETTINGS_LAST_SET_TEMP, (uint8_t)settingMenus_getTargetTemp());
+        printf("Wrote settings temp\r\n");
+        changed = true;
     }
-    if(settings_getValue(SETTINGS_CURRENT_LIMIT) != settingMenus_getCurrentLimit()){
-        setting_writeValue(SETTINGS_CURRENT_LIMIT, settingMenus_getCurrentLimit());
+    if(settings_getSetting(SETTINGS_CURRENT_LIMIT) != settingMenus_getCurrentLimit()){
+        settings_writeValue(SETTINGS_CURRENT_LIMIT, settingMenus_getCurrentLimit());
+        changed = true;
     }
-    if(settings_getValue(SETTINGS_TEMP_UNIT) != settingMenus_getTempUnit()){
-        setting_writeValue(SETTINGS_TEMP_UNIT, settingMenus_getTempUnit());
+    if(settings_getSetting(SETTINGS_TEMP_UNIT) != settingMenus_getTempUnit()){
+        settings_writeValue(SETTINGS_TEMP_UNIT, settingMenus_getTempUnit());
+        changed = true;
     }
-    if(settings_getValue(SETTINGS_DEMO_MODE) != settingMenus_getDemoMode()){
-        setting_writeValue(SETTINGS_DEMO_MODE, settingMenus_getDemoMode());
+    if(settings_getSetting(SETTINGS_DEMO_MODE) != settingMenus_getDemoMode()){
+        settings_writeValue(SETTINGS_DEMO_MODE, settingMenus_getDemoMode());
+        changed = true;
+    }
+    
+    if(changed){
+        settings_writeCRC();
     }
 }

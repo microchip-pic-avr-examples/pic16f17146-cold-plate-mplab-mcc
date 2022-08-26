@@ -9,6 +9,8 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
+    
+
 //Settings    
 typedef enum{
     SETTINGS_EEPROM_VERSION = 0, SETTINGS_CURRENT_LIMIT, SETTINGS_TEMP_UNIT, 

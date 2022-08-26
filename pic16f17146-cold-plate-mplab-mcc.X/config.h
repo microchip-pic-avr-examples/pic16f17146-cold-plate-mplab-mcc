@@ -48,8 +48,8 @@ extern "C" {
 //-- Default Values used for resetting EEPROM -- 
 //Some settings are only accessible in developer mode
         
-//Default Peltier Current Limit
-#define DEFAULT_CURRENT_LIMIT 4
+//Default Peltier Current Limit (divide by 10 to avoid using float))
+#define DEFAULT_CURRENT_LIMIT 40
     
 //Default to Celsius
 #define DEFAULT_TEMP_UNIT 'C'
