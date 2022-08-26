@@ -59,25 +59,25 @@ void runningMenus_runningUpdate(int16_t moves){
         case STATS2:
             // Heatsink temp
             OLED_command(line_address[1]+14);
-            sprintf(disp_buff, "%4d", tempMonitor_getLastHotTemp());
+            sprintf(disp_buff, "%4d", dispTemp(tempMonitor_getLastHotTemp()));
             OLED_writeString(disp_buff);
             OLED_data(0b00000000); // degrees symbol
-            OLED_writeString("C");
+            OLED_writeTempUnit();
             
             // MCU Temp
             OLED_command(line_address[2]+14);
-            sprintf(disp_buff, "%4d", tempMonitor_getLastIntTemp());
+            sprintf(disp_buff, "%4d", dispTemp(tempMonitor_getLastIntTemp()));
             OLED_writeString(disp_buff);
             OLED_data(0b00000000); // degrees symbol
-            OLED_writeString("C");
+            OLED_writeTempUnit();
             break;
     }
     // update current Plate Temperature
     OLED_command(line_address[0]+12);
-    sprintf(disp_buff, "%d/%d", tempMonitor_getLastColdTemp(), settingMenus_getTargetTemp());
+    sprintf(disp_buff, "%d/%d", dispTemp(tempMonitor_getLastColdTemp()), dispTemp(settingMenus_getTargetTemp()));
     OLED_writeString(disp_buff);
     OLED_data(0b00000000); // degrees symbol
-    OLED_writeString("C");
+    OLED_writeTempUnit();
     
     // cycles the stats every 10 seconds
     if(counter10s >= 100){

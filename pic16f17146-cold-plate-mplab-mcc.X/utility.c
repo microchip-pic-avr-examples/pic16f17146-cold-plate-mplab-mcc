@@ -1,6 +1,7 @@
 #include "utility.h"
 
 #include "mcc_generated_files/system/system.h"
+#include "settings.h"
 
 #include <xc.h>
 #include <stdint.h>
@@ -56,4 +57,12 @@ void WWDT_armReset(void)
 void WWDT_reset(void)
 {
     asm("CLRWDT");
+}
+
+int8_t CtoF(int8_t celsius){
+    return (int8_t)((celsius * 9.0/5.0)+ 32);
+}
+
+int8_t dispTemp(int8_t temp){
+    return (settings_getSetting(SETTINGS_TEMP_UNIT) == 'C') ? temp : CtoF(temp);
 }

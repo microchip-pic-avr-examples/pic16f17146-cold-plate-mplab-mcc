@@ -20,6 +20,7 @@ void OLED_init(void);
 void OLED_writeString(char *string);
 void OLED_clear(void);
 void OLED_clear_line(void);
+void OLED_writeTempUnit(void);
 
 #ifdef	__cplusplus
 }

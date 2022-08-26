@@ -25,10 +25,11 @@ void settingMenus_standbySetup(void){
 void settingMenus_standbyUpdate(int16_t moves){
     char temp_buff[4];
     OLED_command(line_address[2] + 14);
-    sprintf(temp_buff, "%d", tempMonitor_getLastColdTemp());
+    sprintf(temp_buff, "%d", dispTemp(tempMonitor_getLastColdTemp()));
     OLED_writeString(temp_buff);
     OLED_data(0b00000000); // degrees symbol
-    OLED_writeString("C ");
+    OLED_writeTempUnit();
+    OLED_writeString(" ");
     
 }
 
@@ -46,17 +47,18 @@ void settingMenus_temperatureSetup(void){
     OLED_command(line_address[0]);
     OLED_writeString("Set Temperature (");
     OLED_data(0b00000000);
-    OLED_writeString("C)");
+    OLED_writeTempUnit();
+    OLED_writeString(")");
     
     OLED_command(line_address[2]);
     OLED_writeString("  Min   Set   Max  ");
     
     OLED_command(line_address[3]);
-    sprintf(disp_string, "  %d          %d", (bool)settings_getSetting(SETTINGS_DEMO_MODE) ? DEMO_TEMP_LIMIT_LOW : TEMP_LIMIT_LOW, TEMP_LIMIT_MAX);
+    sprintf(disp_string, "  %d          %d", settings_getSetting(SETTINGS_DEMO_MODE) ? dispTemp(DEMO_TEMP_LIMIT_LOW) : dispTemp(TEMP_LIMIT_LOW), dispTemp(TEMP_LIMIT_MAX));
     OLED_writeString(disp_string);
 
     OLED_command(line_address[3]+8);
-    sprintf(disp_string, "%3d", target_temp);
+    sprintf(disp_string, "%3d", dispTemp(target_temp));
     OLED_writeString(disp_string);
     #ifdef DEBUG_PRINT
     printf("Target temp setup: %d\r\n", target_temp);
@@ -71,7 +73,7 @@ void settingMenus_temperatureUpdate(int16_t moves){
     int8_t min_temp = settings_getSetting(SETTINGS_DEMO_MODE) ? DEMO_TEMP_LIMIT_LOW : TEMP_LIMIT_LOW;
     target_temp = (target_temp+moves <= min_temp) ? min_temp : (target_temp+moves >= TEMP_LIMIT_MAX) ? TEMP_LIMIT_MAX : (int8_t)(target_temp + moves);
     
-    sprintf(disp_string, "%3d", target_temp);
+    sprintf(disp_string, "%3d", dispTemp(target_temp));
         #ifdef DEBUG_PRINT
     printf("Target temp update: %d\r\n", target_temp);
         #endif
@@ -208,11 +210,11 @@ void settingMenus_startSetup(void){
     OLED_writeString("Target Temp: ");
     
     char disp_string[20];
-    sprintf(disp_string, "%4d", (int8_t)settings_getSetting(SETTINGS_LAST_SET_TEMP));
+    sprintf(disp_string, "%4d", dispTemp(target_temp));
     OLED_writeString(disp_string);
     
     OLED_data(0b00000000);
-    OLED_writeString("C");
+    OLED_writeTempUnit();
     
     OLED_command(line_address[1]);
     OLED_writeString("Current lim: ");

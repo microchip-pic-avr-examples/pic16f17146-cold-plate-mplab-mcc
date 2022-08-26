@@ -1,4 +1,5 @@
 #include "OLED.h"
+#include "settings.h"
 
 #define OLED_CONTROLLER_ADDR 0x3C // 7-bit client address
 
@@ -108,4 +109,8 @@ void OLED_writeString(char *string){
     for(int i = 0; i < strlen(string); i++){
         OLED_data((uint8_t)string[i]);
     }
+}
+
+void OLED_writeTempUnit(void){
+    (settings_getSetting(SETTINGS_TEMP_UNIT) == 'C') ? OLED_writeString("C") : OLED_writeString("F");
 }
