@@ -179,6 +179,13 @@ uint8_t settings_getSetting(UserSetting setting)
 //Writes a setting to memory and updates the checksum.
 void settings_writeSetting(UserSetting setting, uint8_t value)
 {
+    if (setting >= SETTINGS_CRC)
+    {
+        return;
+    }
+    
+    settingsCache[setting] = value;
+    
     //Write the setting to memory
     settings_writeValue(setting, value);
     
@@ -189,6 +196,13 @@ void settings_writeSetting(UserSetting setting, uint8_t value)
 //Writes [VALUE] to [WRITE]
 void settings_writeValue(UserSetting setting, uint8_t value)
 {
+    if (setting >= SETTINGS_CRC)
+    {
+        return;
+    }
+    
+    settingsCache[setting] = value;
+
     eeprom_write(setting, value);
 }
 

@@ -11,42 +11,34 @@ extern "C" {
 #include "navMenu.h"
 #include "OLED.h"
 #include "tempMonitor.h"
+#include "settings.h"
+#include "config.h"
     
 // STANDBY
 void settingMenus_standbySetup(void);
-void settingMenus_standbyUpdate(void);
+void settingMenus_standbyUpdate(int16_t moves);
 
 // TEMPERATURE
 void settingMenus_temperatureSetup(void);
 void settingMenus_temperatureUpdate(int16_t moves);
 
-// temp setters and getters
-void settingMenus_setTargetTemp(int8_t temp);
+// temp getters
 int8_t settingMenus_getTargetTemp(void);
-void settingMenus_setTargetTemp(int8_t temp);
-int8_t settingMenus_getTargetTemp(void);
-void settingMenus_setMinTemp(int8_t temp);
-int8_t settingMenus_getMinTemp(void);
-void settingMenus_setMaxTemp(int8_t temp);
-int8_t settingMenus_getMaxTemp(void);
 
 // LIMIT CURRENT
 void settingMenus_currentSetup(void);
 void settingMenus_currentUpdate(int16_t moves);
-void settingMenus_setCurrentLimit(float limit);
+// current limit getter
 float settingMenus_getCurrentLimit(void);
-void settingMenus_setMaxCurrentLimit(float limit);
-float settingMenus_getMaxCurrentLimit(void);
 
 // CHANGE UNITS
 void settingMenus_changeUnitsSetup(void);
 void settingMenus_changeUnitsUpdate(int16_t moves);
-bool settingMenus_getIsCelsius(void);
-void settingMenus_setIsCelsius(bool celsius);
+uint8_t settingMenus_getTempUnit(void);
 
 // ABOUT
 void settingMenus_aboutSetup(void);
-void settingMenus_aboutUpdate(void);
+void settingMenus_aboutUpdate(int16_t moves);
 
 // START
 void settingMenus_startSetup(void);
@@ -55,6 +47,8 @@ void settingMenus_startUpdate(int16_t moves);
 // DEMO MODE
 void settingMenus_demoModeToggleSetup(void);
 void settingMenus_demoModeToggleUpdate(int16_t moves);
+uint8_t settingMenus_getDemoMode(void);
+
 
 #ifdef	__cplusplus
 }

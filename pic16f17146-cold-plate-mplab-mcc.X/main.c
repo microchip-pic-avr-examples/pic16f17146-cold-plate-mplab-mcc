@@ -206,31 +206,33 @@ int main(void)
         if(dispRefresh){ // update UI every 100ms
             switch(UI_getState()){
                 case STANDBY:
-                    UI_handleStateInput(MENU, false, settingMenus_standbyUpdate);
+                    UI_handleStateInput(MENU, settingMenus_standbyUpdate);
                     break;
                 case MENU:
-                    UI_handleStateInput(navMenu_getSelected(), true, navMenu_update);
+                    UI_handleStateInput(navMenu_getSelected(), navMenu_update);
                     break;
                 case SET_TEMPERATURE:
-                    UI_handleStateInput(MENU, true, settingMenus_temperatureUpdate);
+                    UI_handleStateInput(MENU, settingMenus_temperatureUpdate);
                     break;
                 case CHANGE_UNITS:
-                    UI_handleStateInput(MENU, true, settingMenus_changeUnitsUpdate);
+                    UI_handleStateInput(MENU, settingMenus_changeUnitsUpdate);
                     break;
                 case START:
-                    UI_handleStateInput(RUNNING, true, settingMenus_startUpdate);
+                    UI_handleStateInput(RUNNING, settingMenus_startUpdate);
                     break;
                 case LIMIT_CURRENT:
-                    UI_handleStateInput(MENU, true, settingMenus_currentUpdate);
+                    UI_handleStateInput(MENU, settingMenus_currentUpdate);
                     break;
                 case ABOUT:
-                    UI_handleStateInput(MENU, false, settingMenus_aboutUpdate);
+                    UI_handleStateInput(MENU, settingMenus_aboutUpdate);
                     break;
                 case RUNNING:
-                    UI_handleStateInput(STANDBY, false, runningMenus_runningUpdate);
+                    UI_handleStateInput(STANDBY, runningMenus_runningUpdate);
                     break;
                 case DEMO_MODE_TOGGLE:
-                    UI_handleStateInput(MENU, true, settingMenus_demoModeToggleUpdate);
+                    UI_handleStateInput(MENU, settingMenus_demoModeToggleUpdate);
+                    break;
+                case ERROR: // NO IMPLEMENTATION YET
                     break;
             }
             dispRefresh = false;

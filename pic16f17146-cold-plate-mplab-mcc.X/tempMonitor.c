@@ -166,7 +166,7 @@ void tempMonitor_loadResults(void)
             
             buffer += TS_OFFSET;
             buffer /= 10;
-            intTemp = buffer & 0xFF;
+            intTemp = (int8_t)(buffer & 0xFF);
             
             break;
         }

@@ -14,7 +14,7 @@ extern "C" {
 #include "settingMenus.h"
     
 void runningMenus_runningSetup(void);
-void runningMenus_runningUpdate(void);
+void runningMenus_runningUpdate(int16_t moves);
 
 
 #ifdef	__cplusplus

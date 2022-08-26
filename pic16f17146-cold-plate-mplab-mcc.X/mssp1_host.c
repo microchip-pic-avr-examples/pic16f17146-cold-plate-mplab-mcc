@@ -58,7 +58,7 @@ inline bool startI2CWrite(uint8_t addr)
     while (MSSP_START); 
 
     //Send the I2C Address
-    WriteByteToMSSP(addr << 1); 
+    WriteByteToMSSP((uint8_t)(addr << 1)); 
     
     //If NACKed, stop I2C communication
     if (MSSP_NACKED)
@@ -82,7 +82,7 @@ inline bool startI2CRead(uint8_t addr)
     while (MSSP_START);                                                         
 
     //Load device address (read)
-    WriteByteToMSSP((addr << 1) | 0b1);                                         
+    WriteByteToMSSP((uint8_t)((addr << 1) | 0b1));                                         
     
     //If NACKed, stop I2C communication
     if (MSSP_NACKED)
@@ -171,7 +171,7 @@ bool MSSP_RegisterSelectAndRead(uint8_t deviceADDR, uint8_t registerADDR, uint8_
     while (MSSP_RESTART);
 
     //Load device address (read)
-    WriteByteToMSSP((deviceADDR << 1) | 0b1);
+    WriteByteToMSSP((uint8_t)((deviceADDR << 1) | 0b1));
 
     //If NACKed, stop I2C communication
     if (MSSP_NACKED)

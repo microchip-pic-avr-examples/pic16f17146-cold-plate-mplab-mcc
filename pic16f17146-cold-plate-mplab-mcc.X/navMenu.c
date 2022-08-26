@@ -1,7 +1,7 @@
 #include "navMenu.h"
 
 // MENU OLED FUNTIONS
-const char* options[] = {"Go Back", "Start", "Set Temperature", "Change Units", "Limit Current", "About", "Demo Mode Toggle"};
+char* options[] = {"Go Back", "Start", "Set Temperature", "Change Units", "Limit Current", "About", "Demo Mode Toggle"};
 
 menu_t menu = {
 .options = options,
@@ -48,7 +48,7 @@ void navMenu_update(int16_t moves){
                 moves-=(OLED_LINE_NUM-1-menu.ast_pos); // remove number of moves made from moves
                 menu.ast_pos=OLED_LINE_NUM-1; // update ast pos
             } else { // otherwise just move asterisk down page
-                navMenu_updateAsterisk(menu.ast_pos, menu.ast_pos+moves);
+                navMenu_updateAsterisk(menu.ast_pos, (uint8_t)(menu.ast_pos + moves));
                 menu.ast_pos+=moves;
                 moves = 0;
             }
@@ -61,7 +61,7 @@ void navMenu_update(int16_t moves){
                 moves+=menu.ast_pos; // remove number of moves made from moves
                 menu.ast_pos = 0; // update ast_pos
             } else { // otherwise just move asterisk up page
-                navMenu_updateAsterisk(menu.ast_pos, menu.ast_pos+moves);
+                navMenu_updateAsterisk(menu.ast_pos, (uint8_t)(menu.ast_pos + moves));
                 menu.ast_pos+=moves;
                 moves = 0;
             }
@@ -81,14 +81,14 @@ void navMenu_update(int16_t moves){
 void navMenu_scroll(int16_t moves){
     int8_t scroll_room = 0;
     if(moves > 0){ // scroll down
-        scroll_room = menu.size - (menu.top_item+OLED_LINE_NUM);
+        scroll_room = (int8_t)menu.size - (menu.top_item+OLED_LINE_NUM);
         if(scroll_room){ // if there is room to scroll down
             moves = (moves < scroll_room) ? moves : scroll_room; // don't scroll down more than there is room
             menu.top_item+=moves;
             navMenu_populate(menu.top_item, OLED_LINE_NUM-1);
         }
     } else if(moves < 0){ // scroll up
-        scroll_room = -menu.top_item;
+        scroll_room = (int8_t)-menu.top_item;
         if(scroll_room){
             moves = (moves > scroll_room ? moves : scroll_room); // make sure we don't scroll move than there is room
             menu.top_item+=moves;
@@ -125,7 +125,7 @@ void navMenu_updateArrows(void){
 }
 
 UI_STATE navMenu_getSelected(void){
-    int8_t selected = menu.top_item + menu.ast_pos;
+    int8_t selected = (int8_t)menu.top_item + menu.ast_pos;
     
     if(!strcmp(options[selected], "Go Back")){
         return STANDBY; // TODO: change this depending on what settings have been changed

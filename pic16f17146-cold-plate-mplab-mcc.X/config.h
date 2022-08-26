@@ -16,8 +16,8 @@ extern "C" {
 //Lowest allowed temperature in demo mode
 #define DEMO_TEMP_LIMIT_LOW 5
 
-//Lowest Temperature Limit Possible
-#define TEMP_LIMIT_LOW -13
+//Lowest allowed temperature in not demo mode
+#define TEMP_LIMIT_LOW -20
     
 //Maximum allowed temperature to set
 #define TEMP_LIMIT_MAX 25
