@@ -21,6 +21,7 @@ void OLED_writeString(char *string);
 void OLED_clear(void);
 void OLED_clear_line(void);
 void OLED_writeTempUnit(void);
+void OLED_writeSpaces(uint8_t spaces);
 
 #ifdef	__cplusplus
 }

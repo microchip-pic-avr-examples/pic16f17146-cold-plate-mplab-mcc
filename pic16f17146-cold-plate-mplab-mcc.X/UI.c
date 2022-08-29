@@ -75,7 +75,6 @@ void UI_updateEEPROM(void){
     bool changed = false;
     if(settings_getSetting(SETTINGS_LAST_SET_TEMP) != (uint8_t)settingMenus_getTargetTemp()){
         settings_writeValue(SETTINGS_LAST_SET_TEMP, (uint8_t)settingMenus_getTargetTemp());
-        printf("Wrote settings temp\r\n");
         changed = true;
     }
     if(settings_getSetting(SETTINGS_CURRENT_LIMIT) != settingMenus_getCurrentLimit()){

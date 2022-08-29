@@ -38,8 +38,7 @@ void runningMenus_runningUpdate(int16_t moves){
             // Avg. Current
             OLED_command(line_address[1]+17);
             //sprintf(disp_buff, "4%d", getCurrent()); // TODO: replace with current reading function
-            strcpy(disp_buff, "5 A"); // TODO: remove
-            OLED_writeString(disp_buff);
+            OLED_writeString("5 A");
             
             break;
         case NEW_STATS2:
@@ -61,14 +60,12 @@ void runningMenus_runningUpdate(int16_t moves){
             OLED_command(line_address[1]+14);
             sprintf(disp_buff, "%4d", dispTemp(tempMonitor_getLastHotTemp()));
             OLED_writeString(disp_buff);
-            OLED_data(0b00000000); // degrees symbol
             OLED_writeTempUnit();
             
             // MCU Temp
             OLED_command(line_address[2]+14);
             sprintf(disp_buff, "%4d", dispTemp(tempMonitor_getLastIntTemp()));
             OLED_writeString(disp_buff);
-            OLED_data(0b00000000); // degrees symbol
             OLED_writeTempUnit();
             break;
     }
@@ -76,7 +73,6 @@ void runningMenus_runningUpdate(int16_t moves){
     OLED_command(line_address[0]+12);
     sprintf(disp_buff, "%d/%d", dispTemp(tempMonitor_getLastColdTemp()), dispTemp(settingMenus_getTargetTemp()));
     OLED_writeString(disp_buff);
-    OLED_data(0b00000000); // degrees symbol
     OLED_writeTempUnit();
     
     // cycles the stats every 10 seconds
