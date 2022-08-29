@@ -209,13 +209,16 @@ void settingMenus_aboutSetup(void){
     OLED_writeString("Josh Booth");
 }
 
-void settingMenus_aboutUpdate(int16_t moves){}
+void settingMenus_aboutUpdate(int16_t moves){
+    if(moves < 0){ // return to menu if rotary encoder is turned
+        UI_setState(MENU);
+        UI_setup();
+    }
+}
 
 
 // START
-void settingMenus_startSetup(void){
-
-    
+void settingMenus_startSetup(void){ 
     OLED_clear();
     
     OLED_command(line_address[3]+3);

@@ -44,14 +44,14 @@ void runningMenus_runningUpdate(int16_t moves){
         case NEW_STATS2:
             // update fan number
             OLED_command(line_address[1]);
-            OLED_writeString("Heatsink Temp:      ");
+            OLED_writeString("Heatsink Temp:");
             
             // update to hot temp
-            OLED_command(line_address[2]);
-            OLED_writeString("     MCU Temp:      ");
+            OLED_command(line_address[2]+5);
+            OLED_writeString("MCU Temp:");
             
-            OLED_command(line_address[3]);
-            OLED_writeString("  Status: Running   ");
+            OLED_command(line_address[3]+2);
+            OLED_writeString("Status: Running");
             
             msg = STATS2;
             // fall through execution to update STATS2
@@ -73,6 +73,8 @@ void runningMenus_runningUpdate(int16_t moves){
     OLED_command(line_address[0]+12);
     sprintf(disp_buff, "%d/%d", dispTemp(tempMonitor_getLastColdTemp()), dispTemp(settingMenus_getTargetTemp()));
     OLED_writeString(disp_buff);
+    
+    OLED_command(line_address[0]+18);
     OLED_writeTempUnit();
     
     // cycles the stats every 10 seconds
