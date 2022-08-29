@@ -174,7 +174,6 @@ int main(void)
     //Init OLED Display
     settingMenus_populateSettings();
     OLED_init();
-    UI_setup();
     
     //Start Fan Controller
     fanControl_start();
@@ -207,37 +206,7 @@ int main(void)
         }
         
         if(dispRefresh){ // update UI every 100ms
-            switch(UI_getState()){
-                case STANDBY:
-                    UI_handleStateInput(MENU, settingMenus_standbyUpdate);
-                    break;
-                case MENU:
-                    UI_handleStateInput(navMenu_getSelected(), navMenu_update);
-                    break;
-                case SET_TEMPERATURE:
-                    UI_handleStateInput(MENU, settingMenus_temperatureUpdate);
-                    break;
-                case CHANGE_UNITS:
-                    UI_handleStateInput(MENU, settingMenus_changeUnitsUpdate);
-                    break;
-                case START:
-                    UI_handleStateInput(RUNNING, settingMenus_startUpdate);
-                    break;
-                case LIMIT_CURRENT:
-                    UI_handleStateInput(MENU, settingMenus_currentUpdate);
-                    break;
-                case ABOUT:
-                    UI_handleStateInput(MENU, settingMenus_aboutUpdate);
-                    break;
-                case RUNNING:
-                    UI_handleStateInput(STANDBY, runningMenus_runningUpdate);
-                    break;
-                case DEMO_MODE_TOGGLE:
-                    UI_handleStateInput(MENU, settingMenus_demoModeToggleUpdate);
-                    break;
-                case ERROR: // NO IMPLEMENTATION YET
-                    break;
-            }
+            UI_refresh();
             dispRefresh = false;
         }
     }    

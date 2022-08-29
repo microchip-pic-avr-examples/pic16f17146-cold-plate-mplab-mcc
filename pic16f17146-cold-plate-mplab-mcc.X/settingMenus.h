@@ -13,6 +13,7 @@ extern "C" {
 #include "tempMonitor.h"
 #include "settings.h"
 #include "config.h"
+#include "utility.h"
     
 // STANDBY
 void settingMenus_standbySetup(void);

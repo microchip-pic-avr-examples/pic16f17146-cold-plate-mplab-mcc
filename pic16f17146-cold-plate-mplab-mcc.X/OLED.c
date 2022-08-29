@@ -1,4 +1,5 @@
 #include "OLED.h"
+#include "settings.h"
 
 #define OLED_CONTROLLER_ADDR 0x3C // 7-bit client address
 
@@ -101,11 +102,27 @@ void OLED_clear(void){
 }
 
 void OLED_clear_line(void){
-    OLED_writeString("                    "); // disable cursor & blinking during display on
+    OLED_writeSpaces(20);
 }
 
 void OLED_writeString(char *string){
     for(int i = 0; i < strlen(string); i++){
         OLED_data((uint8_t)string[i]);
     }
+}
+
+void OLED_writeTempUnit(void){
+    OLED_data(0b00000000);
+    (settings_getSetting(SETTINGS_TEMP_UNIT) == 'C') ? OLED_writeString("C") : OLED_writeString("F");
+}
+
+void OLED_writeSpaces(uint8_t spaces){
+    char disp_buff[21];
+    int i = 0;
+    while(i < spaces && i < 20){
+        disp_buff[i] = ' ';
+        i++;
+    }
+    disp_buff[i] = '\0';
+    OLED_writeString(disp_buff);
 }

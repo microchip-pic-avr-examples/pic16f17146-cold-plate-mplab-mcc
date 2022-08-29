@@ -1,23 +1,41 @@
 #include "UI.h"
 
-
+//Current UI State
 static UI_STATE UI_state = STANDBY;
-static UI_STATE UI_last_state = STANDBY;
+//Signals the UI has entered a new state
+static bool UI_new_state = true;
 
-UI_STATE UI_getState(void){
-    return UI_state;
-}
-
-UI_STATE UI_getLastState(void){
-    return UI_last_state;
-}
-
+//UI State setter & flags a new state
 void UI_setState(UI_STATE new_state){
-    UI_last_state = UI_state;
     UI_state = new_state;
+    UI_new_state = true;
 }
 
-// fill OLED with new static state data when the state is switched
+//Updates the scene elements & sets a new scene if needed
+void UI_refresh(void){
+    if(UI_new_state){
+        UI_setup();
+        UI_new_state = false;
+    }
+    UI_update();
+}
+
+// when in a UI state, this handles reading encoder input, updating only the
+// needed info on the OLED, and moving to the next UI state
+void UI_handleStateInput(UI_STATE exit_state, void (*ui_update)(int16_t)){
+    static bool pressed = false; // Value to keep track of button state, avoids blocking
+    if(!BUTTON_GetValue()){ // button press means move to different UI state
+        pressed = true;
+    } else if(BUTTON_GetValue() && pressed == true){ // wait for button to be released
+        UI_updateEEPROM();
+        UI_setState(exit_state); // set state
+        pressed = false;
+    } else {
+        (*ui_update)(encoderControl_getMoves());
+    }
+}
+
+//Fill OLED with new static state data when the state is switched
 void UI_setup(void){
     switch(UI_state){
         case STANDBY:
@@ -52,22 +70,39 @@ void UI_setup(void){
     }
 }
 
-// when in a UI state, this handles reading encoder input, updating only the
-// needed info on the OLED, and moving to the next UI state
-void UI_handleStateInput(UI_STATE exit_state, void (*ui_update)(int16_t)){
-    static bool pressed = false; // Value to keep track of button state, avoids blocking
-    if(!BUTTON_GetValue()){ // button press means move to different UI state
-        pressed = true;
-    } else if(BUTTON_GetValue() && pressed == true){ // wait for button to be released
-        UI_updateEEPROM();
-        UI_setState(exit_state); // set state
-        UI_setup(); // populate OLED to match state
-        pressed = false;
-    } else {
-        (*ui_update)(encoderControl_getMoves());
+//Update only the needed elements in a scene
+void UI_update(void){
+    switch(UI_state){
+    case STANDBY:
+        UI_handleStateInput(MENU, settingMenus_standbyUpdate);
+        break;
+    case MENU:
+        UI_handleStateInput(navMenu_getSelected(), navMenu_update);
+        break;
+    case SET_TEMPERATURE:
+        UI_handleStateInput(MENU, settingMenus_temperatureUpdate);
+        break;
+    case CHANGE_UNITS:
+        UI_handleStateInput(MENU, settingMenus_changeUnitsUpdate);
+        break;
+    case START:
+        UI_handleStateInput(RUNNING, settingMenus_startUpdate);
+        break;
+    case LIMIT_CURRENT:
+        UI_handleStateInput(MENU, settingMenus_currentUpdate);
+        break;
+    case ABOUT:
+        UI_handleStateInput(MENU, settingMenus_aboutUpdate);
+        break;
+    case RUNNING:
+        UI_handleStateInput(STANDBY, runningMenus_runningUpdate);
+        break;
+    case DEMO_MODE_TOGGLE:
+        UI_handleStateInput(MENU, settingMenus_demoModeToggleUpdate);
+        break;
+    case ERROR: // NO IMPLEMENTATION YET
+        break;
     }
-    
-
 }
 
 //Check if current value is different than what is in EEPROM
@@ -75,7 +110,6 @@ void UI_updateEEPROM(void){
     bool changed = false;
     if(settings_getSetting(SETTINGS_LAST_SET_TEMP) != (uint8_t)settingMenus_getTargetTemp()){
         settings_writeValue(SETTINGS_LAST_SET_TEMP, (uint8_t)settingMenus_getTargetTemp());
-        printf("Wrote settings temp\r\n");
         changed = true;
     }
     if(settings_getSetting(SETTINGS_CURRENT_LIMIT) != settingMenus_getCurrentLimit()){

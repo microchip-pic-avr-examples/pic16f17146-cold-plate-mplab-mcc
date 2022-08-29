@@ -1,7 +1,7 @@
 #include "utility.h"
 
 #include "mcc_generated_files/system/system.h"
-#include "config.h"
+#include "settings.h"
 
 #include <xc.h>
 #include <stdint.h>
@@ -25,7 +25,7 @@ uint16_t DIA_readValue(uint16_t address)
 void System_printResetRegisters(void)
 {
 #ifdef DEBUG_PRINT
-    printf("PCON0: %u, PCON1: %u\r\n", PCON0, PCON1);
+    printf("PCON0: 0x%x, PCON1: 0x%x\r\n", PCON0, PCON1);
 #endif
     
     //Clear Values
@@ -57,4 +57,12 @@ void WWDT_armReset(void)
 void WWDT_reset(void)
 {
     asm("CLRWDT");
+}
+
+int8_t CtoF(int8_t celsius){
+    return (int8_t)((celsius * 9.0/5.0)+ 32);
+}
+
+int8_t dispTemp(int8_t temp){
+    return (settings_getSetting(SETTINGS_TEMP_UNIT) == 'C') ? temp : CtoF(temp);
 }

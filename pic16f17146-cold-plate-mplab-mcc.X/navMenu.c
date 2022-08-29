@@ -25,7 +25,7 @@ void navMenu_populate(uint8_t offset, uint8_t ast_pos){
     // populate menu options
     for(int i = 0; i < OLED_LINE_NUM; i++){
         OLED_command(line_address[i]);
-        OLED_writeString(" ");
+        OLED_writeSpaces(1);
         OLED_writeString(menu.options[i+offset]);
     }
     
@@ -68,14 +68,6 @@ void navMenu_update(int16_t moves){
         }
         navMenu_scroll(moves);
     }
-//            // scroll menu
-//            if((menu.ast_pos == 0 && moves < 0) || (menu.ast_pos == OLED_LINE_NUM-1 && moves > 0)){ // if asterisk at top or bottom of page
-//                    navMenu_scroll(moves); // scroll menu
-//
-//            } else { // move asterisk & check if scrolling needs to occur
-//                if(moves < 0)
-//
-//            }
 }
 
 void navMenu_scroll(int16_t moves){
@@ -100,7 +92,7 @@ void navMenu_scroll(int16_t moves){
 void navMenu_updateAsterisk(uint8_t old_pos, uint8_t new_pos){
     // remove old asterisk
     OLED_command(line_address[old_pos]); // put cursor on asterisk
-    OLED_writeString(" "); // replace with space}
+    OLED_writeSpaces(1);
     
     // place new asterisk
     OLED_command(line_address[new_pos]);
@@ -113,34 +105,41 @@ void navMenu_updateArrows(void){
     if(menu.top_item != 0){ // show top arrow
         OLED_data(0b11011110); // up arrow code
     } else {
-        OLED_writeString(" ");
+        OLED_writeSpaces(1);
     }
 
     OLED_command(line_address[3]+19); //show bottom arrow   
     if((menu.top_item + OLED_LINE_NUM) < menu.size){
         OLED_data(0b11100000); // down arrow code
     } else{
-        OLED_writeString(" ");
+        OLED_writeSpaces(1);
     }
 }
 
 UI_STATE navMenu_getSelected(void){
     int8_t selected = (int8_t)menu.top_item + menu.ast_pos;
-    
-    if(!strcmp(options[selected], "Go Back")){
-        return STANDBY; // TODO: change this depending on what settings have been changed
-    } else if(!strcmp(options[selected], "Start")){
-        return START;
-    } else if(!strcmp(options[selected], "Set Temperature")){
-        return SET_TEMPERATURE;
-    } else if(!strcmp(options[selected], "Change Units")){
-        return CHANGE_UNITS;
-    } else if(!strcmp(options[selected], "Limit Current")){
-        return LIMIT_CURRENT;
-    } else if(!strcmp(options[selected], "About")){
-        return ABOUT;
-    } else if(!strcmp(options[selected], "Demo Mode Toggle")){
-        return DEMO_MODE_TOGGLE;
+    switch(selected){
+        case 0:
+            return STANDBY;
+            break;
+        case 1:
+            return START;
+            break;
+        case 2:
+            return SET_TEMPERATURE;
+            break;
+        case 3:
+            return CHANGE_UNITS;
+            break;
+        case 4:
+            return LIMIT_CURRENT;
+            break;
+        case 5:
+            return ABOUT;
+            break;
+        case 6:
+            return DEMO_MODE_TOGGLE;
+            break;
     }
     return ERROR;
 }

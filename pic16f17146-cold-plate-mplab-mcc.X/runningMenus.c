@@ -38,46 +38,44 @@ void runningMenus_runningUpdate(int16_t moves){
             // Avg. Current
             OLED_command(line_address[1]+17);
             //sprintf(disp_buff, "4%d", getCurrent()); // TODO: replace with current reading function
-            strcpy(disp_buff, "5 A"); // TODO: remove
-            OLED_writeString(disp_buff);
+            OLED_writeString("5 A");
             
             break;
         case NEW_STATS2:
             // update fan number
             OLED_command(line_address[1]);
-            OLED_writeString("Heatsink Temp:      ");
+            OLED_writeString("Heatsink Temp:");
             
             // update to hot temp
-            OLED_command(line_address[2]);
-            OLED_writeString("     MCU Temp:      ");
+            OLED_command(line_address[2]+5);
+            OLED_writeString("MCU Temp:");
             
-            OLED_command(line_address[3]);
-            OLED_writeString("  Status: Running   ");
+            OLED_command(line_address[3]+2);
+            OLED_writeString("Status: Running");
             
             msg = STATS2;
             // fall through execution to update STATS2
         case STATS2:
             // Heatsink temp
             OLED_command(line_address[1]+14);
-            sprintf(disp_buff, "%4d", tempMonitor_getLastHotTemp());
+            sprintf(disp_buff, "%4d", dispTemp(tempMonitor_getLastHotTemp()));
             OLED_writeString(disp_buff);
-            OLED_data(0b00000000); // degrees symbol
-            OLED_writeString("C");
+            OLED_writeTempUnit();
             
             // MCU Temp
             OLED_command(line_address[2]+14);
-            sprintf(disp_buff, "%4d", tempMonitor_getLastIntTemp());
+            sprintf(disp_buff, "%4d", dispTemp(tempMonitor_getLastIntTemp()));
             OLED_writeString(disp_buff);
-            OLED_data(0b00000000); // degrees symbol
-            OLED_writeString("C");
+            OLED_writeTempUnit();
             break;
     }
     // update current Plate Temperature
     OLED_command(line_address[0]+12);
-    sprintf(disp_buff, "%d/%d", tempMonitor_getLastColdTemp(), settingMenus_getTargetTemp());
+    sprintf(disp_buff, "%d/%d", dispTemp(tempMonitor_getLastColdTemp()), dispTemp(settingMenus_getTargetTemp()));
     OLED_writeString(disp_buff);
-    OLED_data(0b00000000); // degrees symbol
-    OLED_writeString("C");
+    
+    OLED_command(line_address[0]+18);
+    OLED_writeTempUnit();
     
     // cycles the stats every 10 seconds
     if(counter10s >= 100){
