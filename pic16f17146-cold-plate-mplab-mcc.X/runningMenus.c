@@ -5,7 +5,9 @@ void runningMenus_runningSetup(void){
     
     OLED_command(line_address[0]);
     OLED_writeString("Plate Temp:");
-    runningMenus_runningUpdate(0);
+    
+    OLED_command(line_address[0]+18);
+    OLED_writeTempUnit();
 }
 
 void runningMenus_runningUpdate(int16_t moves){
@@ -17,15 +19,15 @@ void runningMenus_runningUpdate(int16_t moves){
         case NEW_STATS1: // change the few static elements
             // update to avg current
             OLED_command(line_address[1]);
-            OLED_writeString("Avg. current:       ");
+            OLED_writeString("Avg. current:");
             
             
             // update fan number
             OLED_command(line_address[2]);
-            OLED_writeString("Fan RPMs:           ");
+            OLED_writeString("Fan RPMs:");
 
-            OLED_command(line_address[3]);
-            OLED_writeString("   Push to cancel   ");
+            OLED_command(line_address[3]+3);
+            OLED_writeString("Push to cancel   ");
 
             msg = STATS1;
             // fall through execution to update STATS1
@@ -73,9 +75,7 @@ void runningMenus_runningUpdate(int16_t moves){
     OLED_command(line_address[0]+12);
     sprintf(disp_buff, "%d/%d", dispTemp(tempMonitor_getLastColdTemp()), dispTemp(settingMenus_getTargetTemp()));
     OLED_writeString(disp_buff);
-    
-    OLED_command(line_address[0]+18);
-    OLED_writeTempUnit();
+
     
     // cycles the stats every 10 seconds
     if(counter10s >= 100){

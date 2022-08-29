@@ -5,6 +5,10 @@ static UI_STATE UI_state = STANDBY;
 //Signals the UI has entered a new state
 static bool UI_new_state = true;
 
+UI_STATE UI_getState(void){
+    return UI_state;
+}
+
 //UI State setter & flags a new state
 void UI_setState(UI_STATE new_state){
     UI_state = new_state;
