@@ -221,15 +221,27 @@ void settingMenus_startUpdate(int16_t moves){
 
 #define PASSCODE 636
 bool demo_mode = 0;
+static int8_t value[3] = {0,0,0};
+static uint8_t counter_seconds = 0;
+static uint8_t index = 0;
+static bool passcodeEntered = false;
 
 // DEMO MODE
 void settingMenus_demoModeToggleSetup(void){
+
+    value[0] = 0;
+    value[1] = 0;
+    value[2] = 0;
+    counter_seconds = 0;
+    index = 0;
+    passcodeEntered = false;
+    
     OLED_clear();
     
     OLED_command(line_address[0]+5);
     OLED_writeString("Enter code:");
     
-    OLED_command(line_address[1]+6);
+    OLED_command(line_address[1]+7);
     OLED_writeString("0");
     
     OLED_command(line_address[1]+10);
@@ -238,17 +250,20 @@ void settingMenus_demoModeToggleSetup(void){
     OLED_command(line_address[1]+14);
     OLED_writeString("0");
     
-    OLED_command(line_address[3]+2);
+    OLED_command(line_address[3]+1);
+    if(settings_getSetting(SETTINGS_DEMO_MODE)){
+        OLED_writeString("Demo Mode Enabled");
+    } else{
+        OLED_writeString("Demo Mode Disabled");
+    }
+    
+    OLED_command(line_address[2]+2);
     OLED_writeString("Next digit in:");
     
 }
 
 void settingMenus_demoModeToggleUpdate(int16_t moves){
     char disp_buff[20];
-    static int8_t value[3] = {0,0,0};
-    static uint8_t counter_seconds = 0;
-    static uint8_t index = 0;
-    static bool passcodeEntered = false;
     int8_t countdown_seconds = 4;
     if(!passcodeEntered){
         // adjust shown value
@@ -258,25 +273,24 @@ void settingMenus_demoModeToggleUpdate(int16_t moves){
         if(counter_seconds >= countdown_seconds*10){
             if(index >= 2){ // value has been set
                 // compare value && turn on demo mode
-                OLED_command(line_address[2]+1);
+                OLED_command(line_address[3]+1);
                 if(((value[0]*100)+(value[1]*10)+value[2]) == PASSCODE){
                     // toggle demo mode
                     if(settings_getSetting(SETTINGS_DEMO_MODE)){
                         OLED_writeString("Demo Mode Disabled");
-                        settingMenus_setDemoMode(0);
+                        settingMenus_setDemoMode(false);
                     } else {
                         OLED_writeString("Demo Mode Enabled ");
-                        settingMenus_setDemoMode(1);
+                        settingMenus_setDemoMode(true);
                     }
                     passcodeEntered = true;
-                    OLED_command(line_address[3]);
+                    OLED_command(line_address[2]);
                     OLED_clear_line();
                     
                 } else {
-                    OLED_writeString("Incorrect passcode");
+                    OLED_writeString("Incorrect passcode ");
                 }
-                //OLED_command(line_address[3]);
-                //OLED_clear_line();
+
                 value[0] = 0;
                 value[1] = 0;
                 value[2] = 0;
@@ -292,18 +306,10 @@ void settingMenus_demoModeToggleUpdate(int16_t moves){
             
            // adjust time countdown
             OLED_command(line_address[1]+6);
-            sprintf(disp_buff, "%d", value[0]);
-            OLED_writeString(disp_buff);
-
-            OLED_command(line_address[1]+10);
-            sprintf(disp_buff, "%d", value[1]);
-            OLED_writeString(disp_buff);
-
-            OLED_command(line_address[1]+4);
-            sprintf(disp_buff, "%d", value[2]);
+            sprintf(disp_buff, "%d   %d   %d", value[0], value[1], value[2]);
             OLED_writeString(disp_buff);
         
-            OLED_command(line_address[3]+17);
+            OLED_command(line_address[2]+17);
             sprintf(disp_buff, "%d", countdown_seconds-((int)counter_seconds/10));
             OLED_writeString(disp_buff);
         }
