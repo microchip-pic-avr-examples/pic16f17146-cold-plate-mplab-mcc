@@ -1,8 +1,12 @@
 #include "settingMenus.h"
 #include "config.h"
 
-// STANDBY OLED FUNTIONS
+// SET TEMPERATURE FUNCTIONS
+static int8_t target_temp = 0; // set function to read EEPROM
+static uint8_t current_limit = CURRENT_LIMIT_MIN*10; // actual limit is divided by 10
+static char temp_unit = 'C';
 
+// STANDBY OLED FUNTIONS
 // set static elements on the STANDBY scene
 void settingMenus_standbySetup(void){
     OLED_clear();
@@ -18,7 +22,6 @@ void settingMenus_standbySetup(void){
         OLED_writeString("Demo Mode On");
     }
     
-    settingMenus_standbyUpdate(0);
 }
 
 // update dynamic elements on the STANDBY scene
@@ -29,13 +32,7 @@ void settingMenus_standbyUpdate(int16_t moves){
     OLED_writeString(temp_buff);
     OLED_writeTempUnit();
     OLED_writeSpaces(1);
-    
 }
-
-
-// SET TEMPERATURE FUNCTIONS
-static int8_t target_temp = 0; // set function to read EEPROM
-
 
 // set static elements in the scene
 void settingMenus_temperatureSetup(void){
@@ -58,10 +55,6 @@ void settingMenus_temperatureSetup(void){
     OLED_command(line_address[3]+2);
     sprintf(disp_string, "%d", settings_getSetting(SETTINGS_DEMO_MODE) ? dispTemp(DEMO_TEMP_LIMIT_LOW) : dispTemp(TEMP_LIMIT_LOW));
     OLED_writeString(disp_string);
-
-    OLED_command(line_address[3]+7);
-    sprintf(disp_string, "%3d", dispTemp(target_temp));
-    OLED_writeString(disp_string);
     
     OLED_command(line_address[3]+14);
     sprintf(disp_string, "%d", dispTemp(TEMP_LIMIT_MAX));
@@ -77,7 +70,6 @@ void settingMenus_temperatureUpdate(int16_t moves){
     target_temp = (target_temp+moves <= min_temp) ? min_temp : (target_temp+moves >= TEMP_LIMIT_MAX) ? TEMP_LIMIT_MAX : (int8_t)(target_temp + moves);
     
     sprintf(disp_string, "%3d", dispTemp(target_temp));
-
     OLED_command(line_address[3]+7);
     OLED_writeString(disp_string);
 }
@@ -90,17 +82,13 @@ void settingMenus_setTargetTemp(int8_t temp){
     target_temp = temp;
 }
 
-
 // CHANGE UNITS
-static uint8_t current_limit = CURRENT_LIMIT_MIN*10; // actual limit is divided by 10
 void settingMenus_currentSetup(void){
-    char disp_string[20];
-    current_limit = settings_getSetting(SETTINGS_CURRENT_LIMIT);
-       
+    char disp_string[20];       
     OLED_clear();
     
-    OLED_command(line_address[0]);
-    OLED_writeString(" Set Current Limit");
+    OLED_command(line_address[0]+1);
+    OLED_writeString("Set Current Limit");
     
     OLED_command(line_address[1]+7);
     OLED_writeString("(Amps)");
@@ -117,10 +105,6 @@ void settingMenus_currentSetup(void){
     OLED_command(line_address[3]+1);
     sprintf(disp_string, "%2d.0", CURRENT_LIMIT_MIN);
     OLED_writeString(disp_string);
-    
-    OLED_command(line_address[3]+7);
-    sprintf(disp_string, "%2d.%1d", current_limit/10, current_limit%10);
-    OLED_writeString(disp_string);
         
     OLED_command(line_address[3]+14);
     sprintf(disp_string, "%2d.0", CURRENT_LIMIT_MAX);
@@ -134,9 +118,8 @@ void settingMenus_currentUpdate(int16_t moves){
     current_limit = (new_limit <= CURRENT_LIMIT_MIN*10) ? (uint8_t)CURRENT_LIMIT_MIN*10 : (new_limit >= CURRENT_LIMIT_MAX*10) ? (uint8_t)CURRENT_LIMIT_MAX*10 : (uint8_t)new_limit;
     
     char disp_string[4];
-
+    
     OLED_command(line_address[3]+7);
-
     sprintf(disp_string, "%2d.%1d", current_limit/10, current_limit%10);
     OLED_writeString(disp_string);
     
@@ -151,23 +134,12 @@ void settingMenus_setCurrentLimit(uint8_t limit){
 }
 
 // CHANGE UNITS
-char temp_unit = 'C';
 
 void settingMenus_changeUnitsSetup(void){
-
     OLED_clear();
     
     OLED_command(line_address[0]+3);
-    OLED_writeString("Set units to:");
-    
-    OLED_command(line_address[2]+5);
-
-    if(temp_unit == 'C'){
-        OLED_writeString(" Celsius  ");
-    } else if(temp_unit == 'F'){
-        OLED_writeString("Fahrenheit");
-    }
-    
+    OLED_writeString("Set units to:");    
 }
 
 void settingMenus_changeUnitsUpdate(int16_t moves){

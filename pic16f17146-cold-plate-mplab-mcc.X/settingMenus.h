@@ -56,7 +56,7 @@ void settingMenus_demoModeToggleUpdate(int16_t moves);
 bool settingMenus_getDemoMode(void);
 void settingMenus_setDemoMode(bool mode);
 
-void settingMenus_populateSettings();
+void settingMenus_populateSettings(void);
 
 #ifdef	__cplusplus
 }
