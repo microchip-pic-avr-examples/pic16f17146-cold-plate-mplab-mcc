@@ -26,9 +26,6 @@ extern "C" {
     //Sets the gain of the current sense amplifier
     void currentSense_setConfiguration(CurrentSenseGain gain);
     
-    //Prints OPAMP Calibration to UART
-    void currentSense_printCalibration(void);
-    
 #ifdef	__cplusplus
 }
 #endif

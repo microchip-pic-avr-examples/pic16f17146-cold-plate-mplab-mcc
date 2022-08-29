@@ -170,11 +170,3 @@ void currentSense_setConfiguration(CurrentSenseGain gain)
     //Set to VDD
     OPA1_SetSoftwareOverride(0x00);
 }
-
-//Prints OPAMP Calibration to UART
-void currentSense_printCalibration(void)
-{
-#ifdef DEBUG_PRINT
-    printf("OPAMP Offset: 0x%x\r\nOPAMP Gain: %2.4f\r\n", OPAMPOffset, OPAMPGain);
-#endif
-}

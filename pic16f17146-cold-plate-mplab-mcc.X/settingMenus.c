@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include "settingMenus.h"
 #include "config.h"
 
@@ -216,7 +218,16 @@ void settingMenus_startSetup(void){
     
     OLED_command(line_address[1]);
     OLED_writeString("Current lim: ");
-    sprintf(disp_string, "%4.1f A", (float)(settings_getSetting(SETTINGS_CURRENT_LIMIT)/10.0));
+    uint8_t currLim = settings_getSetting(SETTINGS_CURRENT_LIMIT);
+    uint8_t wholeNumber = 0;
+    
+    while (currLim >= 10)
+    {
+        currLim -= 10;
+        wholeNumber++;
+    }
+    
+    sprintf(disp_string, "%u.%u A", wholeNumber, currLim);
     OLED_writeString(disp_string);
 
 }

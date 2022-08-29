@@ -31,7 +31,7 @@ void settings_init(void)
     else
     {
 #ifdef DEBUG_PRINT
-        printf("EEPROM Version ID = 0x%x\r\n", memVersion);
+        printf("EEPROM Version ID = %u\r\n", memVersion);
 #endif
         
         uint8_t checksum = settings_verifyCRC();
@@ -89,9 +89,7 @@ void settings_writeDefaults(void)
 
     //Calculate new checksum
     uint8_t newChecksum = settings_calculateCRC();
-#ifdef DEBUG_PRINT
-    printf("Calculated new checksum = 0x%x\r\n", newChecksum);
-#endif
+
     //Write the new CRC Value
     settings_writeValue(SETTINGS_CRC, newChecksum);
 }

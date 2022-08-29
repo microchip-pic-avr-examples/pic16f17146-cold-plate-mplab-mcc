@@ -11,7 +11,7 @@ extern "C" {
     typedef enum {
         PELTIER_ERROR_NONE = 0, PELTIER_FAN1_ERROR, 
         PELTIER_POWER_ERROR, PELTIER_INT_OVERHEAT, PELTIER_HEATSINK_OVERHEAT, 
-        PELTIER_PLATE_SATURATION
+        PELTIER_PLATE_SATURATION, PELTIER_PLATE_OVERCOOL
     } PeltierError;
     
     //Max Duty Cycle Allowed
@@ -20,9 +20,6 @@ extern "C" {
     //Init the Peltier Current Controller
     void peltierControl_init(void);
     
-    //Performs a self-test of the Peltier element. This function will block when executing. 
-    bool peltierControl_selfTest(void);
-        
     //This function is used to check for faults and to adjust the regulator. 
     //If this function is not called, the device will RESET.
     //ONLY CALL THIS FUNCTION FROM MAIN
@@ -34,9 +31,6 @@ extern "C" {
     
     //Calculate the average duty cycle of the PWM
     uint8_t peltierControl_getAverageDutyCycle(void);
-    
-    //Set the target temperature of the Cold Plate
-    void peltierControl_setTargetTemp(int8_t target);
     
     //This function directly modifies the current threshold in the loop.
     //DO NOT CALL DIRECTLY

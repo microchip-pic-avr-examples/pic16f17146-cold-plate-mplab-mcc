@@ -22,6 +22,9 @@ extern "C" {
 //Maximum allowed temperature to set
 #define TEMP_LIMIT_MAX 25
     
+//Temperature to throw an error at
+#define TEMP_LIMIT_SAFETY_MARGIN 5
+    
 //Minimum Current Limit
 #define CURRENT_LIMIT_MIN 1
     

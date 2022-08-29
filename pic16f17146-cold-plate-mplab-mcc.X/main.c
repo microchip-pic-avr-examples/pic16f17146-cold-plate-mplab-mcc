@@ -195,12 +195,14 @@ int main(void)
             peltierControl_periodicCheck();
             
 #ifdef DEBUG_TELEMETRY
+#ifdef DEBUG_PRINT
             printf("Fan 1 RPM: %u\r\n", fanControl_getFan1RPM());
             printf("Fan 2 RPM: %u\r\n", fanControl_getFan2RPM());  
             printf("Cold Plate Temp: %d\r\n", tempMonitor_getLastColdTemp());   
             printf("Heatsink Temp: %d\r\n", tempMonitor_getLastHotTemp());   
             printf("Int Temp: %d\r\n", tempMonitor_getLastIntTemp());
-            printf("Average Duty Cycle: %d%%\r\n", peltierControl_getAverageDutyCycle());            
+            printf("Average Duty Cycle: %d%%\r\n", peltierControl_getAverageDutyCycle());       
+#endif
 #endif
         }
         
@@ -238,6 +240,5 @@ int main(void)
             }
             dispRefresh = false;
         }
-
     }    
 }
