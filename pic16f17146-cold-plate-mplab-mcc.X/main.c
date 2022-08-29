@@ -171,8 +171,10 @@ int main(void)
     //Start Timer 0 (10ms)
     Timer0_Start();
     
-    //Init OLED Display
+    //Pull local coy of settngs before populating UI
     settingMenus_populateSettings();
+    
+    //Init OLED Display
     OLED_init();
     
     //Start Fan Controller

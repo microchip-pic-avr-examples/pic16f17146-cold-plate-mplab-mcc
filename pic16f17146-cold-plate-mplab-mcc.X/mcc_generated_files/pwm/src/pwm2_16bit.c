@@ -118,12 +118,12 @@ void FAN_PWM_Initialize(void)
     PWM2CON = 0x80;
 }
 
-void FAN_PWM_Enable()
+void FAN_PWM_Enable(void)
 {
     PWM2CON |= _PWM2CON_EN_MASK;
 }
 
-void FAN_PWM_Disable()
+void FAN_PWM_Disable(void)
 {
     PWM2CON &= (~_PWM2CON_EN_MASK);
 }
