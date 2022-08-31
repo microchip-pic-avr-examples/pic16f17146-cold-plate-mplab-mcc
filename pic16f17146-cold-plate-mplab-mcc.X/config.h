@@ -61,6 +61,9 @@ extern "C" {
 //Demo mode is on by default
 #define DEFAULT_DEMO_MODE true
     
+//Show advanced settings by default
+#define DEFAULT_SHOW_ADVANCED_SETTING true
+    
 //Default Plate Set Point
 #define DEFAULT_LAST_TEMP_SETTING 10
     

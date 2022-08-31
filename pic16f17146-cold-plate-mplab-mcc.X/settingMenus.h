@@ -58,6 +58,13 @@ void settingMenus_setDemoMode(bool mode);
 
 void settingMenus_populateSettings(void);
 
+void settingMenus_showAdvancedSetup(void);
+void settingMenus_showAdvancedUpdate(int16_t moves);
+
+bool settingMenus_getShowAdvanced(void);
+void settingMenus_setShowAdvanced(bool showAdvanced);
+
+
 #ifdef	__cplusplus
 }
 #endif

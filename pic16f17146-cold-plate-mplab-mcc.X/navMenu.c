@@ -1,7 +1,7 @@
 #include "navMenu.h"
 
 // MENU OLED FUNTIONS
-char* options[] = {"Go Back", "Start", "Set Temperature", "Change Units", "Limit Current", "About", "Demo Mode Toggle"};
+char* options[] = {"Go Back", "Start", "Set Temperature", "Change Units", "Limit Current", "Show Advanced", "About", "Demo Mode Toggle"};
 
 menu_t menu = {
 .options = options,
@@ -135,9 +135,12 @@ UI_STATE navMenu_getSelected(void){
             return LIMIT_CURRENT;
             break;
         case 5:
-            return ABOUT;
+            return SHOW_ADVANCED;
             break;
         case 6:
+            return ABOUT;
+            break;
+        case 7:
             return DEMO_MODE_TOGGLE;
             break;
     }

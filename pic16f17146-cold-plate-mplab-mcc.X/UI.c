@@ -56,6 +56,9 @@ void UI_setup(void){
         case START:
             settingMenus_startSetup();
             break;
+        case SHOW_ADVANCED:
+            settingMenus_showAdvancedSetup();
+            break;
     }
 }
 
@@ -72,6 +75,7 @@ void UI_update(void){
         case CHANGE_UNITS:
         case ABOUT:
         case DEMO_MODE_TOGGLE:
+        case SHOW_ADVANCED:
             returnState = MENU;
             break;
         case START:
@@ -123,6 +127,9 @@ void UI_update(void){
                 break;
             case START:
                 settingMenus_startUpdate(encoderControl_getMoves());
+                break;
+            case SHOW_ADVANCED:
+                settingMenus_showAdvancedUpdate(encoderControl_getMoves());
                 break;
         }
     }
