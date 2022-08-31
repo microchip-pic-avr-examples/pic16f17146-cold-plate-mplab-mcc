@@ -205,11 +205,12 @@ void settingMenus_startSetup(void){
     OLED_writeString(disp_string);
     
     OLED_writeTempUnit();
-    
-    OLED_command(line_address[1]);
-    OLED_writeString("Current lim: ");
-    sprintf(disp_string, "%2d.%1d A", current_limit/10, current_limit%10);
-    OLED_writeString(disp_string);
+    if(settingMenus_getShowAdvanced()){
+        OLED_command(line_address[1]);
+        OLED_writeString("Current lim: ");
+        sprintf(disp_string, "%2d.%1d A", current_limit/10, current_limit%10);
+        OLED_writeString(disp_string);
+    }
 
 }
 
@@ -338,7 +339,7 @@ void settingMenus_showAdvancedSetup(void){
     OLED_clear();
     
     OLED_command(line_address[0]);
-    OLED_writeString("Show advanced info:");
+    OLED_writeString("Show advanced stats:");
 }
 void settingMenus_showAdvancedUpdate(int16_t moves){
     moves = moves % 2;
