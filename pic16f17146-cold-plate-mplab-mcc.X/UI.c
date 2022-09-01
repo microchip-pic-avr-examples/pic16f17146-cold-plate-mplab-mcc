@@ -63,9 +63,6 @@ void UI_setup(void){
         case DEMO_MODE_TOGGLE:
             settingMenus_demoModeToggleSetup();
             break;
-        case START:
-            settingMenus_startSetup();
-            break;
     }
 }
 
@@ -82,9 +79,6 @@ void UI_update(void){
         case ABOUT:
         case DEMO_MODE_TOGGLE:
             returnState = MENU;
-            break;
-        case START:
-            returnState = RUNNING;
             break;
         case MENU:
             returnState = navMenu_getSelected();
@@ -124,9 +118,6 @@ void UI_update(void){
                 break;
             case DEMO_MODE_TOGGLE:
                 settingMenus_demoModeToggleUpdate(encoderControl_getMoves());
-                break;
-            case START:
-                settingMenus_startUpdate(encoderControl_getMoves());
                 break;
         }
     }

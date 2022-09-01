@@ -147,7 +147,7 @@ UI_STATE navMenu_getSelected(void){
             if(UI_isRunning()){
                 return STANDBY;
             } else{
-                return START;
+                return RUNNING;
             }
             break;
         case 2:

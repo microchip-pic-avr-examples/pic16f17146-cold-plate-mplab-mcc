@@ -142,32 +142,6 @@ void settingMenus_aboutUpdate(int16_t moves){
     }
 }
 
-
-// START
-void settingMenus_startSetup(void){ 
-    OLED_clear();
-    
-    OLED_command(line_address[3]+3);
-    OLED_writeString("Push to start");
-    
-    OLED_command(line_address[0]);
-    OLED_writeString("Target Temp: ");
-    
-    char disp_string[20];
-    sprintf(disp_string, "%4d", dispTemp(target_temp));
-    OLED_writeString(disp_string);
-    
-    OLED_writeTempUnit();
-
-}
-
-void settingMenus_startUpdate(int16_t moves){
-    if(moves < 0){ // return to menu if rotary encoder is turned
-        UI_setState(MENU);
-        UI_setup();
-    }
-}
-
 #define PASSCODE 636
 bool demo_mode = 0;
 static int8_t value[3] = {0,0,0};

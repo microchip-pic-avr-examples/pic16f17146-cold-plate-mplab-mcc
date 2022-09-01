@@ -39,10 +39,6 @@ void settingMenus_setTempUnit(char unit);
 void settingMenus_aboutSetup(void);
 void settingMenus_aboutUpdate(int16_t moves);
 
-// START
-void settingMenus_startSetup(void);
-void settingMenus_startUpdate(int16_t moves);
-
 // DEMO MODE
 void settingMenus_demoModeToggleSetup(void);
 void settingMenus_demoModeToggleUpdate(int16_t moves);
