@@ -10,6 +10,22 @@ menu_t menu = {
 .ast_pos = 0 // asterisk line (1-4))
 };
 
+void navMenu_changeStartOptions(bool start){
+    if(start){
+        options[1] = "Start";
+        //strcpy(options[1], "Start");
+    } else {
+        options[1] = "Cancel";
+        //strcpy(options[1], "Cancel");
+    }
+    navMenu_reset();
+}
+
+void navMenu_reset(void){
+    menu.top_item = 0;
+    menu.ast_pos = 0;
+}
+
 void navMenu_setup(void){
     navMenu_populate(menu.top_item, menu.ast_pos);
 }
@@ -120,10 +136,19 @@ UI_STATE navMenu_getSelected(void){
     int8_t selected = (int8_t)menu.top_item + menu.ast_pos;
     switch(selected){
         case 0:
+            if(UI_isRunning()){
+                return RUNNING;
+            } else {
+                return STANDBY;
+            }
             return STANDBY;
             break;
         case 1:
-            return START;
+            if(UI_isRunning()){
+                return STANDBY;
+            } else{
+                return START;
+            }
             break;
         case 2:
             return SET_TEMPERATURE;

@@ -17,7 +17,7 @@ typedef enum {STANDBY, MENU, RUNNING, ERROR, START, SET_TEMPERATURE, CHANGE_UNIT
     
 UI_STATE UI_getState(void);
 void UI_setState(UI_STATE new_state);
-UI_STATE UI_getLastState(void);
+bool UI_isRunning(void);
 void UI_setup(void);
 void UI_update(void);
 void UI_handleStateInput(UI_STATE exit_state, void (*ui_update)(int16_t));

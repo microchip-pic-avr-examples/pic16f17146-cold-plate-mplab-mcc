@@ -4,6 +4,7 @@
 static UI_STATE UI_state = STANDBY;
 //Signals the UI has entered a new state
 static bool UI_new_state = true;
+static bool UI_is_running = false;
 
 UI_STATE UI_getState(void){
     return UI_state;
@@ -13,6 +14,18 @@ UI_STATE UI_getState(void){
 void UI_setState(UI_STATE new_state){
     UI_state = new_state;
     UI_new_state = true;
+    
+    if(UI_state == STANDBY){
+        UI_is_running = false;
+        navMenu_changeStartOptions(true);
+    } else if(UI_state == RUNNING){
+        UI_is_running = true;
+        navMenu_changeStartOptions(false);
+    }
+}
+
+bool UI_isRunning(void){
+    return UI_is_running;
 }
 
 //Updates the scene elements & sets a new scene if needed
@@ -65,11 +78,11 @@ void UI_setup(void){
 
 //Update only the needed elements in a scene
 void UI_update(void){
-    
     UI_STATE returnState = STANDBY;
     
     switch(UI_state){
         case STANDBY:
+        case RUNNING:
         case SET_TEMPERATURE:
         case LIMIT_CURRENT:
         case CHANGE_UNITS:
@@ -84,8 +97,6 @@ void UI_update(void){
         case MENU:
             returnState = navMenu_getSelected();
             break;
-        case RUNNING:
-            returnState = STANDBY;
         case ERROR: // NO IMPLEMENTATION YET
             break;
     }
@@ -135,65 +146,35 @@ void UI_update(void){
     }
 }
 
-/*
- //Update only the needed elements in a scene
-void UI_update(void){
-    UI_STATE returnState = STANDBY;
-    switch(UI_state){
-    case STANDBY:
-        UI_handleStateInput(MENU, settingMenus_standbyUpdate);
-        break;
-    case MENU:
-        UI_handleStateInput(navMenu_getSelected(), navMenu_update);
-        break;
-    case SET_TEMPERATURE:
-        UI_handleStateInput(MENU, settingMenus_temperatureUpdate);
-        break;
-    case CHANGE_UNITS:
-        UI_handleStateInput(MENU, settingMenus_changeUnitsUpdate);
-        break;
-    case START:
-        UI_handleStateInput(RUNNING, settingMenus_startUpdate);
-        break;
-    case LIMIT_CURRENT:
-        UI_handleStateInput(MENU, settingMenus_currentUpdate);
-        break;
-    case ABOUT:
-        UI_handleStateInput(MENU, settingMenus_aboutUpdate);
-        break;
-    case RUNNING:
-        UI_handleStateInput(STANDBY, runningMenus_runningUpdate);
-        break;
-    case DEMO_MODE_TOGGLE:
-        UI_handleStateInput(MENU, settingMenus_demoModeToggleUpdate);
-        break;
-    case ERROR: // NO IMPLEMENTATION YET
-        break;
-    }
-}
- */
-
 //Check if current value is different than what is in EEPROM
 void UI_updateEEPROM(void){
     bool changed = false;
-    if(settings_getSetting(SETTINGS_LAST_SET_TEMP) != (uint8_t)settingMenus_getTargetTemp()){
+    if(settings_getSetting(SETTINGS_LAST_SET_TEMP) != (uint8_t)settingMenus_getTargetTemp())
+    {
         settings_writeValue(SETTINGS_LAST_SET_TEMP, (uint8_t)settingMenus_getTargetTemp());
         changed = true;
     }
-    if(settings_getSetting(SETTINGS_CURRENT_LIMIT) != settingMenus_getCurrentLimit()){
+    
+    if(settings_getSetting(SETTINGS_CURRENT_LIMIT) != settingMenus_getCurrentLimit())
+    {
         settings_writeValue(SETTINGS_CURRENT_LIMIT, settingMenus_getCurrentLimit());
         changed = true;
     }
-    if(settings_getSetting(SETTINGS_TEMP_UNIT) != settingMenus_getTempUnit()){
+    
+    if(settings_getSetting(SETTINGS_TEMP_UNIT) != settingMenus_getTempUnit())
+    {
         settings_writeValue(SETTINGS_TEMP_UNIT, settingMenus_getTempUnit());
         changed = true;
     }
-    if(settings_getSetting(SETTINGS_DEMO_MODE) != settingMenus_getDemoMode()){
+    
+    if(settings_getSetting(SETTINGS_DEMO_MODE) != settingMenus_getDemoMode())
+    {
         settings_writeValue(SETTINGS_DEMO_MODE, settingMenus_getDemoMode());
         changed = true;
     }
     
-    if(changed){
+    if(changed)
+    {
         settings_writeCRC();
     }
 }

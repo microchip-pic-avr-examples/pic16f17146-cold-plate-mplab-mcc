@@ -24,6 +24,8 @@ void navMenu_scroll(int16_t moves);
 void navMenu_updateAsterisk(uint8_t old_pos, uint8_t new_pos);
 void navMenu_updateArrows(void);
 UI_STATE navMenu_getSelected(void);
+void navMenu_changeStartOptions(bool start);
+void navMenu_reset(void);
 
 #ifdef	__cplusplus
 }
