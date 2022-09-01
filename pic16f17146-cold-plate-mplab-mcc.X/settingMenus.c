@@ -13,8 +13,11 @@ void settingMenus_standbySetup(void){
     OLED_command(line_address[0]); // define DDRAM address to update RAM for display line #1
     OLED_writeString("The Cold Plate:");
 
-    OLED_command(line_address[1]);
-    OLED_writeString("Target temp:");
+//    OLED_command(line_address[1]);
+//    OLED_writeString("Standing By");
+    
+    OLED_command(line_address[2]+3);
+    OLED_writeString("Chill to:");
     
     if(settingMenus_getDemoMode()){
         OLED_command(line_address[3]+4);
@@ -31,7 +34,7 @@ void settingMenus_standbyUpdate(int16_t moves){
     OLED_writeString(temp_buff);
     OLED_writeTempUnit();
     
-    OLED_command(line_address[1]+11);
+    OLED_command(line_address[2]+12);
     sprintf(temp_buff, "%3d", dispTemp(settingMenus_getTargetTemp()));
     OLED_writeString(temp_buff);
     OLED_writeTempUnit();
