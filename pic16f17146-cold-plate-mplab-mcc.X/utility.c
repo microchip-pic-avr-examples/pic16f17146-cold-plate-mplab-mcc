@@ -60,6 +60,9 @@ void WWDT_reset(void)
 }
 
 int8_t CtoF(int8_t celsius){
+    if(celsius > 53){ // F overflows above this
+        return 127;
+    }
     return (int8_t)((celsius * 9.0/5.0)+ 32);
 }
 
