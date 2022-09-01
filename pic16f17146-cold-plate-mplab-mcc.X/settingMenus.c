@@ -4,7 +4,6 @@
 // SET TEMPERATURE FUNCTIONS
 static int8_t target_temp = 0; // set function to read EEPROM
 static char temp_unit = 'C';
-static bool show_advanced = true;
 
 // STANDBY OLED FUNTIONS
 // set static elements on the STANDBY scene
@@ -279,33 +278,4 @@ void settingMenus_populateSettings(void){
     settingMenus_setTargetTemp((int8_t)settings_getSetting(SETTINGS_LAST_SET_TEMP));
     settingMenus_setTempUnit((char)settings_getSetting(SETTINGS_TEMP_UNIT));
     settingMenus_setDemoMode((bool)settings_getSetting(SETTINGS_DEMO_MODE));
-    settingMenus_setShowAdvanced((bool)settings_getSetting(SETTINGS_SHOW_ADVANCED));
-}
-
-void settingMenus_showAdvancedSetup(void){
-    OLED_clear();
-    
-    OLED_command(line_address[0]);
-    OLED_writeString("Show advanced stats:");
-}
-void settingMenus_showAdvancedUpdate(int16_t moves){
-    moves = moves % 2;
-    if(moves){
-        show_advanced = (show_advanced) ? false : true;
-    }
-    
-    OLED_command(line_address[2]+9);
-    if(show_advanced){
-        OLED_writeString("On ");
-    } else {
-        OLED_writeString("Off");
-    }
-}
-
-bool settingMenus_getShowAdvanced(void){
-    return show_advanced;
-}
-
-void settingMenus_setShowAdvanced(bool showAdvanced){
-    show_advanced = showAdvanced;
 }
