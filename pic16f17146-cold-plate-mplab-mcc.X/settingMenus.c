@@ -11,11 +11,11 @@ static bool show_advanced = true;
 void settingMenus_standbySetup(void){
     OLED_clear();
 
-    OLED_command(line_address[0]+3); // define DDRAM address to update RAM for display line #1
-    OLED_writeString("The Cold Plate");
+    OLED_command(line_address[0]); // define DDRAM address to update RAM for display line #1
+    OLED_writeString("The Cold Plate:");
 
-    OLED_command(line_address[2]+2);
-    OLED_writeString("Plate Temp:");
+    OLED_command(line_address[1]);
+    OLED_writeString("Target temp:");
     
     if(settingMenus_getDemoMode()){
         OLED_command(line_address[3]+4);
@@ -27,11 +27,15 @@ void settingMenus_standbySetup(void){
 // update dynamic elements on the STANDBY scene
 void settingMenus_standbyUpdate(int16_t moves){
     char temp_buff[4];
-    OLED_command(line_address[2] + 13);
+    OLED_command(line_address[0] + 15);
     sprintf(temp_buff, "%3d", dispTemp(tempMonitor_getLastColdTemp()));
     OLED_writeString(temp_buff);
     OLED_writeTempUnit();
-    OLED_writeSpaces(1);
+    
+    OLED_command(line_address[1]+11);
+    sprintf(temp_buff, "%3d", dispTemp(settingMenus_getTargetTemp()));
+    OLED_writeString(temp_buff);
+    OLED_writeTempUnit();
 }
 
 // set static elements in the scene
@@ -89,18 +93,20 @@ void settingMenus_changeUnitsSetup(void){
     
     OLED_command(line_address[0]+3);
     OLED_writeString("Set units to:");    
+
 }
 
 void settingMenus_changeUnitsUpdate(int16_t moves){
     moves = moves % 2;
     if(moves){
         temp_unit = (temp_unit == 'C') ? 'F' : 'C';
-        OLED_command(line_address[2]+5);
-        if(temp_unit == 'C'){
-            OLED_writeString(" Celsius  ");
-        } else if(temp_unit == 'F'){
-            OLED_writeString("Fahrenheit");
-        }
+    }
+    
+    OLED_command(line_address[2]+5);
+    if(temp_unit == 'C'){
+        OLED_writeString(" Celsius  ");
+    } else if(temp_unit == 'F'){
+        OLED_writeString("Fahrenheit");
     }
 }
 
