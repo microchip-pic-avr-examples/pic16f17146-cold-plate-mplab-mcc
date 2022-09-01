@@ -1,4 +1,5 @@
 #include "encoderControl.h"
+#include "UI.h"
 
 static volatile int16_t encoderMoves = 0;
 EncoderLEDState LEDState = OFF; // BLUE, ORANGE, BOTH, or OFF
@@ -22,6 +23,15 @@ int16_t encoderControl_getMoves(void){
     encoderControl_resetTimers();
     return encoderMoves;
 }
+
+void encoderControl_LEDUpdate(void){
+    if(UI_getState() == ERROR){
+        encoderControl_setLEDState(ORANGE);
+    } else if (UI_isRunning()){
+        encoderControl_setLEDState(BLUE);
+    }
+}
+
 
 // calculate difference in timers to see total moves since last call & reset timers
 void encoderControl_resetTimers(void){

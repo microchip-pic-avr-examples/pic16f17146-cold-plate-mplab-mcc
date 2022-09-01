@@ -30,11 +30,20 @@ bool UI_isRunning(void){
 
 //Updates the scene elements & sets a new scene if needed
 void UI_refresh(void){
+    #ifdef UI_ERRORS
+    if(peltierControl_getError() != PELTIER_ERROR_NONE && UI_state != ERROR){
+        // Error State
+        UI_setState(ERROR);
+        UI_new_state = true;
+    }
+    #endif
+
     if(UI_new_state){
         UI_setup();
         UI_new_state = false;
     }
     UI_update();
+
 }
 
 //Fill OLED with new static state data when the state is switched
@@ -50,6 +59,7 @@ void UI_setup(void){
             runningMenus_runningSetup();
             break;
         case ERROR:
+            runningMenus_errorSetup();
             break;
         case SET_TEMPERATURE:
             settingMenus_temperatureSetup();
@@ -83,7 +93,8 @@ void UI_update(void){
         case MENU:
             returnState = navMenu_getSelected();
             break;
-        case ERROR: // NO IMPLEMENTATION YET
+        case ERROR:
+            returnState = STANDBY;
             break;
     }
     
@@ -106,6 +117,7 @@ void UI_update(void){
                 runningMenus_runningUpdate(encoderControl_getMoves());
                 break;
             case ERROR:
+                runningMenus_errorUpdate(encoderControl_getMoves());
                 break;
             case SET_TEMPERATURE:
                 settingMenus_temperatureUpdate(encoderControl_getMoves());

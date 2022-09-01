@@ -14,6 +14,7 @@ typedef enum {STANDBY, MENU, RUNNING, ERROR, SET_TEMPERATURE, CHANGE_UNITS, ABOU
 #include "encoderControl.h"
 #include "navMenu.h"
 #include "runningMenus.h"
+#include "peltierControl.h"
     
 UI_STATE UI_getState(void);
 void UI_setState(UI_STATE new_state);

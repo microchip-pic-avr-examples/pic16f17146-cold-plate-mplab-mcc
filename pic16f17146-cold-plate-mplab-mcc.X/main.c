@@ -76,6 +76,8 @@ void Timer0_1ms_Callback(void)
         
         if(UI_getState() == STANDBY){
             encoderControl_breatheLED();
+        } else {
+            encoderControl_updateColor();
         }
 
         counter10ms = 0;
@@ -207,6 +209,7 @@ int main(void)
         
         if(dispRefresh){ // update UI every 100ms
             UI_refresh();
+            encoderControl_LEDUpdate();
             dispRefresh = false;
         }
 

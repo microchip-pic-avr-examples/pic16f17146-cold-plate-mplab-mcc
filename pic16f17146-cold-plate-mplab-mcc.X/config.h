@@ -7,11 +7,16 @@ extern "C" {
 
 #include <stdbool.h>
     
+
+    
 //If defined, telemetry will be sent via UART
 #define DEBUG_TELEMETRY 
     
 //If defined, PRINTF will send messages
 #define DEBUG_PRINT
+    
+//If defined, UI will show error messages
+//#define UI_ERRORS
     
 //Lowest allowed temperature in demo mode
 #define DEMO_TEMP_LIMIT_LOW 5
