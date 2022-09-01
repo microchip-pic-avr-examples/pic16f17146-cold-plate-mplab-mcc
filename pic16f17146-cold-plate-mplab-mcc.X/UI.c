@@ -57,9 +57,6 @@ void UI_setup(void){
         case CHANGE_UNITS:
             settingMenus_changeUnitsSetup();
             break;
-        case LIMIT_CURRENT:
-            settingMenus_currentSetup();
-            break;
         case ABOUT:
             settingMenus_aboutSetup();
             break;
@@ -84,7 +81,6 @@ void UI_update(void){
         case STANDBY:
         case RUNNING:
         case SET_TEMPERATURE:
-        case LIMIT_CURRENT:
         case CHANGE_UNITS:
         case ABOUT:
         case DEMO_MODE_TOGGLE:
@@ -127,9 +123,6 @@ void UI_update(void){
             case CHANGE_UNITS:
                 settingMenus_changeUnitsUpdate(encoderControl_getMoves());
                 break;
-            case LIMIT_CURRENT:
-                settingMenus_currentUpdate(encoderControl_getMoves());
-                break;
             case ABOUT:
                 settingMenus_aboutUpdate(encoderControl_getMoves());
                 break;
@@ -152,12 +145,6 @@ void UI_updateEEPROM(void){
     if(settings_getSetting(SETTINGS_LAST_SET_TEMP) != (uint8_t)settingMenus_getTargetTemp())
     {
         settings_writeValue(SETTINGS_LAST_SET_TEMP, (uint8_t)settingMenus_getTargetTemp());
-        changed = true;
-    }
-    
-    if(settings_getSetting(SETTINGS_CURRENT_LIMIT) != settingMenus_getCurrentLimit())
-    {
-        settings_writeValue(SETTINGS_CURRENT_LIMIT, settingMenus_getCurrentLimit());
         changed = true;
     }
     

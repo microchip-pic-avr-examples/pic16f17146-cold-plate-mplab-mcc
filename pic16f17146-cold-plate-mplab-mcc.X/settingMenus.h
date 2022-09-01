@@ -27,12 +27,6 @@ void settingMenus_temperatureUpdate(int16_t moves);
 int8_t settingMenus_getTargetTemp(void);
 void settingMenus_setTargetTemp(int8_t temp);
 
-// LIMIT CURRENT
-void settingMenus_currentSetup(void);
-void settingMenus_currentUpdate(int16_t moves);
-// current limit getter
-uint8_t settingMenus_getCurrentLimit(void);
-void settingMenus_setCurrentLimit(uint8_t limit);
 
 // CHANGE UNITS
 void settingMenus_changeUnitsSetup(void);

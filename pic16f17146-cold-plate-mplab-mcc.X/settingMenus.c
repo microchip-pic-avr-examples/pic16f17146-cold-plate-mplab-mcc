@@ -3,7 +3,6 @@
 
 // SET TEMPERATURE FUNCTIONS
 static int8_t target_temp = 0; // set function to read EEPROM
-static uint8_t current_limit = CURRENT_LIMIT_MIN*10; // actual limit is divided by 10
 static char temp_unit = 'C';
 static bool show_advanced = true;
 
@@ -84,57 +83,6 @@ void settingMenus_setTargetTemp(int8_t temp){
 }
 
 // CHANGE UNITS
-void settingMenus_currentSetup(void){
-    char disp_string[20];       
-    OLED_clear();
-    
-    OLED_command(line_address[0]+1);
-    OLED_writeString("Set Current Limit");
-    
-    OLED_command(line_address[1]+7);
-    OLED_writeString("(Amps)");
-    
-    OLED_command(line_address[2]+2);
-    OLED_writeString("Min");
-    
-    OLED_command(line_address[2]+8);
-    OLED_writeString("Set");
-    
-    OLED_command(line_address[2]+14);
-    OLED_writeString("Max");
-    
-    OLED_command(line_address[3]+1);
-    sprintf(disp_string, "%2d.0", CURRENT_LIMIT_MIN);
-    OLED_writeString(disp_string);
-        
-    OLED_command(line_address[3]+14);
-    sprintf(disp_string, "%2d.0", CURRENT_LIMIT_MAX);
-    OLED_writeString(disp_string);
-    
-}
-
-void settingMenus_currentUpdate(int16_t moves){
-    int8_t current_adjustment = (int8_t)(moves*5); // each move is 0.1 A.
-    int8_t new_limit = current_limit + current_adjustment;
-    current_limit = (new_limit <= CURRENT_LIMIT_MIN*10) ? (uint8_t)CURRENT_LIMIT_MIN*10 : (new_limit >= CURRENT_LIMIT_MAX*10) ? (uint8_t)CURRENT_LIMIT_MAX*10 : (uint8_t)new_limit;
-    
-    char disp_string[4];
-    
-    OLED_command(line_address[3]+7);
-    sprintf(disp_string, "%2d.%1d", current_limit/10, current_limit%10);
-    OLED_writeString(disp_string);
-    
-}
-
-uint8_t settingMenus_getCurrentLimit(void){
-    return current_limit;
-}
-
-void settingMenus_setCurrentLimit(uint8_t limit){
-    current_limit = limit;
-}
-
-// CHANGE UNITS
 
 void settingMenus_changeUnitsSetup(void){
     OLED_clear();
@@ -205,12 +153,6 @@ void settingMenus_startSetup(void){
     OLED_writeString(disp_string);
     
     OLED_writeTempUnit();
-    if(settingMenus_getShowAdvanced()){
-        OLED_command(line_address[1]);
-        OLED_writeString("Current lim: ");
-        sprintf(disp_string, "%2d.%1d A", current_limit/10, current_limit%10);
-        OLED_writeString(disp_string);
-    }
 
 }
 
@@ -329,7 +271,6 @@ void settingMenus_setDemoMode(bool mode){
 
 void settingMenus_populateSettings(void){
     settingMenus_setTargetTemp((int8_t)settings_getSetting(SETTINGS_LAST_SET_TEMP));
-    settingMenus_setCurrentLimit(settings_getSetting(SETTINGS_CURRENT_LIMIT));
     settingMenus_setTempUnit((char)settings_getSetting(SETTINGS_TEMP_UNIT));
     settingMenus_setDemoMode((bool)settings_getSetting(SETTINGS_DEMO_MODE));
     settingMenus_setShowAdvanced((bool)settings_getSetting(SETTINGS_SHOW_ADVANCED));
