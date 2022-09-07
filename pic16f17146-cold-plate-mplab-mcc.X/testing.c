@@ -4,13 +4,14 @@
 #include <xc.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <math.h>
 
 #include "NTC_ROM.h"
 #include "config.h"
 
 #define NTC_ROM_TEST_SIZE 10
 
-void NTC_ROM_Test(void)
+void TEST_NTC_ROM(void)
 {
     //Test the NTC ROM Search Algorithms
     
@@ -41,5 +42,25 @@ void NTC_ROM_Test(void)
         printf("Test %u - Temperature at value %u: %dC\r\n", i, testValues[i], tempOut);
 #endif
 
+    }
+}
+
+//Software Test Pattern for Current -> DAC settings
+void TEST_DAC_Calc(void)
+{
+    uint8_t dacCode;
+#ifdef DEBUG_PRINT
+    printf("Running DAC Computation Tests...\r\n");
+#endif
+    
+    uint8_t testValues[] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
+    
+    for (uint8_t i = 0; i < 10; i++)
+    {
+       //Same formula!
+       dacCode = floorf(DAC_FORMULA_CONSTANT * 8.0 * testValues[i]);
+#ifdef DEBUG_PRINT
+        printf("Test %u - DAC set for input %u: %dC\r\n", i, testValues[i], dacCode);
+#endif
     }
 }

@@ -2,6 +2,7 @@
 
 #include "mcc_generated_files/system/system.h"
 #include "settings.h"
+#include "config.h"
 
 #include <xc.h>
 #include <stdint.h>

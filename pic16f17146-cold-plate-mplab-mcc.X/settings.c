@@ -122,7 +122,7 @@ uint8_t settings_calculateCRC(void)
     
     //Configure EEPROM Scan Range
     //NOTE: Registers are flipped now - to be fixed
-    CRC_SetScannerAddressLimit((SETTINGS_EEPROM_STOP - 1), SETTINGS_EEPROM_START);
+    CRC_SetScannerAddressLimit((SETTINGS_EEPROM_STOP), SETTINGS_EEPROM_START);
     
     //Start CRC Scanner
     CRC_StartScanner();

@@ -43,8 +43,8 @@
 
 void CURRENT_SENSE_CMP_Initialize(void) 
 {
-    // CHYS enabled; CON enabled; CPOL not inverted; CSYNC asynchronous; 
-    CM1CON0 = 0x82;
+    // CHYS disabled; CON enabled; CPOL not inverted; CSYNC asynchronous; 
+    CM1CON0 = 0x80;
 
     // CINTN no_intFlag; CINTP no_intFlag; 
     CM1CON1 = 0x0;

@@ -101,6 +101,7 @@ void currentSense_selfCalibrate(void)
 void currentSense_setCurrentLimit(uint8_t limit)
 {
     uint8_t dacCode = floorf(DAC_FORMULA_CONSTANT * OPAMPGain * limit);
+    printf("DAC Value = %u\r\n", dacCode);
     DAC1_SetOutput(dacCode);
 }
 

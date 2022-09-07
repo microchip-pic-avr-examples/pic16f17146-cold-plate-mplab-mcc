@@ -124,7 +124,7 @@ int main(void)
     MSSP_HostInit();
     
 #ifdef DEBUG_PRINT
-    printf("Starting Up...\r\n");
+    printf("\r\nStarting Up...\r\n");
 #endif
     
     //Print the Reset Registers
@@ -205,9 +205,9 @@ int main(void)
 #endif
         }
         
-        if(dispRefresh){ // update UI every 100ms
-            UI_refresh();
-            dispRefresh = false;
-        }
+//        if(dispRefresh){ // update UI every 100ms
+//            UI_refresh();
+//            dispRefresh = false;
+//        }
     }    
 }

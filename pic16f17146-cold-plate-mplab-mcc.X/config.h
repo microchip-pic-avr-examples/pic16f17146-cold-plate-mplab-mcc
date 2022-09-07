@@ -42,7 +42,7 @@ extern "C" {
 #define SENSE_RESISTANCE 0.01
     
 //Resolution of the DAC (in terms of bits per volt)
-//125 = 256 / 2.048V / 10
+//125 = 256 / 2.048V
 #define DAC_CURRENT_RES 125
 
 //Pre-Computed DAC Formula
