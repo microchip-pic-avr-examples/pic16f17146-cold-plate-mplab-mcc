@@ -4,6 +4,7 @@
 // SET TEMPERATURE FUNCTIONS
 static int8_t target_temp = 0; // set function to read EEPROM
 static char temp_unit = 'C';
+static bool show_icons = false;
 
 // STANDBY OLED FUNTIONS
 // set static elements on the STANDBY scene
@@ -118,6 +119,38 @@ char settingMenus_getTempUnit(void){
 
 void settingMenus_setTempUnit(char unit){
     temp_unit = unit;
+}
+
+// SHOW ICONS
+void settingMenus_showIconsSetup(void){
+    OLED_clear();
+    
+    OLED_command(line_address[0]+3);
+    OLED_writeString("Show icons on");
+    OLED_command(line_address[1]+3);
+    OLED_writeString("running menu:");
+}
+
+void settingMenus_showIconsUpdate(int16_t moves){
+    moves = moves % 2;
+    if(moves){
+        show_icons = (show_icons) ? false : true;
+    }
+    
+    OLED_command(line_address[3]+8);
+    if(show_icons){
+        OLED_writeString("True ");
+    } else{
+        OLED_writeString("False");
+    }
+}
+
+bool settingMenus_getShowIcons(void){
+    return show_icons;
+}
+
+void settingMenus_setShowIcons(bool showIcons){
+    show_icons = showIcons;
 }
 
 

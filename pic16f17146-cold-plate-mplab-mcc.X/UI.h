@@ -5,7 +5,7 @@
 extern "C" {
 #endif
     
-typedef enum {STANDBY, MENU, RUNNING, ERROR, SET_TEMPERATURE, CHANGE_UNITS, ABOUT, DEMO_MODE_TOGGLE} UI_STATE;
+typedef enum {STANDBY, MENU, RUNNING, ERROR, SET_TEMPERATURE, CHANGE_UNITS, SHOW_ICONS, ABOUT, DEMO_MODE_TOGGLE} UI_STATE;
 
 #include "stdbool.h"
 #include "mcc_generated_files/system/system.h"

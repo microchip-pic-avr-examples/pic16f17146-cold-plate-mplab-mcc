@@ -35,6 +35,13 @@ void settingMenus_changeUnitsUpdate(int16_t moves);
 char settingMenus_getTempUnit(void);
 void settingMenus_setTempUnit(char unit);
 
+// SHOW ICONS
+
+void settingMenus_showIconsSetup(void);
+void settingMenus_showIconsUpdate(int16_t moves);
+bool settingMenus_getShowIcons(void);
+void settingMenus_setShowIcons(bool showIcons);
+
 // ABOUT
 void settingMenus_aboutSetup(void);
 void settingMenus_aboutUpdate(int16_t moves);

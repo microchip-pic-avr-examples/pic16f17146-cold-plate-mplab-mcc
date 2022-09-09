@@ -61,8 +61,8 @@ void Timer0_1ms_Callback(void)
     {
         //Call these functions every 1ms
         
-        //Software PWM
-        if(UI_getState() == STANDBY){
+        //Call for breathing LED if needed, otherwise update LED every 100ms
+        if(encoderControl_getBreatheStatus()){
             encoderControl_IncrementPWM();
         }
     }
@@ -73,13 +73,11 @@ void Timer0_1ms_Callback(void)
         //Call these functions every 10ms
         tempMonitor_runStateMachine();
         peltierControl_calculateDutyCycle();
-        
-        if(UI_getState() == STANDBY){
-            encoderControl_breatheLED();
-        } else {
-            encoderControl_updateColor();
-        }
 
+        if(encoderControl_getBreatheStatus()){
+            encoderControl_breatheLED();
+        }
+        
         counter10ms = 0;
     }
     else
@@ -209,7 +207,7 @@ int main(void)
         
         if(dispRefresh){ // update UI every 100ms
             UI_refresh();
-            encoderControl_LEDUpdate();
+            encoderControl_updateLEDs();
             dispRefresh = false;
         }
 

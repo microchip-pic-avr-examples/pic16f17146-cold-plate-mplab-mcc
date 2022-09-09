@@ -101,6 +101,7 @@ void settings_writeDefaults(void)
     settings_writeValue(SETTINGS_LAST_SET_TEMP, DEFAULT_LAST_TEMP_SETTING);
     settings_writeValue(SETTINGS_HYSTER_OVER, DEFAULT_TEMP_HYSTER_OVER);
     settings_writeValue(SETTINGS_HYSTER_UNDER, DEFAULT_TEMP_HYSTER_UNDER);
+    settings_writeValue(SETTINGS_SHOW_ICONS, DEFAULT_SHOW_ICONS);
     
     //Write EEPROM Version ID
     settings_writeValue(SETTINGS_EEPROM_VERSION, COMPILED_EEPROM_VERSION);

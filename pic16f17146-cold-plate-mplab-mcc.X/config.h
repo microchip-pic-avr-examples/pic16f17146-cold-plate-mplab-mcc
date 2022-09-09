@@ -65,6 +65,9 @@ extern "C" {
     
 //Demo mode is on by default
 #define DEFAULT_DEMO_MODE true
+    
+// Do not show icons on running menu by default    
+#define DEFAULT_SHOW_ICONS false
         
 //Default Plate Set Point
 #define DEFAULT_LAST_TEMP_SETTING 10

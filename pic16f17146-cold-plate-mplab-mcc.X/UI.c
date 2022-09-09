@@ -67,6 +67,9 @@ void UI_setup(void){
         case CHANGE_UNITS:
             settingMenus_changeUnitsSetup();
             break;
+        case SHOW_ICONS:
+            settingMenus_showIconsSetup();
+            break;
         case ABOUT:
             settingMenus_aboutSetup();
             break;
@@ -86,6 +89,7 @@ void UI_update(void){
         case RUNNING:
         case SET_TEMPERATURE:
         case CHANGE_UNITS:
+        case SHOW_ICONS:
         case ABOUT:
         case DEMO_MODE_TOGGLE:
             returnState = MENU;
@@ -125,6 +129,9 @@ void UI_update(void){
             case CHANGE_UNITS:
                 settingMenus_changeUnitsUpdate(encoderControl_getMoves());
                 break;
+            case SHOW_ICONS:
+                settingMenus_showIconsUpdate(encoderControl_getMoves());
+                break;
             case ABOUT:
                 settingMenus_aboutUpdate(encoderControl_getMoves());
                 break;
@@ -153,6 +160,12 @@ void UI_updateEEPROM(void){
     if(settings_getSetting(SETTINGS_DEMO_MODE) != settingMenus_getDemoMode())
     {
         settings_writeValue(SETTINGS_DEMO_MODE, settingMenus_getDemoMode());
+        changed = true;
+    }
+    
+    if(settings_getSetting(SETTINGS_SHOW_ICONS) != settingMenus_getShowIcons())
+    {
+        settings_writeValue(SETTINGS_SHOW_ICONS, settingMenus_getShowIcons());
         changed = true;
     }
     
