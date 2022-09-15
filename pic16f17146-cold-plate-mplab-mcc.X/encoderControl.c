@@ -1,22 +1,48 @@
 #include "encoderControl.h"
 
 
-static volatile int16_t encoderMoves = 0;
-
-
 // Return total encoder moves since last poll
 int16_t encoderControl_getMoves(void){
-    encoderControl_resetTimers();
-    return encoderMoves;
+    static uint16_t oldTimer1 = 0;
+    static uint16_t oldTimer3 = 0;
+    
+    uint16_t newTimer1, newTimer3, netTimer1, netTimer3;
+    int16_t encoder;
+    
+    newTimer1 = Timer1_Read();
+    newTimer3 = Timer3_Read();
+    
+    netTimer1 = 0;
+    netTimer3 = 0;
+    
+    if(newTimer1 < oldTimer1){
+        // Rollover occurred
+        // Add an offset to the net value and clear the old value
+        netTimer1 = 0xFFFF - oldTimer1;
+        oldTimer1 = 0;
+    }
+    
+     if(newTimer3 < oldTimer3){
+        // Rollover occurred
+        // Add an offset to the net value and clear the old value
+        netTimer3 = 0xFFFF - oldTimer3;
+        oldTimer3 = 0;
+    }
+    
+    //Find the net change
+    netTimer1 += newTimer1 - oldTimer1;
+    netTimer3 += newTimer3 - oldTimer3;
+    
+    // Calculate the net encoder change
+    encoder = (int16_t)(netTimer3 - netTimer1);
+    
+    oldTimer1 = newTimer1;
+    oldTimer3 = newTimer3;
+    
+    return encoder;
 }
 
 
-// calculate difference in timers to see total moves since last call & reset timers
-void encoderControl_resetTimers(void){
-    encoderMoves = (int16_t)Timer3_Read() - (int16_t)Timer1_Read(); // + if right, - if left
-    Timer1_Write(0);
-    Timer3_Write(0);
-}
 
 EncoderLEDState LEDState = OFF; // BLUE, ORANGE, BOTH, or OFF
 bool breatheStatus = false; // whether to breathe the LED

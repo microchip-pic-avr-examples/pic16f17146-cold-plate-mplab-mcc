@@ -17,7 +17,6 @@ bool encoderControl_getBreatheStatus(void);
 void encoderControl_setBreatheStatus(bool status);
 
 int16_t encoderControl_getMoves(void);
-void encoderControl_resetTimers(void);
 void encoderControl_updateColor(void);
 void encoderControl_IncrementPWM(void);
 void encoderControl_breatheLED(void);
