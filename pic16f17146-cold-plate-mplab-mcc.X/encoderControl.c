@@ -79,16 +79,15 @@ void encoderControl_updateLEDs(void){
             if(!UI_isRunning()){
                 encoderControl_setLEDState(PURPLE);
                 breatheStatus = false;
-            } else { // if in running menu
-                // TODO: set depending if at temp
-                encoderControl_setLEDState(PURPLE);
-                breatheStatus = false;
+            } else { // If running
+                encoderControl_setLEDState(BLUE);
+                breatheStatus = peltierControl_getState() == PELTIER_STATE_AT_TEMP ? false : true;
             }
             break;
         case RUNNING:
-            // TODO: check if at temp
             encoderControl_setLEDState(BLUE);
-            breatheStatus = false;
+            // PWM while cooling, Solid blue at temp
+            breatheStatus = peltierControl_getState() == PELTIER_STATE_AT_TEMP ? false : true;
             break;
     }
 }
@@ -126,7 +125,9 @@ static uint8_t PWM_intensity = 0; // value between 0 - PWM_increments
 void encoderControl_PWM(void){
     static uint8_t duty_cycle = 0;
     if(duty_cycle < PWM_intensity){
-        LED_ERROR_SetHigh();
+        if(LEDState == PURPLE){
+            LED_ERROR_SetHigh();
+        }
         LED_STATUS_SetHigh();
     } else if(duty_cycle <= PWM_increments){
         LED_ERROR_SetLow();
