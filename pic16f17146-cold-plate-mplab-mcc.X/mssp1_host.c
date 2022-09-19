@@ -46,7 +46,7 @@ inline void stopI2C(void)
     NOP();
 }
 
-inline bool startI2CWrite(uint8_t addr)
+static inline bool startI2CWrite(uint8_t addr)
 {
     //Wait until MSSP module is idle
     while (!MSSP_IDLE);                                           
@@ -70,7 +70,7 @@ inline bool startI2CWrite(uint8_t addr)
     return true;
 }
 
-inline bool startI2CRead(uint8_t addr)
+static inline bool startI2CRead(uint8_t addr)
 {
     //Wait until MSSP module is idle
     while (!MSSP_IDLE);                                                         

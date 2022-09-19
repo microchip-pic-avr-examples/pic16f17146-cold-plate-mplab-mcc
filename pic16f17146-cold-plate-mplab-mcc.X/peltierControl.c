@@ -17,6 +17,9 @@
 
 #define CWG_ENABLE() do { CWG1CON0bits.EN = 1; } while (0)
 
+#define CWG_DISABLE_OUTPUT() do { CWG1STRbits.CWG1STRA = 1;} while (0) //0
+#define CWG_ENABLE_OUTPUT() do { CWG1STRbits.CWG1STRA = 1; } while (0)
+
 //State machine for DAC updates
 enum CurrentLimitState {
     CURRENT_LIMIT_NO_CHANGE = 0, CURRENT_LIMIT_SET_DAC, CURRENT_LIMIT_SETTLE
@@ -26,17 +29,18 @@ enum CurrentLimitState {
 static enum CurrentLimitState dacUpdateState = CURRENT_LIMIT_NO_CHANGE;
 static uint8_t newDACValue = 0;
 
+enum PeltierState {
+    PELTIER_STATE_DISABLED = 0, PELTIER_STATE_STARTUP, PELTIER_STATE_AT_TEMP, PELTIER_STATE_COOLING
+};
+
+//Peltier State Machine
+static enum PeltierState peltierState = PELTIER_STATE_DISABLED;
+
 //Average Duty Cycle of FET
 static uint8_t averageDutyCycle = 0;
 
-//True if Peltier is on
-static bool peltierOn = false;
-
 //Error for Peltier
 static PeltierError error = PELTIER_ERROR_NONE;
-
-//Target Peltier Temperature
-static int8_t targetTemp = 0;
 
 //Init the Peltier Current Controller
 void peltierControl_init(void)
@@ -54,6 +58,8 @@ void peltierControl_init(void)
     //Enable Int. PWM Signal for CWG
     //Does not go to output yet
     FET_PWM_Enable();
+    
+    //peltierControl_setMaxCurrent(85);
 }
 
 //Performs a self-test of the Peltier element. This function will block when executing. 
@@ -70,49 +76,122 @@ void peltierControl_periodicCheck(void)
     //Clear the WWDT
     WWDT_reset();    
     
-    if (peltierOn)
+    if (fanControl_getFan1RPM() == 0)
     {
-        //Peltier is active
-        if (fanControl_getFan1RPM() == 0)
+        //Fan Error!
+        error = PELTIER_FAN1_ERROR;
+    }
+    if (tempMonitor_getLastHotTemp() > settings_getSetting(SETTINGS_MAX_HEATSINK_TEMP))
+    {
+        //Overheat - Heatsink
+        error = PELTIER_HEATSINK_OVERHEAT;
+    }
+    if (tempMonitor_getLastIntTemp() > settings_getSetting(SETTINGS_MAX_INT_TEMP))
+    {
+        //Overheat - Int. Temperature
+        error = PELTIER_INT_OVERHEAT;
+    }
+    if (tempMonitor_getLastColdTemp() < (TEMP_LIMIT_SAFETY_MARGIN + tempMonitor_getLastColdTemp()))
+    {
+        //Overcooled - Cold Plate is below safe temperature
+        error = PELTIER_PLATE_OVERCOOL;
+    }
+
+    int8_t stopTemp, startTemp, currentTemp;
+    stopTemp = settings_getSetting(SETTINGS_LAST_SET_TEMP);
+    startTemp = stopTemp;
+    currentTemp = tempMonitor_getLastColdTemp();
+
+    //Setup Temperature Hysteresis
+    stopTemp += settings_getSetting(SETTINGS_HYSTER_OVER);
+    startTemp -= settings_getSetting(SETTINGS_HYSTER_UNDER);
+
+    switch (peltierState)
+    {
+        case PELTIER_STATE_DISABLED:
         {
-            //Fan Error!
-            error = PELTIER_FAN1_ERROR;
+            //System is disabled
+            break;
         }
-        if (tempMonitor_getLastHotTemp() > settings_getSetting(SETTINGS_MAX_HEATSINK_TEMP))
+        case PELTIER_STATE_STARTUP:
         {
-            //Overheat - Heatsink
-            error = PELTIER_HEATSINK_OVERHEAT;
-        }
-        if (tempMonitor_getLastIntTemp() > settings_getSetting(SETTINGS_MAX_INT_TEMP))
-        {
-            //Overheat - Int. Temperature
-            error = PELTIER_INT_OVERHEAT;
-        }
-        if (!CLC4_OutputStatusGet())
-        {
-            //Power Error - CWG is ON, but no current is running
-            error = PELTIER_POWER_ERROR;
-        }
-        
-        if (error != PELTIER_ERROR_NONE)
-        {
+            //Check to see if system is ready
+
+            if (error != PELTIER_ERROR_NONE)
+            {
+                //Something went wrong
+                peltierControl_stop();
+            }
+            else
+            {
+                if (currentTemp <= stopTemp)
+                {
+                    //Plate is already cooled
+                    peltierState = PELTIER_STATE_AT_TEMP;
+                    
 #ifdef DEBUG_PRINT
-            printf("Peltier Control Error, Code 0x%x\r\n", error);
+                    printf("-- PELTIER IDLE --\r\n");
 #endif
-            peltierControl_stop();
+                }
+                else
+                {
+                    //Plate needs to be cooled
+                    peltierState = PELTIER_STATE_COOLING;
+                    CWG_ENABLE_OUTPUT();
+                    
+#ifdef DEBUG_PRINT
+                    printf("-- PELTIER ON --\r\n");
+#endif
+                }
+            }
+
+            break;
         }
-        else
+        case PELTIER_STATE_AT_TEMP:
         {
-            //No errors - system OK
-            
+            //Plate is cooled, waiting to restart
+
+            if (currentTemp >= startTemp)
+            {
+                //Need to restart the peltier
+                peltierState = PELTIER_STATE_COOLING;
+                CWG_ENABLE_OUTPUT();
+                
+#ifdef DEBUG_PRINT
+                printf("-- PELTIER ON --\r\n");
+#endif
+            }
+            break;
+        }
+        case PELTIER_STATE_COOLING:
+        {
+            //Actively Cooling the Plate
+
+            //Check for Power Error
+            if (!CLC4_OutputStatusGet())
+            {
+                //Power Error - CWG is ON, but no current is running
+                error = PELTIER_POWER_ERROR;
+            }
+
+            if (currentTemp <= stopTemp)
+            {
+                //At Temperature
+                peltierState = PELTIER_STATE_AT_TEMP;
+                CWG_DISABLE_OUTPUT();
+                
+#ifdef DEBUG_PRINT
+                printf("-- PELTIER IDLE --\r\n");
+#endif
+            }
+            break;
         }
     }
-    else
+
+    if (error != PELTIER_ERROR_NONE)
     {
-        //Peltier is not on
-    }
-    
-    
+        peltierControl_stop();
+    }    
 }
 
 void peltierControl_calculateDutyCycle(void)
@@ -161,12 +240,6 @@ uint8_t peltierControl_getAverageDutyCycle(void)
     return averageDutyCycle;
 }
 
-//Set the target temperature of the Cold Plate
-void peltierControl_setTargetTemp(int8_t target)
-{
-    
-}
-
 //This function directly modifies the current threshold in the loop.
 void peltierControl_adjustThreshold(void)
 {
@@ -175,7 +248,7 @@ void peltierControl_adjustThreshold(void)
         case CURRENT_LIMIT_SET_DAC:
         {
             //Steer CWG to Logic-0
-            CWG1STRbits.CWG1STRA = 0;
+            CWG_DISABLE_OUTPUT();
             
             //Update DAC Value
             DAC1_SetOutput(newDACValue);
@@ -187,7 +260,7 @@ void peltierControl_adjustThreshold(void)
         case CURRENT_LIMIT_SETTLE:
         {            
             //Release CWG
-            CWG1STRbits.CWG1STRA = 1;
+            CWG_ENABLE_OUTPUT();
             
             //Update State
             dacUpdateState = CURRENT_LIMIT_NO_CHANGE;
@@ -210,56 +283,66 @@ void peltierControl_adjustThreshold(void)
 
 
 //Attempt to start the Peltier Regulator. Returns false if an error has occurred
-bool peltierControl_start(void)
+void peltierControl_start(void)
 {
-    peltierOn = true;
+    //Update State Machine
+    peltierState = PELTIER_STATE_STARTUP;
     
     //Clear Errors
     error = PELTIER_ERROR_NONE;
-        
-    //Disable Steering
-    CWG1STRbits.CWG1STRA = 1;
+    
+    //NOTE: CWG will start in state machine
     
     //Enable WWDT
     WWDT_start();
     
     //TODO: Add Sanity Checking
 #ifdef DEBUG_PRINT
-    printf("-- PELTIER ON --\r\n");
+    printf("-- PELTIER STARTUP --\r\n");
 #endif
-    return true;
 }
 
 //Stop the Peltier Regulator
 void peltierControl_stop(void)
-{    
-    peltierOn = false;
+{   
+#ifdef DEBUG_PRINT
+    if (error != PELTIER_ERROR_NONE)
+    {
+        printf("Peltier Control Error, Code %u\r\n", error);
+    }
+#endif
     
-    //Re-enable Steering
-    CWG1STRbits.CWG1STRA = 0;
-    
+    //Disable Output
+    CWG_DISABLE_OUTPUT();
+
     //Disable WWDT
     WWDT_stop();
     
+    if (peltierState != PELTIER_STATE_DISABLED)
+    {
+        //Update State Machine
+        peltierState = PELTIER_STATE_DISABLED;
+        
 #ifdef DEBUG_PRINT
-    printf("-- PELTIER OFF --\r\n");
+        printf("-- PELTIER OFF --\r\n");
 #endif
+    }
 }
 
 //Set the max current through the loop
-void peltierControl_setMaxCurrent(uint8_t lim)
-{
-    static uint8_t counter = 10;
-    newDACValue = counter;
-    
-    counter++;
-    
-    if (counter == 0)
-        counter = 10;
-    
-    dacUpdateState = CURRENT_LIMIT_SET_DAC;
-    FET_PWM_ENABLE_PERIOD_INT();
-}
+//void peltierControl_setMaxCurrent(uint8_t lim)
+//{
+//    static uint8_t counter = 10;
+//    newDACValue = counter;
+//    
+//    counter++;
+//    
+//    if (counter == 0)
+//        counter = 10;
+//    
+//    dacUpdateState = CURRENT_LIMIT_SET_DAC;
+//    FET_PWM_ENABLE_PERIOD_INT();
+//}
 
 //Returns the error code from the Peltier regulator. Does NOT clear the error
 PeltierError peltierControl_getError(void)

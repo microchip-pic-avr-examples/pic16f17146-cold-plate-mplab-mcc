@@ -11,7 +11,7 @@
 */
 
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+ï¿½ [2022] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -124,7 +124,7 @@ int main(void)
     MSSP_HostInit();
     
 #ifdef DEBUG_PRINT
-    printf("Starting Up...\r\n");
+    printf("\r\nStarting Up...\r\n");
 #endif
     
     //Print the Reset Registers
@@ -196,12 +196,14 @@ int main(void)
             peltierControl_periodicCheck();
             
 #ifdef DEBUG_TELEMETRY
+#ifdef DEBUG_PRINT
             printf("Fan 1 RPM: %u\r\n", fanControl_getFan1RPM());
             printf("Fan 2 RPM: %u\r\n", fanControl_getFan2RPM());  
             printf("Cold Plate Temp: %d\r\n", tempMonitor_getLastColdTemp());   
             printf("Heatsink Temp: %d\r\n", tempMonitor_getLastHotTemp());   
             printf("Int Temp: %d\r\n", tempMonitor_getLastIntTemp());
-            printf("Average Duty Cycle: %d%%\r\n", peltierControl_getAverageDutyCycle());            
+            printf("Average Duty Cycle: %d%%\r\n", peltierControl_getAverageDutyCycle());       
+#endif
 #endif
         }
         
