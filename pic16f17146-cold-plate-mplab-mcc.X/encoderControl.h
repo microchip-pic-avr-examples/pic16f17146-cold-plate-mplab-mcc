@@ -18,7 +18,7 @@ void encoderControl_setBreatheStatus(bool status);
 
 int16_t encoderControl_getMoves(void);
 void encoderControl_updateColor(void);
-void encoderControl_IncrementPWM(void);
+void encoderControl_PWM(void);
 void encoderControl_breatheLED(void);
 void encoderControl_updateLEDs(void);
 

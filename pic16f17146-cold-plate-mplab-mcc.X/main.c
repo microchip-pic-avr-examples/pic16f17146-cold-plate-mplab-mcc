@@ -63,7 +63,7 @@ void Timer0_1ms_Callback(void)
         
         //Call for breathing LED if needed, otherwise update LED every 100ms
         if(encoderControl_getBreatheStatus()){
-            encoderControl_IncrementPWM();
+            encoderControl_PWM();
         }
     }
         
@@ -73,7 +73,7 @@ void Timer0_1ms_Callback(void)
         //Call these functions every 10ms
         tempMonitor_runStateMachine();
         peltierControl_calculateDutyCycle();
-
+        
         if(encoderControl_getBreatheStatus()){
             encoderControl_breatheLED();
         }
@@ -176,7 +176,7 @@ int main(void)
     
     //Init OLED Display
     OLED_init();
-    
+
     //Start Fan Controller
     fanControl_start();
     
@@ -208,6 +208,11 @@ int main(void)
         if(dispRefresh){ // update UI every 100ms
             UI_refresh();
             encoderControl_updateLEDs();
+            if(!encoderControl_getBreatheStatus())
+            {
+                // Update LEDs if not breathing them
+                encoderControl_updateColor();
+            }
             dispRefresh = false;
         }
 
