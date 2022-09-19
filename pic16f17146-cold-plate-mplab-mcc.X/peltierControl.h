@@ -13,6 +13,11 @@ extern "C" {
         PELTIER_POWER_ERROR, PELTIER_INT_OVERHEAT, PELTIER_HEATSINK_OVERHEAT, 
         PELTIER_PLATE_SATURATION, PELTIER_PLATE_OVERCOOL
     } PeltierError;
+    
+    typedef enum {
+        PELTIER_STATE_DISABLED = 0, PELTIER_STATE_STARTUP, PELTIER_STATE_AT_TEMP, PELTIER_STATE_COOLING
+    } PeltierState;
+
         
     //Init the Peltier Current Controller
     void peltierControl_init(void);
@@ -28,6 +33,9 @@ extern "C" {
     
     //Calculate the average duty cycle of the PWM
     uint8_t peltierControl_getAverageDutyCycle(void);
+    
+    //Returns the current state of the Peltier
+    PeltierState peltierControl_getState(void);
     
     //This function directly modifies the current threshold in the loop.
     //DO NOT CALL DIRECTLY
