@@ -29,12 +29,9 @@ enum CurrentLimitState {
 static enum CurrentLimitState dacUpdateState = CURRENT_LIMIT_NO_CHANGE;
 static uint8_t newDACValue = 0;
 
-enum PeltierState {
-    PELTIER_STATE_DISABLED = 0, PELTIER_STATE_STARTUP, PELTIER_STATE_AT_TEMP, PELTIER_STATE_COOLING
-};
 
 //Peltier State Machine
-static enum PeltierState peltierState = PELTIER_STATE_DISABLED;
+static PeltierState peltierState = PELTIER_STATE_DISABLED;
 
 //Average Duty Cycle of FET
 static uint8_t averageDutyCycle = 0;
@@ -238,6 +235,12 @@ void peltierControl_calculateDutyCycle(void)
 uint8_t peltierControl_getAverageDutyCycle(void)
 {
     return averageDutyCycle;
+}
+
+//Returns the current state of the Peltier
+PeltierState peltierControl_getState(void)
+{
+    return peltierState;
 }
 
 //This function directly modifies the current threshold in the loop.
