@@ -11,6 +11,7 @@
 #include "tempMonitor.h"
 #include "settings.h"
 #include "config.h"
+#include "currentSense.h"
 
 #define FET_PWM_DISABLE_PERIOD_INT() do { PIR3bits.PWM1PIF = 0; PIE3bits.PWM1PIE = 0; } while (0)
 #define FET_PWM_ENABLE_PERIOD_INT() do { PIR3bits.PWM1PIF = 0; PIE3bits.PWM1PIE = 1; } while (0)
@@ -54,9 +55,7 @@ void peltierControl_init(void)
         
     //Enable Int. PWM Signal for CWG
     //Does not go to output yet
-    FET_PWM_Enable();
-    
-    //peltierControl_setMaxCurrent(85);
+    FET_PWM_Enable();    
 }
 
 //Performs a self-test of the Peltier element. This function will block when executing. 
@@ -99,6 +98,9 @@ void peltierControl_periodicCheck(void)
     startTemp = stopTemp;
     currentTemp = tempMonitor_getLastColdTemp();
 
+    //Update fan speed based on temperature
+    fanControl_updateSpeedFromTemp(tempMonitor_getLastHotTemp());
+    
     //Setup Temperature Hysteresis
     stopTemp += settings_getSetting(SETTINGS_HYSTER_OVER);
     startTemp -= settings_getSetting(SETTINGS_HYSTER_UNDER);

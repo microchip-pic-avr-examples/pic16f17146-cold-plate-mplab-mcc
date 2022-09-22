@@ -36,7 +36,7 @@ extern "C" {
 #define POWER_DETECT_MINIMUM 10
     
 //Max Temperature before 100% Fan Speed
-#define SAFETY_TEMP_MAX 60
+#define HEATSINK_TEMP_FAN_MAX 60
     
 //Sense Resistance
 #define SENSE_RESISTANCE 0.01
@@ -48,30 +48,9 @@ extern "C" {
 //Pre-Computed DAC Formula
 #define DAC_FORMULA_CONSTANT ((DAC_CURRENT_RES * SENSE_RESISTANCE) / 10.0)
     
-//-- Default Values used for resetting EEPROM -- 
-//Some settings are only accessible in developer mode
-        
-//Default Peltier Current Limit (divide by 10 to avoid using float))
-#define DEFAULT_CURRENT_LIMIT 40
-    
-//Default to Celsius
-#define DEFAULT_TEMP_UNIT 'C'
-        
-//Default Temperature Limits
-#define DEFAULT_MAX_INT_SETTING 70
-#define DEFAULT_MAX_HOT_SETTINGS 80
-    
-//Demo mode is on by default
-#define DEFAULT_DEMO_MODE true
-    
-//Default Plate Set Point
-#define DEFAULT_LAST_TEMP_SETTING 10
-    
-//Default Temperature Hysteresis
-//Will turn off at SET_POINT + OVER and on again at SET_POINT + UNDER
-#define DEFAULT_TEMP_HYSTER_OVER 5
-#define DEFAULT_TEMP_HYSTER_UNDER 5
-        
+//8A Current Limit
+#define POWER_LIMIT 80
+            
 #ifdef	__cplusplus
 }
 #endif

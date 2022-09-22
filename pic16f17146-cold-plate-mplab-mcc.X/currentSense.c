@@ -13,7 +13,6 @@
 
 //1x, 2x, 4x, 8x, 16x Gains + OFFSET
 static float OPAMPGain = 8.0;
-static int16_t OPAMPOffset = 0.0;
 
 static CurrentSenseGain systemGain = UNITY;
 
@@ -30,6 +29,9 @@ void currentSense_init(void)
     
     //Reset Minimum Current Detector
     DAC2_SetOutput(POWER_DETECT_MINIMUM);
+    
+    //Set power limit
+    currentSense_setCurrentLimit(POWER_LIMIT);
 }
 
 //Runs current sense - self calibration

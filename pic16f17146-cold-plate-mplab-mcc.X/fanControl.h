@@ -16,6 +16,9 @@ extern "C" {
     //Stop Cooling Fans
     void fanControl_stop(void);
     
+    //Sets the fan speed based on the heatsink temperature
+    void fanControl_updateSpeedFromTemp(int8_t hTemp);
+    
     //Returns the RPM of Fan 1
     uint16_t fanControl_getFan1RPM(void);
     

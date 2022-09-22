@@ -6,6 +6,7 @@
 #include <stdbool.h>
 
 #include "config.h"
+#include "defaults.h"
 
 static uint8_t settingsCache[SETTINGS_CRC];
 

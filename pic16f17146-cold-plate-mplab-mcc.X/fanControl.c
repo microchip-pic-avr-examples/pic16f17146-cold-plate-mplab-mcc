@@ -1,6 +1,7 @@
 #include "fanControl.h"
 #include "mcc_generated_files/system/system.h"
 #include "mcc_generated_files/pwm/pwm2_16bit.h"
+#include "config.h"
 #include <xc.h>
 
 #include <stdint.h>
@@ -41,6 +42,21 @@ void fanControl_stop(void)
 {
     //Disable Fan PWM
     FAN_PWM_Disable();
+}
+
+//Sets the fan speed based on the heatsink temperature
+void fanControl_updateSpeedFromTemp(int8_t hTemp)
+{
+    if (hTemp >= HEATSINK_TEMP_FAN_MAX)
+    {
+        //100% Fan Speed
+    }
+    else
+    {
+        
+    }
+    
+    FAN_PWM_LoadBufferRegisters();
 }
 
 //Returns the RPM of Fan 1

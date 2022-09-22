@@ -168,6 +168,9 @@ int main(void)
     //Must be run before Timer0 starts!
     currentSense_selfCalibrate();
     
+    //Update current limit after self-cal
+    currentSense_setCurrentLimit(POWER_LIMIT);
+    
     //Start Timer 0 (10ms)
     Timer0_Start();
     
@@ -177,8 +180,6 @@ int main(void)
     
     //Start Fan Controller
     fanControl_start();
-    
-    currentSense_setCurrentLimit(80);
     
     //Start Peltier Controller
     peltierControl_start();
