@@ -5,7 +5,7 @@
  * 
  * @ingroup  tmr4
  * 
- * @brief This is the generated driver implementation file for the TMR4 module.
+ * @brief API implementations for the TMR4 module.
  *
  * @version TMR4 Driver Version 3.0.1
  */
@@ -73,8 +73,8 @@ void Timer4_Initialize(void){
 
     // Clearing IF flag.
      PIR2bits.TMR4IF = 0;
-    // TCKPS 1:1; TMRON on; TOUTPS 1:1; 
-    T4CON = 0x80;
+    // TCKPS 1:1; TMRON off; TOUTPS 1:1; 
+    T4CON = 0x0;
 }
 
 void Timer4_ModeSet(Timer4_HLT_MODE mode)

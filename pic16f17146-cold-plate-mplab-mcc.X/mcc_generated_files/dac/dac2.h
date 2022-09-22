@@ -52,6 +52,7 @@
  */ 
 void DAC2_Initialize(void);
 
+
 /**
  * @ingroup dac2
  * @brief  This routine pass the digital input data intoDAC2 voltage reference control register.

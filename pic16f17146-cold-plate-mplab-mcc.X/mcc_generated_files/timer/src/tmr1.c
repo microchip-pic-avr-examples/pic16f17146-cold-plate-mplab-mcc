@@ -5,7 +5,7 @@
   *
   * @ingroup tmr1
   *
-  * @brief This file contains the driver code for TMR1 module.
+  * @brief Driver implementation for the TMR1 driver
   *
   * @version TMR1 Driver Version 3.0.1
 */
@@ -65,8 +65,8 @@ void Timer1_Initialize(void)
     T1CLK = 0xE;
     //TMRH 0; 
     TMR1H = 0x0;
-    //TMRL 1; 
-    TMR1L = 0x1;
+    //TMRL 0; 
+    TMR1L = 0x0;
 
     // Load the TMR1 value to reload variable
     timer1ReloadVal=(uint16_t)((TMR1H << 8) | TMR1L);

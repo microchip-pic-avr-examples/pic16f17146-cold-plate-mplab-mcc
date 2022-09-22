@@ -5,7 +5,7 @@
   *
   * @ingroup tmr3
   *
-  * @brief This file contains the driver code for TMR3 module.
+  * @brief Driver implementation for the TMR3 driver
   *
   * @version TMR3 Driver Version 3.0.1
 */
@@ -65,8 +65,8 @@ void Timer3_Initialize(void)
     T3CLK = 0xF;
     //TMRH 0; 
     TMR3H = 0x0;
-    //TMRL 1; 
-    TMR3L = 0x1;
+    //TMRL 0; 
+    TMR3L = 0x0;
 
     // Load the TMR3 value to reload variable
     timer3ReloadVal=(uint16_t)((TMR3H << 8) | TMR3L);

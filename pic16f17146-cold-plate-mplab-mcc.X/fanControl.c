@@ -14,13 +14,7 @@ static volatile uint8_t lastTimer2 = 0, lastTimer4 = 0;
 
 //Init Fan Speed Control
 void fanControl_init(void)
-{
-    //Assign Timer 2 Input (RA4)
-    T2INPPS = 0b000100;
-    
-    //Assign Timer 4 Input (RA5)
-    T4INPPS = 0b000101;
-    
+{    
     //Fan 1 RPM Counter
     Timer2_Start();
     

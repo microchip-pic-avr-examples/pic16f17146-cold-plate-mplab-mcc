@@ -5,7 +5,7 @@
  * 
  * @ingroup tmr0
  * 
- * @brief This is the generated driver implementation file for the TMR0 driver
+ * @brief  Driver implementation for the TMR0 driver
  *
  * @version TMR0 Driver Version 2.0.2
 */

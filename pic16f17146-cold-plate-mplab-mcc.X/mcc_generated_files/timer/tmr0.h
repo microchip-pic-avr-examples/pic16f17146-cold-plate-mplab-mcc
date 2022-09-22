@@ -5,7 +5,7 @@
  * 
  * @defgroup tmr0 TMR0
  * 
- * @brief This file contains API prototypes and other datatypes for the TMR0 module.
+ * @brief API prototypes and other datatypes for the TMR0 module.
  *
  * @version TMR0 Driver Version 2.0.2
 */
@@ -41,69 +41,69 @@
 /**
  @ingroup tmr0
  @struct TMR_INTERFACE
- @brief This is an instance of TMR_INTERFACE for Timer-0 module
+ @brief Declares an instance of TMR_INTERFACE for the Timer0 module
  */
 extern const struct TMR_INTERFACE Timer0;
 
 /**
  * @ingroup tmr0
- * @brief This API initializes the Timer-0 module.
+ * @brief Initializes the Timer-0 module.
  *        This routine must be called before any other Timer-0 routines.
- * @param void.
- * @return void.
+ * @param none.
+ * @return none.
  */
 void Timer0_Initialize(void);
 
 /**
  * @ingroup tmr0
- * @brief This function starts Timer-0.
+ * @brief Starts Timer-0.
  * @pre Timer-0 should be initialized with Timer0_Initialize() before calling this API.
- * @param void.
- * @return void.
+ * @param none.
+ * @return none.
  */
 void Timer0_Start(void);
 
 /**
  * @ingroup tmr0
- * @brief This function stops Timer-0.
+ * @brief Stops Timer-0.
  * @pre Timer-0 should be initialized with Timer0_Initialize() before calling this API.
- * @param void.
- * @return void.
+ * @param none.
+ * @return none.
  */
 void Timer0_Stop(void);
 
 /**
  * @ingroup tmr0
- * @brief This function reads the 8 bits from TMRTMR0 register.
+ * @brief Reads the 8 bits from TMRTMR0 register.
  * @pre Timer-0 should be initialized with Timer0_Initialize() before calling this API.
- * @param void.
- * @return 8-bit data from TMRTMR0 register.
+ * @param none.
+ * @return 8-bit data from TMRTMR0 Period/Count register.
  */
 uint8_t Timer0_Read(void);
 
 /**
  * @ingroup tmr0
- * @brief This function writes 8-bit value to TMRTMR0 register.
+ * @brief Writes 8-bit value to TMRTMR0 register.
  * @pre Timer-0 should be initialized with Timer0_Initialize() before calling this API.
  * @param 8-bit value to be written to TMRTMR0 register.
- * @return void.
+ * @return none.
  */
 void Timer0_Write(size_t timerVal);
 
 /**
  * @ingroup tmr0
- * @brief This function loads 8 bit value to TMRTMR0H register.
+ * @brief Loads 8 bit value to TMRTMR0H register.
  * @pre Timer-0 should be initialized with Timer0_Initialize() before calling this API.
  * @param 8-bit value to be written to TMRTMR0H register.
- * @return void.
+ * @return none.
  */
 void Timer0_Reload(uint8_t periodVal);
 
 /**
  * @ingroup tmr0
  * @brief Interrupt Service Routine for Timer-0 overflow interrupt.
- * @param void
- * @return void
+ * @param none
+ * @return none
  */
 void Timer0_OverflowISR(void);
 
@@ -111,7 +111,7 @@ void Timer0_OverflowISR(void);
  * @ingroup tmr0
  * @brief Setter function for Timer-0 overflow Callback.
  * @param CallbackHandler - Pointer to custom Callback.
- * @return void
+ * @return none
  */
  void Timer0_OverflowCallbackRegister(void (* CallbackHandler)(void));
 

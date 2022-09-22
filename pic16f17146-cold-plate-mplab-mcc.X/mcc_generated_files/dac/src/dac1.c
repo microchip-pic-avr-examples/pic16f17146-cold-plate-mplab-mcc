@@ -41,24 +41,24 @@
   Section: DAC1 APIs
 */
 
-void DAC1_Initialize(void) {
- 
+void DAC1_Initialize(void) 
+{ 
     //DACPSS FVR; DACNSS VSS; DACOE DACOUT1 and DACOUT2 are Disabled; DACEN enabled; 
     DAC1CON =  136;
 
     //DACR 125; 
-    DAC1DATL =  125; 
+    DAC1DATL =  125;     
 }
 
-void DAC1_SetOutput(uint8_t inputData) {
- 
+void DAC1_SetOutput(uint8_t inputData) 
+{
     DAC1DATL =  inputData;
 }
-
-uint8_t DAC1_GetOutput(void) {
- 
+uint8_t DAC1_GetOutput(void) 
+{
     return DAC1DATL;
 }
+
 /**
  End of File
 */

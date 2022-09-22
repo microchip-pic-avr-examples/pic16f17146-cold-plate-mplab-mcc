@@ -5,7 +5,7 @@
  * 
  * @ingroup  tmr2
  * 
- * @brief This is the generated driver implementation file for the TMR2 module.
+ * @brief API implementations for the TMR2 module.
  *
  * @version TMR2 Driver Version 3.0.1
  */
@@ -73,8 +73,8 @@ void Timer2_Initialize(void){
 
     // Clearing IF flag.
      PIR2bits.TMR2IF = 0;
-    // TCKPS 1:1; TMRON on; TOUTPS 1:1; 
-    T2CON = 0x80;
+    // TCKPS 1:1; TMRON off; TOUTPS 1:1; 
+    T2CON = 0x0;
 }
 
 void Timer2_ModeSet(Timer2_HLT_MODE mode)

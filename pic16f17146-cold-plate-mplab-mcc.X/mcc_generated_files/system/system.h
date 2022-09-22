@@ -40,7 +40,6 @@
 #include <xc.h>
 #include <stdint.h>
 #include <stdbool.h>
-#define MCC_H
 #include <conio.h>
 #include "config_bits.h"
 #include "../system/clock.h"

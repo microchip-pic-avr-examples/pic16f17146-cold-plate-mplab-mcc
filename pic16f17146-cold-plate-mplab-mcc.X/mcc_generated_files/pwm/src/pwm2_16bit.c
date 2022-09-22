@@ -1,13 +1,13 @@
 /**
-  * PWM2_16BIT Generated Driver File
+  * PWM2_16BIT Generated Driver File.
   *
   * @file pwm2_16bit.c
   *
   * @ingroup pwm2_16bit
   *
-  * @brief This file contains the driver code for PWM2_16BIT module.
+  * @brief This file contains the API implementation for the PWM2_16BIT module.
   *
-  * version PWM2_16BIT Driver Version <!--Use existing driver version-->
+  * version PWM2_16BIT Driver Version 1.0.1
 */
 
 /*

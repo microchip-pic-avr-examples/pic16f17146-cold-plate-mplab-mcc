@@ -41,24 +41,24 @@
   Section: DAC2 APIs
 */
 
-void DAC2_Initialize(void) {
- 
+void DAC2_Initialize(void) 
+{ 
     //DACPSS FVR; DACNSS VSS; DACOE DACOUT1 and DACOUT2 are Disabled; DACEN enabled; 
     DAC2CON =  136;
 
     //DACR 125; 
-    DAC2DATL =  125; 
+    DAC2DATL =  125;     
 }
 
-void DAC2_SetOutput(uint8_t inputData) {
- 
+void DAC2_SetOutput(uint8_t inputData) 
+{
     DAC2DATL =  inputData;
 }
-
-uint8_t DAC2_GetOutput(void) {
- 
+uint8_t DAC2_GetOutput(void) 
+{
     return DAC2DATL;
 }
+
 /**
  End of File
 */

@@ -5,7 +5,7 @@
  *
  * @defgroup tmr3 TMR3
  *
- * @brief This header file provides APIs for the TMR3 driver.
+ * @brief API prototypes and other datatypes for the TMR3 module.
  *
  * @version TMR3 Driver Version 3.0.1
 */
@@ -47,7 +47,7 @@ extern const struct TMR_INTERFACE Timer3;
 
 /**
  * @ingroup tmr3
- * @brief This API initializes the Timer module.
+ * @brief Initializes the timer module.
  *        This routine must be called before any other Timer routines.
  * @param none
  * @return none
@@ -56,7 +56,7 @@ void Timer3_Initialize(void);
 
 /**
  * @ingroup tmr3
- * @brief This function starts Timer.
+ * @brief Starts the timer.
  * @pre Timer should be initialized with Timer3_Initialize() before calling this API.
  * @param none
  * @return none
@@ -65,7 +65,7 @@ void Timer3_Start(void);
 
 /**
  * @ingroup tmr3
- * @brief This function stops Timer.
+ * @brief Stops the timer.
  * @pre Timer should be initialized with Timer3_Initialize() before calling this API.
  * @param none
  * @return none
@@ -74,7 +74,7 @@ void Timer3_Stop(void);
 
 /**
  * @ingroup tmr3
- * @brief This function reads the 16-bits from TMR3 register.
+ * @brief Reads the 16-bits from TMR3 register.
  *        Timer should be initialized with Timer3_Initialize() before calling this API.
  * @param none
  * @return uint16_t - 16-bit data from TMR3 register.
@@ -83,7 +83,7 @@ uint16_t Timer3_Read(void);
 
 /**
  * @ingroup tmr3
- * @brief This function writes 16-bit value to TMR3 register.
+ * @brief Writes 16-bit value to TMR3 register.
  * @pre Timer should be initialized with Timer3_Initialize() before calling this API.
  * @param size_t timerVal - 16-bit value to be written to TMR3 register.
  * @return none
@@ -92,7 +92,7 @@ void Timer3_Write(size_t timerVal);
 
 /**
  * @ingroup tmr3
- * @brief This function loads 8 bit value to TMR3 register.
+ * @brief Loads 8 bit value to TMR3 register.
  * @pre Timer should be initialized with Timer3_Initialize() before calling this API.
  * @param none
  * @return none
@@ -102,7 +102,7 @@ void Timer3_Reload(void);
 
 /**
  * @ingroup tmr3
- * @brief This function starts the single pulse acquisition in TMR3 gate operation.
+ * @brief Starts the single pulse acquisition in TMR3 gate operation.
  * @Pre This function must be used when the TMR3 gate is enabled.
  * @param none
  * @return none
@@ -111,7 +111,7 @@ void Timer3_StartSinglePulseAcquisition(void);
 
 /**
  * @ingroup tmr3
- * @brief This function reads the TMR3 gate value and return it.
+ * @brief Reads the TMR3 gate value and returns it.
  * @pre This function must be used when the TMR3 gate is enabled.
  * @param none
  * @return uint8_t - Gate value status.
@@ -121,7 +121,7 @@ uint8_t Timer3_CheckGateValueStatus(void);
 
 /**
  * @ingroup tmr3
- * @brief Setter function for Timer overflow Callback.
+ * @brief Setter function for Timer overflow callback.
  * @param void (* CallbackHandler)(void) - Pointer to custom Callback.
  * @return none
  */
@@ -129,7 +129,7 @@ uint8_t Timer3_CheckGateValueStatus(void);
 
 /**
  * @ingroup tmr3
- * @brief This function performs tasks to be executed on timer overflow event
+ * @brief Performs tasks to be executed on timer overflow event
  * @param none
  * @return none
  */
@@ -137,7 +137,7 @@ void Timer3_Tasks(void);
 
 /**
  * @ingroup tmr3
- * @brief This function is called to check for the timer overflow flag when in polling mode.
+ * @brief Checks for the timer overflow flag when in polling mode.
  * @param none
  * @retval true  - timer overflow has occured.
  * @retval false - timer overflow has not occured.
@@ -147,7 +147,7 @@ bool Timer3_HasOverflowOccured(void);
 
 /**
  * @ingroup tmr3
- * @brief Timer Gate Interrupt Service Routine is called by the Interrupt Manager.
+ * @brief Timer Gate Interrupt Service Routine (ISR) called by the Interrupt Manager.
  * @param none
  * @return none
  */

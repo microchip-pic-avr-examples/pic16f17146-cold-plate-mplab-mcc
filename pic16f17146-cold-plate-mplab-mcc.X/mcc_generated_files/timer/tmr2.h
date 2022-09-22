@@ -5,7 +5,7 @@
  *  
  * @defgroup tmr2 TMR2
  *
- * @brief This is the generated header file for the TMR2 module.
+ * @brief API Prototypes and other data types for the TMR2 module.
  *
  * @version TMR2 Driver Version 3.0.1
  */
@@ -34,11 +34,6 @@
 
 #ifndef TMR2_H
 #define TMR2_H
-
-/**
- * @brief This file contains API prototypes and other data types for TMR2 module.
- * @{
- */
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -267,8 +262,7 @@ typedef enum
 
 /**
  * @ingroup tmr2
- * @brief This API initializes the TMR2 module.
- *        This routine must be called before any other TMR2 routines.
+ * @brief Initializes the TMR2 module. This routine must be called before any other TMR2 routines.
  * @param none
  * @return none
  */
@@ -277,8 +271,7 @@ typedef enum
 /**
  * @ingroup tmr2
  * @brief Configures the Hardware Limit Timer mode.
- *        Writes the T2HLTbits.MODE bits.
- *        TMR2 should be initialized with Timer2_Initialize after calling this API.
+ * @pre TMR2 should be initialized with Timer2_Initialize after calling this API.
  * @param mode - Value to write into T2HLTbits.MODE bits.
  * @return none
  */
@@ -287,8 +280,7 @@ void Timer2_ModeSet(Timer2_HLT_MODE mode);
 /**
  * @ingroup tmr2
  * @brief Configures the HLT external reset source.
- *        Writes the T2RSTbits.RSEL bits.
- *        TMR2 should be initialized with Timer2_Initialize after calling this API.
+ * @pre TMR2 should be initialized with Timer2_Initialize after calling this API.
  * @param reset - Value to write into T2RSTbits.RSEL bits.
  * @return none
  */
@@ -296,8 +288,8 @@ void Timer2_ExtResetSourceSet(Timer2_HLT_EXT_RESET_SOURCE reset);
 
 /**
  * @ingroup tmr2
- * @brief This function starts TMR2.
- *        TMR2 should be initialized with Timer2_Initialize() before calling this API.
+ * @brief Starts TMR2.
+ * @pre TMR2 should be initialized with Timer2_Initialize() before calling this API.
  * @param none
  * @return none
  */
@@ -305,8 +297,8 @@ void Timer2_Start(void);
 
 /**
  * @ingroup tmr2
- * @brief This function stops TMR2.
- *        TMR2 should be initialized with Timer2_Initialize() before calling this API.
+ * @brief Stops TMR2.
+ * @pre TMR2 should be initialized with Timer2_Initialize() before calling this API.
  * @param none
  * @return none
  */
@@ -314,8 +306,8 @@ void Timer2_Stop(void);
 
 /**
  * @ingroup tmr2
- * @brief This function reads the 8 bits from TMR2 register.
- *        TMR2 should be initialized with Timer2_Initialize() before calling this API.
+ * @brief Reads the 8 bits from TMR2 register.
+ * @pre TMR2 should be initialized with Timer2_Initialize() before calling this API.
  * @param none.
  * @return 8-bit data from TMR2 register.
  */
@@ -323,8 +315,8 @@ uint8_t Timer2_Read(void);
 
 /**
  * @ingroup tmr2
- * @brief This function writes 8-bit value to TMR2 register.
- *        TMR2 should be initialized with Timer2_Initialize() before calling this API.
+ * @brief Writes 8-bit value to TMR2 register.
+ * @pre TMR2 should be initialized with Timer2_Initialize() before calling this API.
  * @param 8-bit value to be written to TMR2 register.
  * @return none
  */
@@ -332,8 +324,8 @@ void Timer2_Write(uint8_t timerVal);
 
 /**
  * @ingroup tmr2
- * @brief This function loads 8 bit value to PR2H register.
- *        TMR2 should be initialized with Timer2_Initialize() before calling this API.
+ * @brief Loads 8-bit value to PR2H register.
+ * @pre TMR2 should be initialized with Timer2_Initialize() before calling this API.
  * @param 8-bit value to be written to PR2 register.
  * @return none
  */
@@ -349,7 +341,7 @@ void Timer2_OverflowCallbackRegister(void (* InterruptHandler)(void));
 
 /**
  * @ingroup tmr2
- * @brief This function performs tasks to be executed on timer overflow event
+ * @brief Performs tasks to be executed on timer overflow event.
  * @param none
  * @return none
  */
