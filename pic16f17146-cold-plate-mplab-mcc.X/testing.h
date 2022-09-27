@@ -10,7 +10,10 @@ extern "C" {
     
     //Software Test Pattern for Current -> DAC settings
     void TEST_DAC_Calc(void);
-
+    
+    //Software Test Pattern for Compact Print API
+    void TEST_compactPrint(void);
+    
 #ifdef	__cplusplus
 }
 #endif

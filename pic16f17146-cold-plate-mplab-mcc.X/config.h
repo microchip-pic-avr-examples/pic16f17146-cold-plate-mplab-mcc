@@ -10,7 +10,7 @@ extern "C" {
 //If defined, telemetry will be sent via UART
 #define DEBUG_TELEMETRY 
     
-//If defined, PRINTF will send messages
+//If defined, debug messages will be sent via UART
 #define DEBUG_PRINT
     
 //Lowest allowed temperature in demo mode

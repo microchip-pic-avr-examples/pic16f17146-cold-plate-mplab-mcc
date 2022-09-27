@@ -12,13 +12,14 @@
 #include "settings.h"
 #include "config.h"
 #include "currentSense.h"
+#include "compactPrint.h"
 
 #define FET_PWM_DISABLE_PERIOD_INT() do { PIR3bits.PWM1PIF = 0; PIE3bits.PWM1PIE = 0; } while (0)
 #define FET_PWM_ENABLE_PERIOD_INT() do { PIR3bits.PWM1PIF = 0; PIE3bits.PWM1PIE = 1; } while (0)
 
 #define CWG_ENABLE() do { CWG1CON0bits.EN = 1; } while (0)
 
-#define CWG_DISABLE_OUTPUT() do { CWG1STRbits.CWG1STRA = 1;} while (0) //0
+#define CWG_DISABLE_OUTPUT() do { CWG1STRbits.CWG1STRA = 1;} while (0) 
 #define CWG_ENABLE_OUTPUT() do { CWG1STRbits.CWG1STRA = 1; } while (0)
 
 //State machine for DAC updates
@@ -129,7 +130,7 @@ void peltierControl_periodicCheck(void)
                     peltierState = PELTIER_STATE_AT_TEMP;
                     
 #ifdef DEBUG_PRINT
-                    printf("-- PELTIER IDLE --\r\n");
+                    compactPrint_sendStringWithNewline("-- PELTIER IDLE --");
 #endif
                 }
                 else
@@ -139,7 +140,7 @@ void peltierControl_periodicCheck(void)
                     CWG_ENABLE_OUTPUT();
                     
 #ifdef DEBUG_PRINT
-                    printf("-- PELTIER ON --\r\n");
+                    compactPrint_sendStringWithNewline("-- PELTIER ON --");
 #endif
                 }
             }
@@ -157,7 +158,7 @@ void peltierControl_periodicCheck(void)
                 CWG_ENABLE_OUTPUT();
                 
 #ifdef DEBUG_PRINT
-                printf("-- PELTIER ON --\r\n");
+                compactPrint_sendStringWithNewline("-- PELTIER ON --");
 #endif
             }
             break;
@@ -180,7 +181,7 @@ void peltierControl_periodicCheck(void)
                 CWG_DISABLE_OUTPUT();
                 
 #ifdef DEBUG_PRINT
-                printf("-- PELTIER IDLE --\r\n");
+                compactPrint_sendStringWithNewline("-- PELTIER IDLE --");
 #endif
             }
             break;
@@ -303,7 +304,7 @@ void peltierControl_start(void)
     
     //TODO: Add Sanity Checking
 #ifdef DEBUG_PRINT
-    printf("-- PELTIER STARTUP --\r\n");
+    compactPrint_sendStringWithNewline("-- PELTIER STARTUP --");
 #endif
 }
 

@@ -43,6 +43,7 @@
 #include "mssp1_host.h"
 #include "settings.h"
 #include "config.h"
+#include "compactPrint.h"
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -124,7 +125,7 @@ int main(void)
     MSSP_HostInit();
     
 #ifdef DEBUG_PRINT
-    printf("\r\nStarting Up...\r\n");
+    compactPrint_sendStringWithNewline("\r\nStarting Up...");
 #endif
     
     //Print the Reset Registers
@@ -146,7 +147,7 @@ int main(void)
     peltierControl_init();
         
 #ifdef DEBUG_PRINT
-    printf("Done initializing...\r\n");
+    compactPrint_sendStringWithNewline("Done initializing...");
 #endif
     
     //Configure 10ms Callback
@@ -196,12 +197,7 @@ int main(void)
             
 #ifdef DEBUG_TELEMETRY
 #ifdef DEBUG_PRINT
-            printf("Fan 1 RPM: %u\r\n", fanControl_getFan1RPM());
-            printf("Fan 2 RPM: %u\r\n", fanControl_getFan2RPM());  
-            printf("Cold Plate Temp: %d\r\n", tempMonitor_getLastColdTemp());   
-            printf("Heatsink Temp: %d\r\n", tempMonitor_getLastHotTemp());   
-            printf("Int Temp: %d\r\n", tempMonitor_getLastIntTemp());
-            printf("Average Duty Cycle: %d%%\r\n", peltierControl_getAverageDutyCycle());       
+            compactPrint_sendDebugTelemetry();
 #endif
 #endif
         }

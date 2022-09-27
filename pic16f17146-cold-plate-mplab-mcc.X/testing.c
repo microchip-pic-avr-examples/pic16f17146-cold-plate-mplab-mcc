@@ -64,3 +64,9 @@ void TEST_DAC_Calc(void)
 #endif
     }
 }
+
+//Software Test Pattern for Compact Print API
+void TEST_compactPrint(void)
+{
+    
+}
