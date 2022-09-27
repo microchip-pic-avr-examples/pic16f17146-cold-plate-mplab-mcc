@@ -8,15 +8,18 @@
 
 #include "NTC_ROM.h"
 #include "config.h"
+#include "compactPrint.h"
 
 #define NTC_ROM_TEST_SIZE 10
+
+static char msgBuffer[64];
 
 void TEST_NTC_ROM(void)
 {
     //Test the NTC ROM Search Algorithms
     
 #ifdef DEBUG_PRINT
-    printf("Running NTC ROM Test Pattern...\r\n");
+    compactPrint_sendStringWithNewline("Running NTC ROM Test Pattern...");
 #endif
     uint16_t testValues[NTC_ROM_TEST_SIZE];
     
@@ -39,7 +42,8 @@ void TEST_NTC_ROM(void)
     {
         tempOut = NTC_ROM_search(testValues[i]);
 #ifdef DEBUG_PRINT
-        printf("Test %u - Temperature at value %u: %dC\r\n", i, testValues[i], tempOut);
+        sprintf(&msgBuffer[0], "Test %u - Temperature at value %u: %dC\r\n", i, testValues[i], tempOut);
+        compactPrint_sendStringWithNewline(&msgBuffer[0]);
 #endif
 
     }
@@ -50,7 +54,7 @@ void TEST_DAC_Calc(void)
 {
     uint8_t dacCode;
 #ifdef DEBUG_PRINT
-    printf("Running DAC Computation Tests...\r\n");
+    compactPrint_sendStringWithNewline("Running DAC Computation Tests...");
 #endif
     
     uint8_t testValues[] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
@@ -60,13 +64,8 @@ void TEST_DAC_Calc(void)
        //Same formula!
        dacCode = floorf(DAC_FORMULA_CONSTANT * 8.0 * testValues[i]);
 #ifdef DEBUG_PRINT
-        printf("Test %u - DAC set for input %u: %dC\r\n", i, testValues[i], dacCode);
+        sprintf(&msgBuffer[0], "Test %u - DAC set for input %u: %dC\r\n", i, testValues[i], dacCode);
+        compactPrint_sendStringWithNewline(&msgBuffer[0]);
 #endif
     }
-}
-
-//Software Test Pattern for Compact Print API
-void TEST_compactPrint(void)
-{
-    
 }

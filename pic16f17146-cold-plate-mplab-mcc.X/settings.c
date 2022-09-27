@@ -7,6 +7,7 @@
 
 #include "config.h"
 #include "defaults.h"
+#include "compactPrint.h"
 
 static uint8_t settingsCache[SETTINGS_CRC];
 
@@ -26,31 +27,30 @@ void settings_init(void)
         //Invalid EEPROM
         settings_writeDefaults();
 #ifdef DEBUG_PRINT
-        printf("EEPROM Version ID Mismatch - Settings Reset.\r\n");
+        compactPrint_sendStringWithNewline("EEPROM version ID mismatch - settings reset.");
 #endif
     }
     else
     {
 #ifdef DEBUG_PRINT
-        printf("EEPROM Version ID = %u\r\n", memVersion);
+        compactPrint_sendErrorCode("EEPROM Version ID = ", memVersion);
 #endif
         
         uint8_t checksum = settings_verifyCRC();
-        //printf("CRC Checksum = 0x%x\r\n", checksum);
 
         //Verify checksum
         if (checksum != 0x00)
         {
             //Failed CRC
 #ifdef DEBUG_PRINT
-            printf("CRC Checksum failed validation - settings reset.\r\n");
+            compactPrint_sendStringWithNewline("CRC Checksum failed validation - settings reset.");
 #endif
             settings_writeDefaults();
         }
         else
         {
 #ifdef DEBUG_PRINT
-            printf("Memory Checksum OK.\r\n");
+            compactPrint_sendStringWithNewline("Memory Checksum OK.");
 #endif
         }
     }
@@ -72,7 +72,7 @@ void settings_loadFromEEPROM()
 void settings_writeDefaults(void)
 {
 #ifdef DEBUG_PRINT
-    printf("Clearing EEPROM Settings\r\n");
+    compactPrint_sendStringWithNewline("Clearing EEPROM Settings");
 #endif
     
     //Write Defaults
@@ -147,7 +147,7 @@ uint8_t settings_verifyCRC(void)
     
     //Configure EEPROM Scan Range
     //NOTE: Registers are flipped now - to be fixed
-    CRC_SetScannerAddressLimit((SETTINGS_EEPROM_STOP), SETTINGS_EEPROM_START);
+    CRC_SetScannerAddressLimit((SETTINGS_EEPROM_STOP + 1), SETTINGS_EEPROM_START);
     
     //Start CRC Scanner
     CRC_StartScanner();
@@ -196,7 +196,7 @@ void settings_writeSetting(UserSetting setting, uint8_t value)
 //Writes [VALUE] to [WRITE]
 void settings_writeValue(UserSetting setting, uint8_t value)
 {
-    if (setting >= SETTINGS_CRC)
+    if (setting > SETTINGS_CRC)
     {
         return;
     }

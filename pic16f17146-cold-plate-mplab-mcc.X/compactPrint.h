@@ -13,6 +13,9 @@ extern "C" {
     //Sends a string of text to the UART with a newline appended.
     void compactPrint_sendStringWithNewline(const char* str);
     
+    //Sends a string + error code with a newline appended.
+    void compactPrint_sendErrorCode(const char* str, uint8_t err);
+        
     //Converts a duty cycle to a string
     //Requires up-to 4 positions "255" + [NULL]
     //Returns the location of the NULL character

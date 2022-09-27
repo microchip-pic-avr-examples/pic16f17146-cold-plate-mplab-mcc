@@ -31,6 +31,19 @@ void compactPrint_sendStringWithNewline(const char* str)
     compactPrint_sendStringLiteral("\r\n");
 }
 
+//Sends a string + error code with a newline appended.
+void compactPrint_sendErrorCode(const char* str, uint8_t err)
+{
+    char buffer[4];
+    
+    //Send string
+    compactPrint_sendStringLiteral(str);
+    
+    //Print Value
+    compactPrint_convertUint8ToString(&buffer[0], err);
+    compactPrint_sendStringWithNewline(buffer);
+}
+
 //Converts a duty cycle to a string
 char* compactPrint_convertUint8ToString(char* str, uint8_t value)
 {

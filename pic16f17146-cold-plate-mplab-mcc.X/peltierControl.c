@@ -314,7 +314,7 @@ void peltierControl_stop(void)
 #ifdef DEBUG_PRINT
     if (error != PELTIER_ERROR_NONE)
     {
-        printf("Peltier Control Error, Code %u\r\n", error);
+        compactPrint_sendErrorCode("Peltier Control Error, Code ", error);
     }
 #endif
     
@@ -330,7 +330,7 @@ void peltierControl_stop(void)
         peltierState = PELTIER_STATE_DISABLED;
         
 #ifdef DEBUG_PRINT
-        printf("-- PELTIER OFF --\r\n");
+        compactPrint_sendStringWithNewline("-- PELTIER OFF --");
 #endif
     }
 }

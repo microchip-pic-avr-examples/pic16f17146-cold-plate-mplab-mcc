@@ -4,6 +4,7 @@
 #include "mcc_generated_files/dac/dac1.h"
 #include "mcc_generated_files/dac/dac2.h"
 #include "config.h"
+#include "compactPrint.h"
 
 #include <xc.h>
 #include <stdint.h>
@@ -103,7 +104,6 @@ void currentSense_selfCalibrate(void)
 void currentSense_setCurrentLimit(uint8_t limit)
 {
     uint8_t dacCode = floorf(DAC_FORMULA_CONSTANT * OPAMPGain * limit);
-    printf("DAC Value = %u\r\n", dacCode);
     DAC1_SetOutput(dacCode);
 }
 

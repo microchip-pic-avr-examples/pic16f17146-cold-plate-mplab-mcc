@@ -28,6 +28,7 @@ extern "C" {
 #define DEFAULT_TEMP_HYSTER_OVER 5
 #define DEFAULT_TEMP_HYSTER_UNDER 5
 
+#define DEFAULT_SHOW_ICONS false
 
 #ifdef	__cplusplus
 }
