@@ -5,7 +5,7 @@
 extern "C" {
 #endif
     
-typedef enum {STANDBY, MENU, RUNNING, ERROR, START, SET_TEMPERATURE, CHANGE_UNITS, LIMIT_CURRENT, ABOUT, DEMO_MODE_TOGGLE} UI_STATE;
+typedef enum {STANDBY, MENU, RUNNING, ERROR, SET_TEMPERATURE, CHANGE_UNITS, SHOW_ICONS, ABOUT, DEMO_MODE_TOGGLE} UI_STATE;
 
 #include "stdbool.h"
 #include "mcc_generated_files/system/system.h"
@@ -14,10 +14,11 @@ typedef enum {STANDBY, MENU, RUNNING, ERROR, START, SET_TEMPERATURE, CHANGE_UNIT
 #include "encoderControl.h"
 #include "navMenu.h"
 #include "runningMenus.h"
+#include "peltierControl.h"
     
 UI_STATE UI_getState(void);
 void UI_setState(UI_STATE new_state);
-UI_STATE UI_getLastState(void);
+bool UI_isRunning(void);
 void UI_setup(void);
 void UI_update(void);
 void UI_handleStateInput(UI_STATE exit_state, void (*ui_update)(int16_t));

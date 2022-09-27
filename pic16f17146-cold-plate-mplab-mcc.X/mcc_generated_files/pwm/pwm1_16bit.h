@@ -55,7 +55,7 @@ void FET_PWM_Initialize(void);
  * @param None.
  * @return None.
  */
-void FET_PWM_Enable();
+void FET_PWM_Enable(void);
 
 /**
  * @ingroup pwm1_16bit
@@ -64,7 +64,7 @@ void FET_PWM_Enable();
  * @param None.
  * @return None.
  */
-void FET_PWM_Disable();
+void FET_PWM_Disable(void);
 
 /**
  * @ingroup pwm1_16bit

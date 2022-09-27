@@ -27,12 +27,6 @@ void settingMenus_temperatureUpdate(int16_t moves);
 int8_t settingMenus_getTargetTemp(void);
 void settingMenus_setTargetTemp(int8_t temp);
 
-// LIMIT CURRENT
-void settingMenus_currentSetup(void);
-void settingMenus_currentUpdate(int16_t moves);
-// current limit getter
-uint8_t settingMenus_getCurrentLimit(void);
-void settingMenus_setCurrentLimit(uint8_t limit);
 
 // CHANGE UNITS
 void settingMenus_changeUnitsSetup(void);
@@ -41,13 +35,16 @@ void settingMenus_changeUnitsUpdate(int16_t moves);
 char settingMenus_getTempUnit(void);
 void settingMenus_setTempUnit(char unit);
 
+// SHOW ICONS
+
+void settingMenus_showIconsSetup(void);
+void settingMenus_showIconsUpdate(int16_t moves);
+bool settingMenus_getShowIcons(void);
+void settingMenus_setShowIcons(bool showIcons);
+
 // ABOUT
 void settingMenus_aboutSetup(void);
 void settingMenus_aboutUpdate(int16_t moves);
-
-// START
-void settingMenus_startSetup(void);
-void settingMenus_startUpdate(int16_t moves);
 
 // DEMO MODE
 void settingMenus_demoModeToggleSetup(void);

@@ -1,88 +1,128 @@
 #include "runningMenus.h"
+#include "peltierControl.h"
 
 void runningMenus_runningSetup(void){     
     OLED_clear();
+    if(settingMenus_getShowIcons()){
+        //Show icons
+        OLED_command(line_address[0]+11);
+        OLED_data(0b00000101);
+        OLED_data(0b00000110);
+        OLED_writeString(":");
+
+        OLED_command(line_address[0]);
+        OLED_writeString("Set:");
+
+        OLED_command(line_address[1]+1);
+        OLED_data(0b00000001);
+        OLED_data(0b00000010);
+        OLED_writeString(":");
+
+
+        OLED_command(line_address[1]+11);
+        OLED_data(0b00000011);
+        OLED_data(0b00000100);
+        OLED_writeString(":");
+
+
+    } else {
+        // Show text
+    OLED_command(line_address[0]+3);
+    OLED_writeString("Plate:");
     
-    OLED_command(line_address[0]);
-    OLED_writeString("Plate Temp:");
+    OLED_command(line_address[1]);
+    OLED_writeString("Heatsink:");
+
+    OLED_command(line_address[2]+5);
+    OLED_writeString("MCU:");
+    }
     
-    OLED_command(line_address[0]+18);
-    OLED_writeTempUnit();
+    OLED_command(line_address[3]);
+    OLED_writeString("Fan RPMs:");
+    
 }
 
 void runningMenus_runningUpdate(int16_t moves){
-    enum RUNNING_MSGS {NEW_STATS1, STATS1, NEW_STATS2, STATS2};
-    static enum RUNNING_MSGS msg = NEW_STATS2;
-    static int8_t counter10s = 0;
     char disp_buff[20];
-    switch(msg){
-        case NEW_STATS1: // change the few static elements
-            // update to avg current
-            OLED_command(line_address[1]);
-            OLED_writeString("Avg. current:");
-            
-            
-            // update fan number
-            OLED_command(line_address[2]);
-            OLED_writeString("Fan RPMs:");
+    if(settingMenus_getShowIcons()){
+        // Show icons
+        // update current Plate Temperature
+        OLED_command(line_address[0]+14);
+        sprintf(disp_buff, "%3d", dispTemp(tempMonitor_getLastColdTemp()));
+        OLED_writeString(disp_buff);
+        OLED_writeTempUnit();
 
-            OLED_command(line_address[3]+3);
-            OLED_writeString("Push to cancel   ");
+        OLED_command(line_address[0]+4);
+        sprintf(disp_buff, "%3d", dispTemp(settingMenus_getTargetTemp()));
+        OLED_writeString(disp_buff);
+        OLED_writeTempUnit();
 
-            msg = STATS1;
-            // fall through execution to update STATS1
-        case STATS1: // only update changing values
-            // FAN 1 RPM
-            OLED_command(line_address[2]+10);
-            sprintf(disp_buff, "%d, %d", fanControl_getFan1RPM(), fanControl_getFan2RPM());
-            OLED_writeString(disp_buff);
+        // MCU Temp
+        OLED_command(line_address[1]+4);
+        sprintf(disp_buff, "%3d", dispTemp(tempMonitor_getLastIntTemp()));
+        OLED_writeString(disp_buff);
+        OLED_writeTempUnit();
 
-            // Avg. Current
-            OLED_command(line_address[1]+17);
-            //sprintf(disp_buff, "4%d", getCurrent()); // TODO: replace with current reading function
-            OLED_writeString("5 A");
-            
-            break;
-        case NEW_STATS2:
-            // update fan number
-            OLED_command(line_address[1]);
-            OLED_writeString("Heatsink Temp:");
-            
-            // update to hot temp
-            OLED_command(line_address[2]+5);
-            OLED_writeString("MCU Temp:");
-            
-            OLED_command(line_address[3]+2);
-            OLED_writeString("Status: Running");
-            
-            msg = STATS2;
-            // fall through execution to update STATS2
-        case STATS2:
-            // Heatsink temp
-            OLED_command(line_address[1]+14);
-            sprintf(disp_buff, "%4d", dispTemp(tempMonitor_getLastHotTemp()));
-            OLED_writeString(disp_buff);
-            OLED_writeTempUnit();
-            
-            // MCU Temp
-            OLED_command(line_address[2]+14);
-            sprintf(disp_buff, "%4d", dispTemp(tempMonitor_getLastIntTemp()));
-            OLED_writeString(disp_buff);
-            OLED_writeTempUnit();
-            break;
-    }
-    // update current Plate Temperature
-    OLED_command(line_address[0]+12);
-    sprintf(disp_buff, "%d/%d", dispTemp(tempMonitor_getLastColdTemp()), dispTemp(settingMenus_getTargetTemp()));
-    OLED_writeString(disp_buff);
+        OLED_command(line_address[1]+14);
+        sprintf(disp_buff, "%3d", dispTemp(tempMonitor_getLastHotTemp()));
+        OLED_writeString(disp_buff);
+        OLED_writeTempUnit();
 
-    
-    // cycles the stats every 10 seconds
-    if(counter10s >= 100){
-        msg = (msg == STATS1) ? NEW_STATS2 : NEW_STATS1;        
-        counter10s = 0;
     } else {
-        counter10s++;
+        // Show text
+        
+        // update current Plate Temperature
+        OLED_command(line_address[0]+9);
+        sprintf(disp_buff, "%3d/%3d", dispTemp(tempMonitor_getLastColdTemp()), dispTemp(settingMenus_getTargetTemp()));
+        OLED_writeString(disp_buff);
+        OLED_writeTempUnit();
+
+        OLED_command(line_address[1]+12);
+        sprintf(disp_buff, "%4d", dispTemp(tempMonitor_getLastHotTemp()));
+        OLED_writeString(disp_buff);
+        OLED_writeTempUnit();
+
+        // MCU Temp
+        OLED_command(line_address[2]+12);
+        sprintf(disp_buff, "%4d", dispTemp(tempMonitor_getLastIntTemp()));
+        OLED_writeString(disp_buff);
+        OLED_writeTempUnit();
     }
     
+    OLED_command(line_address[3]+10);
+    sprintf(disp_buff, "%4d, %4d", fanControl_getFan1RPM(), fanControl_getFan2RPM());
+    OLED_writeString(disp_buff);
+}
+
+
+void runningMenus_errorSetup(void){
+    OLED_clear();
+    OLED_command(line_address[0]+2);
+    OLED_writeString("Not Cool - Error");
+    
+    OLED_command(line_address[3]+3);
+    OLED_writeString("Push to clear");
+}
+
+void runningMenus_errorUpdate(int16_t moves){
+    OLED_command(line_address[2]);
+    switch(peltierControl_getError()){
+        case PELTIER_FAN1_ERROR:
+            OLED_writeSpaces(1);
+            OLED_writeString("Fan 1 Not Running");
+            break;
+        case PELTIER_HEATSINK_OVERHEAT:
+            OLED_writeString("Heatsink Overheated");
+            break;
+        case PELTIER_INT_OVERHEAT:
+            OLED_writeSpaces(3);
+            OLED_writeString("MCU Overheated");
+            break;
+        case PELTIER_POWER_ERROR:
+            OLED_writeString("Peltier Power Error");
+            break;
+        case PELTIER_ERROR_NONE:
+            break;
+    }
+
 }

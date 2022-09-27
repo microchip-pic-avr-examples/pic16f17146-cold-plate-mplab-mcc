@@ -16,6 +16,9 @@ extern "C" {
 void runningMenus_runningSetup(void);
 void runningMenus_runningUpdate(int16_t moves);
 
+void runningMenus_errorSetup(void);
+void runningMenus_errorUpdate(int16_t moves);
+
 
 #ifdef	__cplusplus
 }

@@ -11,7 +11,7 @@
 */
 
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+ï¿½ [2022] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -62,9 +62,9 @@ void Timer0_1ms_Callback(void)
     {
         //Call these functions every 1ms
         
-        //Software PWM
-        if(UI_getState() == STANDBY){
-            encoderControl_IncrementPWM();
+        //Call for breathing LED if needed, otherwise update LED every 100ms
+        if(encoderControl_getBreatheStatus()){
+            encoderControl_PWM();
         }
     }
         
@@ -75,10 +75,10 @@ void Timer0_1ms_Callback(void)
         tempMonitor_runStateMachine();
         peltierControl_calculateDutyCycle();
         
-        if(UI_getState() == STANDBY){
+        if(encoderControl_getBreatheStatus()){
             encoderControl_breatheLED();
         }
-
+        
         counter10ms = 0;
     }
     else
@@ -175,10 +175,12 @@ int main(void)
     //Start Timer 0 (10ms)
     Timer0_Start();
     
-    //Init OLED Display
+    //Pull local coy of settngs before populating UI
     settingMenus_populateSettings();
-    OLED_init();
     
+    //Init OLED Display
+    OLED_init();
+
     //Start Fan Controller
     fanControl_start();
     
@@ -202,9 +204,16 @@ int main(void)
 #endif
         }
         
-//        if(dispRefresh){ // update UI every 100ms
-//            UI_refresh();
-//            dispRefresh = false;
-//        }
+        if(dispRefresh){ // update UI every 100ms
+            UI_refresh();
+            encoderControl_updateLEDs();
+            if(!encoderControl_getBreatheStatus())
+            {
+                // Update LEDs if not breathing them
+                encoderControl_updateColor();
+            }
+            dispRefresh = false;
+        }
+
     }    
 }

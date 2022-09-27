@@ -1,7 +1,7 @@
 #include "navMenu.h"
 
 // MENU OLED FUNTIONS
-char* options[] = {"Go Back", "Start", "Set Temperature", "Change Units", "Limit Current", "About", "Demo Mode Toggle"};
+char* options[] = {"Go Back", "Start", "Set Temperature", "Change Units", "Show Icons", "About", "Demo Mode Toggle"};
 
 menu_t menu = {
 .options = options,
@@ -9,6 +9,22 @@ menu_t menu = {
 .top_item = 0, // menu item currently on line 1
 .ast_pos = 0 // asterisk line (1-4))
 };
+
+void navMenu_changeStartOptions(bool start){
+    if(start){
+        options[1] = "Start";
+        //strcpy(options[1], "Start");
+    } else {
+        options[1] = "Cancel";
+        //strcpy(options[1], "Cancel");
+    }
+    navMenu_reset();
+}
+
+void navMenu_reset(void){
+    menu.top_item = 0;
+    menu.ast_pos = 0;
+}
 
 void navMenu_setup(void){
     navMenu_populate(menu.top_item, menu.ast_pos);
@@ -120,10 +136,19 @@ UI_STATE navMenu_getSelected(void){
     int8_t selected = (int8_t)menu.top_item + menu.ast_pos;
     switch(selected){
         case 0:
+            if(UI_isRunning()){
+                return RUNNING;
+            } else {
+                return STANDBY;
+            }
             return STANDBY;
             break;
         case 1:
-            return START;
+            if(UI_isRunning()){
+                return STANDBY;
+            } else{
+                return RUNNING;
+            }
             break;
         case 2:
             return SET_TEMPERATURE;
@@ -132,7 +157,7 @@ UI_STATE navMenu_getSelected(void){
             return CHANGE_UNITS;
             break;
         case 4:
-            return LIMIT_CURRENT;
+            return SHOW_ICONS;
             break;
         case 5:
             return ABOUT;

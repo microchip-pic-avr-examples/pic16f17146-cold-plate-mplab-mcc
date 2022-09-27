@@ -1,11 +1,50 @@
 #include "encoderControl.h"
 
-static volatile int16_t encoderMoves = 0;
-EncoderLEDState LEDState = OFF; // BLUE, ORANGE, BOTH, or OFF
 
-// number of PWM increments (PWM functions scale to each intensity level is 10% of increments)
-#define PWM_increments 20
-static uint8_t PWM_intensity = 0; // value between 0 - PWM_increments
+// Return total encoder moves since last poll
+int16_t encoderControl_getMoves(void){
+    static uint16_t oldTimer1 = 0;
+    static uint16_t oldTimer3 = 0;
+    
+    uint16_t newTimer1, newTimer3, netTimer1, netTimer3;
+    int16_t encoder;
+    
+    newTimer1 = Timer1_Read();
+    newTimer3 = Timer3_Read();
+    
+    netTimer1 = 0;
+    netTimer3 = 0;
+    
+    if(newTimer1 < oldTimer1){
+        // Rollover occurred
+        // Add an offset to the net value and clear the old value
+        netTimer1 = 0xFFFF - oldTimer1;
+        oldTimer1 = 0;
+    }
+    
+     if(newTimer3 < oldTimer3){
+        // Rollover occurred
+        // Add an offset to the net value and clear the old value
+        netTimer3 = 0xFFFF - oldTimer3;
+        oldTimer3 = 0;
+    }
+    
+    //Find the net change
+    netTimer1 += newTimer1 - oldTimer1;
+    netTimer3 += newTimer3 - oldTimer3;
+    
+    // Calculate the net encoder change
+    encoder = (int16_t)(netTimer3 - netTimer1);
+    
+    oldTimer1 = newTimer1;
+    oldTimer3 = newTimer3;
+    
+    return encoder;
+}
+
+
+EncoderLEDState LEDState = OFF; // BLUE, ORANGE, BOTH, or OFF
+bool breatheStatus = false; // whether to breathe the LED
 
 // LED color getter
 EncoderLEDState encoderControl_getLEDState(void){
@@ -17,28 +56,52 @@ void encoderControl_setLEDState(EncoderLEDState new_state){
     LEDState = new_state;
 }
 
-// Return total encoder moves since last poll
-int16_t encoderControl_getMoves(void){
-    encoderControl_resetTimers();
-    return encoderMoves;
+bool encoderControl_getBreatheStatus(void){
+    return breatheStatus;
 }
 
-// calculate difference in timers to see total moves since last call & reset timers
-void encoderControl_resetTimers(void){
-    encoderMoves = (int16_t)Timer3_Read() - (int16_t)Timer1_Read(); // + if right, - if left
-    Timer1_Write(0);
-    Timer3_Write(0);
+void encoderControl_setBreatheStatus(bool status){
+    breatheStatus = status;
 }
+
+
+void encoderControl_updateLEDs(void){
+    switch(UI_getState()){
+        case STANDBY:
+            encoderControl_setLEDState(PURPLE);
+            breatheStatus = true;
+            break;
+        case ERROR:
+            encoderControl_setLEDState(ORANGE);
+            breatheStatus = false;
+            break;
+        case MENU:
+            if(!UI_isRunning()){
+                encoderControl_setLEDState(PURPLE);
+                breatheStatus = false;
+            } else { // If running
+                encoderControl_setLEDState(BLUE);
+                breatheStatus = peltierControl_getState() == PELTIER_STATE_AT_TEMP ? false : true;
+            }
+            break;
+        case RUNNING:
+            encoderControl_setLEDState(BLUE);
+            // PWM while cooling, Solid blue at temp
+            breatheStatus = peltierControl_getState() == PELTIER_STATE_AT_TEMP ? false : true;
+            break;
+    }
+}
+
 
 // set encoder LED colors
 void encoderControl_updateColor(void){
-    LED_ERROR_SetLow();
-    LED_STATUS_SetLow();
     switch(LEDState){
         case ORANGE:
             LED_ERROR_SetHigh();
+            LED_STATUS_SetLow();
             break;
         case BLUE:
+            LED_ERROR_SetLow();
             LED_STATUS_SetHigh();
             break;
         case PURPLE:
@@ -46,40 +109,48 @@ void encoderControl_updateColor(void){
             LED_STATUS_SetHigh();
             break;
         case OFF: 
-        default:
             LED_ERROR_SetLow();
             LED_STATUS_SetLow();
             break;
     }
 }
 
+
+// number of PWM increments (PWM functions scale to each intensity level is 10% of increments)
+#define PWM_increments 20
+static uint8_t PWM_intensity = 0; // value between 0 - PWM_increments
+
+
 // PWM intensity between 0-PWM_increments
-void encoderControl_IncrementPWM(void){
+void encoderControl_PWM(void){
     static uint8_t duty_cycle = 0;
-    if(duty_cycle <= PWM_intensity){
-        encoderControl_setLEDState(PURPLE);
+    if(duty_cycle < PWM_intensity){
+        if(LEDState == PURPLE){
+            LED_ERROR_SetHigh();
+        }
+        LED_STATUS_SetHigh();
     } else if(duty_cycle <= PWM_increments){
-        encoderControl_setLEDState(OFF);
+        LED_ERROR_SetLow();
+        LED_STATUS_SetLow();
     } else{
         duty_cycle = 0;
     }
     duty_cycle++;
-    encoderControl_updateColor(); // set color to current state
 }
 
 // if breathing, call every 10ms
 void encoderControl_breatheLED(void){
     enum BREATHING_STATES {RAMPING_UP, PEAK, RAMPING_DOWN, BOTTOM};
     static enum BREATHING_STATES breathing_state = RAMPING_UP;
-    static uint8_t counter = 0;
+    static uint16_t counter = 0;
     
     switch(breathing_state){
         case RAMPING_UP: 
-            if(counter >= 10){ // PWM 10% increase every 100ms
-                PWM_intensity+=(int)(0.1*PWM_increments);
+            if(counter >= 3){ // PWM 1% increase every 10ms
+                PWM_intensity+=1;
                 counter = 0;
             }
-            if(PWM_intensity == PWM_increments){ // when intensity is maxed out
+            if(PWM_intensity >= PWM_increments){ // when intensity is maxed out
                 breathing_state = PEAK;
                 counter = 0;
             }
@@ -91,8 +162,8 @@ void encoderControl_breatheLED(void){
             }
             break;
         case RAMPING_DOWN:
-            if(counter >= 10){ // PWM 10% decrease every 100ms
-                PWM_intensity-=(int)(0.1*PWM_increments);
+            if(counter >= 3){ // PWM 1% decrease every 10ms
+                PWM_intensity-=1;
                 counter = 0;
             }
             if(PWM_intensity <= 0){
@@ -101,7 +172,7 @@ void encoderControl_breatheLED(void){
             }
             break;
         case BOTTOM:
-            if(counter >= 5){ // wait 50 ms before restarting cycle
+            if(counter >= 50){ // wait 50 ms before restarting cycle
                 breathing_state = RAMPING_UP;
                 counter = 0;
             }
