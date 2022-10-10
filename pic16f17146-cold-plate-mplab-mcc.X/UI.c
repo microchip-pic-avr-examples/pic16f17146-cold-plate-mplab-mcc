@@ -30,18 +30,21 @@ bool UI_isRunning(void){
 
 //Updates the scene elements & sets a new scene if needed
 void UI_refresh(void){
+    
+    // Adds error states to UI
     #ifdef UI_ERRORS
-    if(peltierControl_getError() != PELTIER_ERROR_NONE && UI_state != ERROR){
-        // Error State
+    if(UI_is_running && peltierControl_getError() != PELTIER_ERROR_NONE && UI_state != ERROR){
         UI_setState(ERROR);
-        UI_new_state = true;
     }
     #endif
 
+    // Set static elements of a scene when a new UI state is entered
     if(UI_new_state){
         UI_setup();
         UI_new_state = false;
     }
+    
+    // Immediately update dynamic elements so they populate
     UI_update();
 
 }
