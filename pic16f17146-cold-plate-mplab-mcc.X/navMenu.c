@@ -141,12 +141,13 @@ UI_STATE navMenu_getSelected(void){
             } else {
                 return STANDBY;
             }
-            return STANDBY;
             break;
         case 1:
             if(UI_isRunning()){
+                peltierControl_stop(); // already running
                 return STANDBY;
             } else{
+                peltierControl_start(); // not running
                 return RUNNING;
             }
             break;

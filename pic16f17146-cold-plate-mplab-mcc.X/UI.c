@@ -15,7 +15,7 @@ void UI_setState(UI_STATE new_state){
     UI_state = new_state;
     UI_new_state = true;
     
-    if(UI_state == STANDBY){
+    if(UI_state == STANDBY || UI_state == ERROR){
         UI_is_running = false;
         navMenu_changeStartOptions(true);
     } else if(UI_state == RUNNING){
@@ -35,6 +35,7 @@ void UI_refresh(void){
     #ifdef UI_ERRORS
     if(UI_is_running && peltierControl_getError() != PELTIER_ERROR_NONE && UI_state != ERROR){
         UI_setState(ERROR);
+        peltierControl_stop(); // stop peltier plate
     }
     #endif
 
