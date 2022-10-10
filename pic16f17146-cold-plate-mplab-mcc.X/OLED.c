@@ -21,6 +21,13 @@ void OLED_data(uint8_t cmd_byte){
 }
 
 void OLED_init(void){
+    // flash reset signal
+    IO_RB4_SetHigh();
+    __delay_ms(10);
+    IO_RB4_SetLow();
+    __delay_ms(10);
+    IO_RB4_SetHigh();
+    
     //OLED init command sequence
     // Breakdown of each command is below this compressed version
     uint8_t init_data[80] = {
