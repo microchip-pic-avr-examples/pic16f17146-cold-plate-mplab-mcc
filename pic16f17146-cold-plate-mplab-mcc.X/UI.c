@@ -73,6 +73,12 @@ void UI_setup(void){
         case SHOW_ICONS:
             settingMenus_showIconsSetup();
             break;
+        case HYSTERESIS:
+            settingMenus_hysteresisSetup();
+            break;
+        case HYSTERESIS_OVER:
+            settingMenus_hysteresisOverSetup();
+            break;
         case ABOUT:
             settingMenus_aboutSetup();
             break;
@@ -95,10 +101,14 @@ void UI_update(void){
         case SHOW_ICONS:
         case ABOUT:
         case DEMO_MODE_TOGGLE:
+        case HYSTERESIS_OVER:
             returnState = MENU;
             break;
         case MENU:
             returnState = navMenu_getSelected();
+            break;
+        case HYSTERESIS:
+            returnState = HYSTERESIS_OVER;
             break;
         case ERROR:
             returnState = STANDBY;
@@ -135,6 +145,12 @@ void UI_update(void){
             case SHOW_ICONS:
                 settingMenus_showIconsUpdate(encoderControl_getMoves());
                 break;
+            case HYSTERESIS:
+                settingMenus_hysteresisUpdate(encoderControl_getMoves());
+                break;
+            case HYSTERESIS_OVER:
+                settingMenus_hysteresisOverUpdate(encoderControl_getMoves());
+                break;
             case ABOUT:
                 settingMenus_aboutUpdate(encoderControl_getMoves());
                 break;
@@ -169,6 +185,18 @@ void UI_updateEEPROM(void){
     if(settings_getSetting(SETTINGS_SHOW_ICONS) != settingMenus_getShowIcons())
     {
         settings_writeValue(SETTINGS_SHOW_ICONS, settingMenus_getShowIcons());
+        changed = true;
+    }
+    
+    if(settings_getSetting(SETTINGS_HYSTER_OVER) != settingMenus_getHysterOver())
+    {
+        settings_writeValue(SETTINGS_HYSTER_OVER, settingMenus_getHysterOver());
+        changed = true;
+    }
+    
+    if(settings_getSetting(SETTINGS_HYSTER_UNDER) != settingMenus_getHysterUnder())
+    {
+        settings_writeValue(SETTINGS_HYSTER_UNDER, settingMenus_getHysterUnder());
         changed = true;
     }
     

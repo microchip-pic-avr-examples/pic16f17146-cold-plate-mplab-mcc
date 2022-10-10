@@ -42,6 +42,21 @@ void settingMenus_showIconsUpdate(int16_t moves);
 bool settingMenus_getShowIcons(void);
 void settingMenus_setShowIcons(bool showIcons);
 
+// HYSTERESIS
+void settingMenus_hysteresisSetup(void);
+void settingMenus_hysteresisUpdate(int16_t moves);
+
+// HYSTERESIS UNDER
+void settingMenus_hysteresisOverSetup(void);
+void settingMenus_hysteresisOverUpdate(int16_t moves);
+
+int8_t settingMenus_getHysterOver(void);
+void settingMenus_setHysterOver(int8_t newHysterOver);
+int8_t settingMenus_getHysterUnder(void);
+void settingMenus_setHysterUnder(int8_t newHysterUnder);
+
+
+
 // ABOUT
 void settingMenus_aboutSetup(void);
 void settingMenus_aboutUpdate(int16_t moves);
