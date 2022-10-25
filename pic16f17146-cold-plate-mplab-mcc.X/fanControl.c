@@ -41,14 +41,25 @@ void fanControl_stop(void)
 //Sets the fan speed based on the heatsink temperature
 void fanControl_updateSpeedFromTemp(int8_t hTemp)
 {
+    //320 = 25% speed
+    
     if (hTemp >= HEATSINK_TEMP_FAN_MAX)
     {
         //100% Fan Speed
+        FAN_PWM_SetSlice1Output1DutyCycleRegister(0xFFFF);
+    }
+    else if (hTemp <= HEATSINK_TEMP_FAN_MIN)
+    {
+        //Below min temperature, low speed
+        FAN_PWM_SetSlice1Output1DutyCycleRegister(320);
     }
     else
     {
-        
+        uint16_t fanSpeed = 320 + (HEATSINK_TEMP_SLOPE * (hTemp - HEATSINK_TEMP_FAN_MIN));
+        FAN_PWM_SetSlice1Output1DutyCycleRegister(fanSpeed);
     }
+    
+    //100%
     
     FAN_PWM_LoadBufferRegisters();
 }

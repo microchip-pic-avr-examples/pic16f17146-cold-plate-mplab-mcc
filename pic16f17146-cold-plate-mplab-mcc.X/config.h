@@ -43,6 +43,12 @@ extern "C" {
 //Max Temperature before 100% Fan Speed
 #define HEATSINK_TEMP_FAN_MAX 60
     
+//Base Temperature for Fan Speed Calculations
+#define HEATSINK_TEMP_FAN_MIN 28
+    
+//Min Fan Speed (1 degree per C above)
+#define HEATSINK_TEMP_SLOPE 40
+    
 //Sense Resistance
 #define SENSE_RESISTANCE 0.01
     
@@ -53,8 +59,8 @@ extern "C" {
 //Pre-Computed DAC Formula
 #define DAC_FORMULA_CONSTANT ((DAC_CURRENT_RES * SENSE_RESISTANCE) / 10.0)
     
-//8A Current Limit
-#define POWER_LIMIT 80
+//6.5A Current Limit
+#define POWER_LIMIT 65
             
 #ifdef	__cplusplus
 }

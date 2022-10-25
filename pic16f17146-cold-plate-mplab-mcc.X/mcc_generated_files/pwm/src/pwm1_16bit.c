@@ -85,8 +85,8 @@ void FET_PWM_Initialize(void)
     //PWMS1P1H 0; 
     PWM1S1P1H = 0x0;
 
-    //PWMS1P2L 160; 
-    PWM1S1P2L = 0xA0;
+    //PWMS1P2L 3; 
+    PWM1S1P2L = 0x3;
 
     //PWMS1P2H 0; 
     PWM1S1P2H = 0x0;
@@ -118,12 +118,12 @@ void FET_PWM_Initialize(void)
     PWM1CON = 0x80;
 }
 
-void FET_PWM_Enable(void)
+void FET_PWM_Enable()
 {
     PWM1CON |= _PWM1CON_EN_MASK;
 }
 
-void FET_PWM_Disable(void)
+void FET_PWM_Disable()
 {
     PWM1CON &= (~_PWM1CON_EN_MASK);
 }
