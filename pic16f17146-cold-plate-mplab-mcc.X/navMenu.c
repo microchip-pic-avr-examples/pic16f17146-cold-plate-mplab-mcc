@@ -1,7 +1,7 @@
 #include "navMenu.h"
 
 // MENU OLED FUNTIONS
-char* options[] = {"Go Back", "Start", "Set Temperature", "Change Units", "Show Icons", "About", "Demo Mode Toggle"};
+char* options[] = {"Go Back", "Start", "Set Temperature", "Change Units", "Show Icons", "Hysteresis", "About", "Demo Mode Toggle"};
 
 menu_t menu = {
 .options = options,
@@ -141,12 +141,13 @@ UI_STATE navMenu_getSelected(void){
             } else {
                 return STANDBY;
             }
-            return STANDBY;
             break;
         case 1:
             if(UI_isRunning()){
+                peltierControl_stop(); // already running
                 return STANDBY;
             } else{
+                peltierControl_start(); // not running
                 return RUNNING;
             }
             break;
@@ -160,9 +161,12 @@ UI_STATE navMenu_getSelected(void){
             return SHOW_ICONS;
             break;
         case 5:
-            return ABOUT;
+            return HYSTERESIS;
             break;
         case 6:
+            return ABOUT;
+            break;
+        case 7:
             return DEMO_MODE_TOGGLE;
             break;
     }

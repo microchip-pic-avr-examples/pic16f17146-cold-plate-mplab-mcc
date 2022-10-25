@@ -5,6 +5,8 @@
 static int8_t target_temp = 0; // set function to read EEPROM
 static char temp_unit = 'C';
 static bool show_icons = false;
+static int8_t hysterOver = 0;
+static int8_t hysterUnder = 0;
 
 // STANDBY OLED FUNTIONS
 // set static elements on the STANDBY scene
@@ -153,6 +155,62 @@ void settingMenus_setShowIcons(bool showIcons){
     show_icons = showIcons;
 }
 
+//HYSTERESIS
+void settingMenus_hysteresisSetup(void){
+    OLED_clear();
+    OLED_command(line_address[0]+2);
+    OLED_writeString("Set Hysteresis:");
+    
+    OLED_command(line_address[2]+3);
+    OLED_writeString("*Under");
+    OLED_writeSpaces(3);
+    OLED_writeString("Over");  
+}
+
+void settingMenus_hysteresisUpdate(int16_t moves){
+    OLED_command(line_address[3]+5);            
+    
+    hysterUnder = (hysterUnder+moves > 9) ? 9 : (hysterUnder+moves < 0) ? 0 : hysterUnder+moves;
+    
+    char disp_buff[20];        
+    sprintf(disp_buff, "%d       %d", hysterUnder, hysterOver);
+    OLED_writeString(disp_buff);
+}
+
+// HYSTERESIS UNDER
+void settingMenus_hysteresisOverSetup(void){
+    OLED_command(line_address[2]+3);
+    OLED_writeString(" Under");
+    OLED_writeSpaces(2);
+    OLED_writeString("*Over");  
+}
+
+void settingMenus_hysteresisOverUpdate(int16_t moves){
+    OLED_command(line_address[3]+5);            
+    
+    hysterOver = (hysterOver+moves > 9) ? 9 : (hysterOver+moves < 0) ? 0 : hysterOver+moves;
+    
+    char disp_buff[20];        
+    sprintf(disp_buff, "%d       %d", hysterUnder, hysterOver);
+    OLED_writeString(disp_buff);
+}
+
+int8_t settingMenus_getHysterOver(void){
+    return hysterOver;
+}
+
+void settingMenus_setHysterOver(int8_t newHysterOver){
+    hysterOver = newHysterOver;
+}
+
+int8_t settingMenus_getHysterUnder(void){
+    return hysterUnder;
+}
+
+void settingMenus_setHysterUnder(int8_t newHysterUnder){
+    hysterUnder = newHysterUnder;
+}
+
 
 // ABOUT
 void settingMenus_aboutSetup(void){
@@ -288,4 +346,6 @@ void settingMenus_populateSettings(void){
     settingMenus_setTargetTemp((int8_t)settings_getSetting(SETTINGS_LAST_SET_TEMP));
     settingMenus_setTempUnit((char)settings_getSetting(SETTINGS_TEMP_UNIT));
     settingMenus_setDemoMode((bool)settings_getSetting(SETTINGS_DEMO_MODE));
+    settingMenus_setHysterOver((int8_t)settings_getSetting(SETTINGS_HYSTER_OVER));
+    settingMenus_setHysterUnder((int8_t)settings_getSetting(SETTINGS_HYSTER_UNDER));
 }

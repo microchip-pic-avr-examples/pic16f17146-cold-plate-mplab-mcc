@@ -121,6 +121,12 @@ void runningMenus_errorUpdate(int16_t moves){
         case PELTIER_POWER_ERROR:
             OLED_writeString("Peltier Power Error");
             break;
+        case PELTIER_PLATE_TEMP_LIMIT:
+            OLED_writeSpaces(2);
+            OLED_writeString("Peltier Too Cold");
+            OLED_command(line_address[1]);
+            OLED_writeString(" Safety Shutdown:");
+            break;
         case PELTIER_ERROR_NONE:
             break;
     }

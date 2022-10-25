@@ -91,7 +91,7 @@ void peltierControl_periodicCheck(void)
     if (tempMonitor_getLastColdTemp() < (TEMP_LIMIT_SAFETY_MARGIN + tempMonitor_getLastColdTemp()))
     {
         //Overcooled - Cold Plate is below safe temperature
-        error = PELTIER_PLATE_OVERCOOL;
+        error = PELTIER_PLATE_TEMP_LIMIT;
     }
 
     int8_t stopTemp, startTemp, currentTemp;
