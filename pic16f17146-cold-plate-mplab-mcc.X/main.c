@@ -184,9 +184,6 @@ int main(void)
     //Start Fan Controller
     fanControl_start();
     
-    //Start Peltier Controller
-    peltierControl_start();
-    
     while(1)
     {        
         //Note: This must occur every 250ms to 2s or WWDT will reset

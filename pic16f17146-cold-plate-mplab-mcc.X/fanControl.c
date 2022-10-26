@@ -41,6 +41,10 @@ void fanControl_stop(void)
 //Sets the fan speed based on the heatsink temperature
 void fanControl_updateSpeedFromTemp(int8_t hTemp)
 {
+#ifdef FORCED_100_OPERATION
+    FAN_PWM_SetSlice1Output1DutyCycleRegister(0xFFFF);
+    FAN_PWM_LoadBufferRegisters();
+#else
     //320 = 25% speed
     
     if (hTemp >= HEATSINK_TEMP_FAN_MAX)
@@ -62,6 +66,8 @@ void fanControl_updateSpeedFromTemp(int8_t hTemp)
     //100%
     
     FAN_PWM_LoadBufferRegisters();
+#endif
+    
 }
 
 //Returns the RPM of Fan 1

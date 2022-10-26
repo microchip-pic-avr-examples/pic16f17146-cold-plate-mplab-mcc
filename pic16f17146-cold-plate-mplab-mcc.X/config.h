@@ -16,7 +16,7 @@ extern "C" {
 #define DEBUG_PRINT
     
 //If defined, UI will show error messages
-//#define UI_ERRORS
+#define UI_ERRORS
     
 //Lowest allowed temperature in demo mode
 #define DEMO_TEMP_LIMIT_LOW 5
@@ -59,8 +59,8 @@ extern "C" {
 //Pre-Computed DAC Formula
 #define DAC_FORMULA_CONSTANT ((DAC_CURRENT_RES * SENSE_RESISTANCE) / 10.0)
     
-//6.5A Current Limit
-#define POWER_LIMIT 65
+//Current Limit
+#define POWER_LIMIT 85
             
 #ifdef	__cplusplus
 }

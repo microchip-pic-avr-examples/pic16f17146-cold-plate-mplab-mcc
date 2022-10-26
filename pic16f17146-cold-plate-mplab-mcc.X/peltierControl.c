@@ -19,7 +19,7 @@
 
 #define CWG_ENABLE() do { CWG1CON0bits.EN = 1; } while (0)
 
-#define CWG_DISABLE_OUTPUT() do { CWG1STRbits.CWG1STRA = 1;} while (0) 
+#define CWG_DISABLE_OUTPUT() do { CWG1STRbits.CWG1STRA = 0;} while (0) 
 #define CWG_ENABLE_OUTPUT() do { CWG1STRbits.CWG1STRA = 1; } while (0)
 
 //State machine for DAC updates
@@ -49,6 +49,7 @@ void peltierControl_init(void)
     
     //Enable CWG
     CWG_ENABLE();
+    CWG_DISABLE_OUTPUT();
     
     //For freq. counting, increment is 1
     NCO1INC = 1;
@@ -88,7 +89,7 @@ void peltierControl_periodicCheck(void)
         //Overheat - Int. Temperature
         error = PELTIER_INT_OVERHEAT;
     }
-    if (tempMonitor_getLastColdTemp() < (TEMP_LIMIT_SAFETY_MARGIN + tempMonitor_getLastColdTemp()))
+    if (tempMonitor_getLastColdTemp() < (TEMP_LIMIT_LOW))
     {
         //Overcooled - Cold Plate is below safe temperature
         error = PELTIER_PLATE_TEMP_LIMIT;
@@ -103,8 +104,8 @@ void peltierControl_periodicCheck(void)
     fanControl_updateSpeedFromTemp(tempMonitor_getLastHotTemp());
     
     //Setup Temperature Hysteresis
-    stopTemp += settings_getSetting(SETTINGS_HYSTER_OVER);
-    startTemp -= settings_getSetting(SETTINGS_HYSTER_UNDER);
+    stopTemp -= settings_getSetting(SETTINGS_HYSTER_OVER);
+    startTemp += settings_getSetting(SETTINGS_HYSTER_UNDER);
 
     switch (peltierState)
     {
@@ -171,7 +172,7 @@ void peltierControl_periodicCheck(void)
             if (!CLC4_OutputStatusGet())
             {
                 //Power Error - CWG is ON, but no current is running
-                error = PELTIER_POWER_ERROR;
+                //error = PELTIER_POWER_ERROR;
             }
 
             if (currentTemp <= stopTemp)

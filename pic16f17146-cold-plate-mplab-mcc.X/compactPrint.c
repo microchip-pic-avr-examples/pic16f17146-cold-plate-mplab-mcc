@@ -199,4 +199,38 @@ void compactPrint_sendDebugTelemetry(void)
     compactPrint_sendStringLiteral("Average Duty Cycle: ");
     compactPrint_convertDutyCycleToString(buffer, peltierControl_getAverageDutyCycle());
     compactPrint_sendStringWithNewline(buffer);
+    
+    compactPrint_sendStringLiteral("Peltier State: ");
+    PeltierState currentPeltierState = peltierControl_getState();
+    
+    switch (currentPeltierState)
+    {
+        case PELTIER_STATE_DISABLED:
+        {
+            compactPrint_sendStringWithNewline("Disabled");
+            break;
+        }
+        case PELTIER_STATE_STARTUP:
+        {
+            compactPrint_sendStringWithNewline("Startup");
+            break;
+        }
+        case PELTIER_STATE_AT_TEMP:
+        {
+            compactPrint_sendStringWithNewline("At Temp");
+            break;
+        }
+        case PELTIER_STATE_COOLING:
+        {
+            compactPrint_sendStringWithNewline("Cooling");
+            break;
+        }
+        default:
+        {
+            compactPrint_sendStringWithNewline("Unknown");
+        }
+    }
+    
+    //Add an extra line for readability
+    compactPrint_sendStringLiteral("\r\n");
 }

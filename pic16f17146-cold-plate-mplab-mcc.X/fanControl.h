@@ -7,6 +7,9 @@ extern "C" {
     
 #include <stdint.h>
     
+//Forces the fan to run at 100% speed
+//#define FORCED_100_OPERATION
+    
     //Init Fan Speed Control
     void fanControl_init(void);
 
