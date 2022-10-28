@@ -84,6 +84,12 @@ void peltierControl_periodicCheck(void)
         //Overheat - Heatsink
         error = PELTIER_HEATSINK_OVERHEAT;
     }
+    if (tempMonitor_getLastHotTemp() < TEMP_NTC_HOT_OPEN)
+    {
+        //Possible bad NTC connection on the hot side
+        //Usually appears as a really low temperature
+        error = PELTIER_SENSE_HOT_OPEN;
+    }
     if (tempMonitor_getLastIntTemp() > settings_getSetting(SETTINGS_MAX_INT_TEMP))
     {
         //Overheat - Int. Temperature
@@ -93,6 +99,17 @@ void peltierControl_periodicCheck(void)
     {
         //Overcooled - Cold Plate is below safe temperature
         error = PELTIER_PLATE_TEMP_LIMIT;
+    }
+    if (tempMonitor_getLastColdTemp() > TEMP_NTC_COLD_OPEN)
+    {
+        //Possible bad NTC connection on the cold side
+        //This is likely a rare condition (expect overcool to detect this), but worth testing for
+        error = PELTIER_SENSE_COLD_OPEN;
+    }
+    if (currentSense_hasOvercurrentOccurred())
+    {
+        //Overcurrent
+        error = PELTIER_OVERCURRENT_ERROR;
     }
 
     int8_t stopTemp, startTemp, currentTemp;
@@ -167,13 +184,6 @@ void peltierControl_periodicCheck(void)
         case PELTIER_STATE_COOLING:
         {
             //Actively Cooling the Plate
-
-            //Check for Power Error
-            if (!CLC4_OutputStatusGet())
-            {
-                //Power Error - CWG is ON, but no current is running
-                //error = PELTIER_POWER_ERROR;
-            }
 
             if (currentTemp <= stopTemp)
             {
@@ -334,6 +344,14 @@ void peltierControl_stop(void)
         compactPrint_sendStringWithNewline("-- PELTIER OFF --");
 #endif
     }
+}
+
+void peltierControl_fastStop(void)
+{
+    //Disable Output
+    CWG_DISABLE_OUTPUT();
+    
+    //Note, peltierState is not set here so the message prints later
 }
 
 //Set the max current through the loop

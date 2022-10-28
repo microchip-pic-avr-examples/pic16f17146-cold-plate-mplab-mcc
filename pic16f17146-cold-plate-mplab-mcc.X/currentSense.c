@@ -5,6 +5,7 @@
 #include "mcc_generated_files/dac/dac2.h"
 #include "config.h"
 #include "compactPrint.h"
+#include "peltierControl.h"
 
 #include <xc.h>
 #include <stdint.h>
@@ -13,11 +14,13 @@
 #include <math.h>
 
 //1x, 2x, 4x, 8x, 16x Gains + OFFSET
-static float OPAMPGain = 8.0;
+static float OPAMPGain = 4.0;
+static int8_t offset = 0;
+static bool isOvercurrent = false;
 
 static CurrentSenseGain systemGain = UNITY;
 
-#define SYSTEM_GAIN GAIN_8
+#define SYSTEM_GAIN GAIN_4
 
 //Init Current Sense System
 void currentSense_init(void)
@@ -28,9 +31,6 @@ void currentSense_init(void)
     //Select VSS as a negative source
     OPA1_SetNegativeSource(OPA1_Vss);
     
-    //Reset Minimum Current Detector
-    DAC2_SetOutput(POWER_DETECT_MINIMUM);
-    
     //Set power limit
     currentSense_setCurrentLimit(POWER_LIMIT);
 }
@@ -39,8 +39,18 @@ void currentSense_init(void)
 //Blocking Code
 void currentSense_selfCalibrate(void)
 {
+    currentSense_gainCalibration();
+    CM2CON0bits.EN = 1;
+}
+
+//Calibrates the gain of the OPAMP
+//Blocking Code - only run on startup
+void currentSense_gainCalibration(void)
+{
     //2.048V for VREF DAC
     //~100mV output
+    
+    //Set Output
     DAC2_SetOutput(13);
     
     //Set VDD as ADC Reference
@@ -88,9 +98,6 @@ void currentSense_selfCalibrate(void)
     
     //Return OPAMP to Input Pin
     OPA1_SetPositiveChannel(OPA1_posChannel_OPA1IN);
-        
-    //Reset Minimum Current Detector
-    DAC2_SetOutput(POWER_DETECT_MINIMUM);
     
     //Set VREF as ADC Reference
     ADREFbits.PREF = 0b11;
@@ -105,6 +112,10 @@ void currentSense_setCurrentLimit(uint8_t limit)
 {
     uint8_t dacCode = floorf(DAC_FORMULA_CONSTANT * OPAMPGain * limit);
     DAC1_SetOutput(dacCode);
+    
+    //Update Overcurrent Limits
+    dacCode *= OVERCURRENT_TOLERANCE;
+    DAC2_SetOutput(dacCode);
 }
 
 //Sets the gain of the current sense amplifier
@@ -172,4 +183,17 @@ void currentSense_setConfiguration(CurrentSenseGain gain)
     
     //Set to VDD
     OPA1_SetSoftwareOverride(0x00);
+}
+
+//Overcurrent event has occurred
+void currentSense_overcurrentCallback(void)
+{
+    peltierControl_fastStop();
+    isOvercurrent = true;
+}
+
+//Returns true if an overcurrent event was detected
+bool currentSense_hasOvercurrentOccurred(void)
+{
+    return isOvercurrent;
 }

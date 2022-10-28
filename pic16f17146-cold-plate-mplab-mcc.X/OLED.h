@@ -12,7 +12,7 @@ extern "C" {
 
 #define OLED_LINE_NUM 4
 // address to put the OLED cursor at the start of each line
-uint8_t line_address[4] = {0x80, 0xA0, 0xC0, 0xE0};
+const uint8_t line_address[4] = {0x80, 0xA0, 0xC0, 0xE0};
     
 void OLED_command(uint8_t cmd_byte);
 void OLED_data(uint8_t cmd_byte);

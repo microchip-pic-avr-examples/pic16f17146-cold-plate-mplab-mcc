@@ -49,6 +49,7 @@ void SYSTEM_Initialize(void)
     CLC2_Initialize();
     CLC3_Initialize();
     CLC4_Initialize();
+    CLKREF_Initialize();
     CMP2_Initialize();
     CRC_Initialize();
     CURRENT_SENSE_CMP_Initialize();

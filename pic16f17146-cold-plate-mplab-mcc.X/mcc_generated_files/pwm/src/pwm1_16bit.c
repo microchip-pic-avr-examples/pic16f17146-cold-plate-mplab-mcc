@@ -58,11 +58,11 @@ void FET_PWM_Initialize(void)
     //PWMLDS Autoload disabled; 
     PWM1LDS = 0x0;
 
-    //PWMPRL 63; 
-    PWM1PRL = 0x3F;
+    //PWMPRL 159; 
+    PWM1PRL = 0x9F;
 
-    //PWMPRH 1; 
-    PWM1PRH = 0x1;
+    //PWMPRH 0; 
+    PWM1PRH = 0x0;
 
     //PWMCPRE No prescale; 
     PWM1CPRE = 0x0;
@@ -79,14 +79,14 @@ void FET_PWM_Initialize(void)
     //PWMPOL1 disabled; PWMPOL2 disabled; PWMPPEN disabled; PWMMODE Right aligned mode; 
     PWM1S1CFG = 0x1;
 
-    //PWMS1P1L 240; 
-    PWM1S1P1L = 0xF0;
+    //PWMS1P1L 120; 
+    PWM1S1P1L = 0x78;
 
     //PWMS1P1H 0; 
     PWM1S1P1H = 0x0;
 
-    //PWMS1P2L 3; 
-    PWM1S1P2L = 0x3;
+    //PWMS1P2L 8; 
+    PWM1S1P2L = 0x8;
 
     //PWMS1P2H 0; 
     PWM1S1P2H = 0x0;

@@ -1,15 +1,15 @@
 /**
- * CMP1 Generated Driver File
+ * CLKREF Generated Driver File
  * 
- * @file cmp1.c
+ * @file clkref.c
  * 
- * @ingroup cmp1
+ * @ingroup  clkref
  * 
- * @brief This is the generated driver implementation file for the CMP1 driver.
+ * @brief This is the generated driver implementation file for the CLKREF driver.
  *
- * @version CMP1 Driver Version 2.12.0
+ * @version CLKREF Driver Version 2.0.0
 */
- /*
+/*
 © [2022] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
@@ -30,41 +30,25 @@
     THIS SOFTWARE.
 */
 
- /**
-   Section: Included Files
- */
-
-#include <xc.h>
-#include "../cmp1.h"
-
 /**
-  Section: CMP1 APIs
+  Section: Included Files
 */
 
-void CURRENT_SENSE_CMP_Initialize(void) 
+#include <xc.h>
+#include "../clkref.h"
+
+/**
+  Section: CLKREF APIs
+*/
+
+void CLKREF_Initialize(void)
 {
-    // CHYS enabled; CON enabled; CPOL not inverted; CSYNC asynchronous; 
-    CM1CON0 = 0x82;
+    // CLK HFINTOSC; 
+    CLKRCLK = 0x1;
 
-    // CINTN no_intFlag; CINTP no_intFlag; 
-    CM1CON1 = 0x0;
-    
-    // CNCH OPA1OUT; 
-    CM1NCH = 0x5;
-    
-    // CPCH DAC1_OUT; 
-    CM1PCH = 0x4;    
+    // CLKREN enabled; CLKRDC 50% Duty Cycle; CLKRDIV BaseClock/16; 
+    CLKRCON = 0x94;
 }
-
-bool CURRENT_SENSE_CMP_GetOutputStatus(void) 
-{
-  return CM1CON0bits.C1OUT; /* Note : As per datasheet, CxOUT bit in CMOUT register (if relevant) 
-                                                   is mirror copy of CMxCON0.OUT */
-}
-
-void CURRENT_SENSE_CMP_ISR(void) 
-{
-    // Clear the CMP1 interrupt flag
-    PIR5bits.CM1IF = 0; 
-}
-
+/**
+ End of File
+*/

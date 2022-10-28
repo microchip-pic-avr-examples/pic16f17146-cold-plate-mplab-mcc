@@ -16,6 +16,9 @@
           <itemPath>mcc_generated_files/clc/clc3.h</itemPath>
           <itemPath>mcc_generated_files/clc/clc4.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="clkref" displayName="clkref" projectFiles="true">
+          <itemPath>mcc_generated_files/clkref/clkref.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="comparator" displayName="comparator" projectFiles="true">
           <itemPath>mcc_generated_files/comparator/cmp1.h</itemPath>
           <itemPath>mcc_generated_files/comparator/cmp2.h</itemPath>
@@ -109,6 +112,11 @@
             <itemPath>mcc_generated_files/clc/src/clc1.c</itemPath>
             <itemPath>mcc_generated_files/clc/src/clc3.c</itemPath>
             <itemPath>mcc_generated_files/clc/src/clc4.c</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+        <logicalFolder name="clkref" displayName="clkref" projectFiles="true">
+          <logicalFolder name="src" displayName="src" projectFiles="true">
+            <itemPath>mcc_generated_files/clkref/src/clkref.c</itemPath>
           </logicalFolder>
         </logicalFolder>
         <logicalFolder name="comparator" displayName="comparator" projectFiles="true">

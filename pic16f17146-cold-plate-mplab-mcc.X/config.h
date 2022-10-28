@@ -7,8 +7,6 @@ extern "C" {
 
 #include <stdbool.h>
     
-
-    
 //If defined, telemetry will be sent via UART
 #define DEBUG_TELEMETRY 
     
@@ -27,6 +25,12 @@ extern "C" {
 //Maximum allowed temperature to set
 #define TEMP_LIMIT_MAX 25
     
+//Minimum Heatsink Temperature (to be considered connected)
+#define TEMP_NTC_HOT_OPEN 15
+    
+//Minimum Heatsink Temperature (to be considered connected)
+#define TEMP_NTC_COLD_OPEN 40
+    
 //Temperature to throw an error at
 #define TEMP_LIMIT_SAFETY_MARGIN 5
     
@@ -35,11 +39,7 @@ extern "C" {
     
 //Maximum Current Limit
 #define CURRENT_LIMIT_MAX 10
-    
-//Threshold to detect power
-//~100mA per bit
-#define POWER_DETECT_MINIMUM 10
-    
+        
 //Max Temperature before 100% Fan Speed
 #define HEATSINK_TEMP_FAN_MAX 60
     
@@ -60,8 +60,11 @@ extern "C" {
 #define DAC_FORMULA_CONSTANT ((DAC_CURRENT_RES * SENSE_RESISTANCE) / 10.0)
     
 //Current Limit
-#define POWER_LIMIT 85
+#define POWER_LIMIT 80
             
+//Tolerance to trip the overcurrent protection
+#define OVERCURRENT_TOLERANCE 1.2
+    
 #ifdef	__cplusplus
 }
 #endif

@@ -55,7 +55,7 @@ void FAN_PWM_Initialize(void);
  * @param None.
  * @return None.
  */
-void FAN_PWM_Enable(void);
+void FAN_PWM_Enable();
 
 /**
  * @ingroup pwm2_16bit
@@ -64,7 +64,7 @@ void FAN_PWM_Enable(void);
  * @param None.
  * @return None.
  */
-void FAN_PWM_Disable(void);
+void FAN_PWM_Disable();
 
 /**
  * @ingroup pwm2_16bit

@@ -118,14 +118,34 @@ void runningMenus_errorUpdate(int16_t moves){
             OLED_writeSpaces(3);
             OLED_writeString("MCU Overheated");
             break;
-        case PELTIER_POWER_ERROR:
-            OLED_writeString("Peltier Power Error");
+        case PELTIER_OVERCURRENT_ERROR:
+            OLED_writeString("Overcurrent Error");
             break;
         case PELTIER_PLATE_TEMP_LIMIT:
             OLED_writeSpaces(2);
             OLED_writeString("Peltier Too Cold");
             OLED_command(line_address[1]);
             OLED_writeString(" Safety Shutdown:");
+            break;
+        case PELTIER_SENSE_HOT_OPEN:
+            OLED_command(line_address[0]);
+            OLED_writeSpaces(1);
+            OLED_writeString("Invalid Hot Sense");
+            OLED_command(line_address[1]);
+            OLED_writeSpaces(4);
+            OLED_writeString("Temperature");
+            OLED_command(line_address[2]);
+            OLED_writeString("Check Connections");
+            break;
+        case PELTIER_SENSE_COLD_OPEN:
+            OLED_command(line_address[0]);
+            OLED_writeSpaces(1);
+            OLED_writeString("Invalid Cold Sense");
+            OLED_command(line_address[1]);
+            OLED_writeSpaces(4);
+            OLED_writeString("Temperature");
+            OLED_command(line_address[2]);
+            OLED_writeString("Check Connections");
             break;
         case PELTIER_ERROR_NONE:
             break;
