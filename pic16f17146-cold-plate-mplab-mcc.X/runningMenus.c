@@ -106,7 +106,8 @@ void runningMenus_errorSetup(void){
 
 void runningMenus_errorUpdate(int16_t moves){
     OLED_command(line_address[2]);
-    switch(peltierControl_getError()){
+    PeltierError currentError = peltierControl_getError();
+    switch(currentError){
         case PELTIER_FAN1_ERROR:
             OLED_writeSpaces(1);
             OLED_writeString("Fan 1 Not Running");
@@ -127,25 +128,24 @@ void runningMenus_errorUpdate(int16_t moves){
             OLED_command(line_address[1]);
             OLED_writeString(" Safety Shutdown:");
             break;
-        case PELTIER_SENSE_HOT_OPEN:
-            OLED_command(line_address[0]);
-            OLED_writeSpaces(1);
-            OLED_writeString("Invalid Hot Sense");
-            OLED_command(line_address[1]);
-            OLED_writeSpaces(4);
-            OLED_writeString("Temperature");
-            OLED_command(line_address[2]);
-            OLED_writeString("Check Connections");
-            break;
         case PELTIER_SENSE_COLD_OPEN:
-            OLED_command(line_address[0]);
-            OLED_writeSpaces(1);
-            OLED_writeString("Invalid Cold Sense");
+        case PELTIER_SENSE_HOT_OPEN:
+            OLED_writeString("Check Connections");
             OLED_command(line_address[1]);
             OLED_writeSpaces(4);
             OLED_writeString("Temperature");
-            OLED_command(line_address[2]);
-            OLED_writeString("Check Connections");
+            
+            OLED_command(line_address[0]);
+            OLED_writeSpaces(1);
+            if (currentError == PELTIER_SENSE_COLD_OPEN)
+            {
+                OLED_writeString("Invalid Cold Sense");            
+            }
+            else
+            {
+                OLED_writeString("Invalid Hot Sense");
+            }
+
             break;
         case PELTIER_ERROR_NONE:
             break;

@@ -59,11 +59,8 @@ extern "C" {
 //Pre-Computed DAC Formula
 #define DAC_FORMULA_CONSTANT ((DAC_CURRENT_RES * SENSE_RESISTANCE) / 10.0)
     
-//Current Limit
-#define POWER_LIMIT 80
-            
-//Tolerance to trip the overcurrent protection
-#define OVERCURRENT_TOLERANCE 1.2
+//Current Limit (100s of mA)
+#define CURRENT_LIMIT 80
     
 #ifdef	__cplusplus
 }

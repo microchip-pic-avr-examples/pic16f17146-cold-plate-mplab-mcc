@@ -170,7 +170,7 @@ int main(void)
     currentSense_selfCalibrate();
     
     //Update current limit after self-cal
-    currentSense_setCurrentLimit(POWER_LIMIT);
+    currentSense_setCurrentLimit(CURRENT_LIMIT);
     
     //Start Timer 0 (10ms)
     Timer0_Start();

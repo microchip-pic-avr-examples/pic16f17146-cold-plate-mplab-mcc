@@ -32,7 +32,7 @@ void currentSense_init(void)
     OPA1_SetNegativeSource(OPA1_Vss);
     
     //Set power limit
-    currentSense_setCurrentLimit(POWER_LIMIT);
+    currentSense_setCurrentLimit(CURRENT_LIMIT);
 }
 
 //Runs current sense - self calibration
@@ -114,7 +114,7 @@ void currentSense_setCurrentLimit(uint8_t limit)
     DAC1_SetOutput(dacCode);
     
     //Update Overcurrent Limits
-    dacCode *= OVERCURRENT_TOLERANCE;
+    dacCode += (dacCode >> 2);
     DAC2_SetOutput(dacCode);
 }
 
