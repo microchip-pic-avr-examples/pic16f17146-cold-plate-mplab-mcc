@@ -48,19 +48,12 @@ extern "C" {
     
 //Min Fan Speed (1 degree per C above)
 #define HEATSINK_TEMP_SLOPE 40
-    
-//Sense Resistance
-#define SENSE_RESISTANCE 0.01
-    
-//Resolution of the DAC (in terms of bits per volt)
-//125 = 256 / 2.048V
-#define DAC_CURRENT_RES 125
 
-//Pre-Computed DAC Formula
-#define DAC_FORMULA_CONSTANT ((DAC_CURRENT_RES * SENSE_RESISTANCE) / 10.0)
+//Pre-Computed DAC Constant (Current per bit)
+#define DAC_FORMULA_CONSTANT 0.1
     
 //Current Limit (100s of mA)
-#define CURRENT_LIMIT 80
+#define CURRENT_LIMIT 60
     
 #ifdef	__cplusplus
 }

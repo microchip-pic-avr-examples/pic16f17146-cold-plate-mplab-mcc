@@ -39,6 +39,9 @@ void currentSense_init(void)
 //Blocking Code
 void currentSense_selfCalibrate(void)
 {
+    //Disable CMP2 to prevent overcurrent trigger
+    
+    CM2CON0bits.EN = 0;
     currentSense_gainCalibration();
     CM2CON0bits.EN = 1;
 }
@@ -110,10 +113,10 @@ void currentSense_gainCalibration(void)
 //Units are 100s of mA (e.g.: 100mA = 1, 1A = 10, etc...)
 void currentSense_setCurrentLimit(uint8_t limit)
 {
-    uint8_t dacCode = floorf(DAC_FORMULA_CONSTANT * OPAMPGain * limit);
+    uint8_t dacCode = limit;
     DAC1_SetOutput(dacCode);
     
-    //Update Overcurrent Limits
+    //Update Overcurrent Limits (125%)
     dacCode += (dacCode >> 2);
     DAC2_SetOutput(dacCode);
 }
