@@ -47,7 +47,7 @@
  * @param None.
  * @return None.
  */
-void FET_PWM_Initialize(void);
+void LED_PWM_Initialize(void);
 
 /**
  * @ingroup pwm1_16bit
@@ -55,50 +55,50 @@ void FET_PWM_Initialize(void);
  * @param None.
  * @return None.
  */
-void FET_PWM_Enable();
+void LED_PWM_Enable();
 
 /**
  * @ingroup pwm1_16bit
  * @brief Disables the PWM1_16BIT module.
-          In case one wants to re-initialize the PWM1_16BIT, this function must be called before FET_PWM_Initialize().
+          In case one wants to re-initialize the PWM1_16BIT, this function must be called before LED_PWM_Initialize().
  * @param None.
  * @return None.
  */
-void FET_PWM_Disable();
+void LED_PWM_Disable();
 
 /**
  * @ingroup pwm1_16bit
- * @brief Configures the total PWM1_16BIT period. FET_PWM_LoadBufferRegisters() must be called after this routine.
+ * @brief Configures the total PWM1_16BIT period. LED_PWM_LoadBufferRegisters() must be called after this routine.
  * @param [in] uint16_t periodCount - Desired 16-bit PWM1_16BIT period.
  * @return None.
  */
-void FET_PWM_WritePeriodRegister(uint16_t periodCount);
+void LED_PWM_WritePeriodRegister(uint16_t periodCount);
 
 /**
  * @ingroup pwm1_16bit
- * @brief Sets the active period or duty cycle of Slice 1, Parameter 1 output. FET_PWM_LoadBufferRegisters() must be called after this routine.
+ * @brief Sets the active period or duty cycle of Slice 1, Parameter 1 output. LED_PWM_LoadBufferRegisters() must be called after this routine.
  * @param [in] uint16_t value - PWMPWM1_16BITS1P1 register value.
  * @return None.
  */
-void FET_PWM_SetSlice1Output1DutyCycleRegister(uint16_t value);
+void LED_PWM_SetSlice1Output1DutyCycleRegister(uint16_t value);
 
 /**
  * @ingroup pwm1_16bit
- * @brief Sets the active period or duty cycle of Slice 1, Parameter 1 output. FET_PWM_LoadBufferRegisters() must be called after this routine.
+ * @brief Sets the active period or duty cycle of Slice 1, Parameter 1 output. LED_PWM_LoadBufferRegisters() must be called after this routine.
  * @param [in] uint16_t value - PWMPWM1_16BITS1P2 register value.
  * @return None.
  */
-void FET_PWM_SetSlice1Output2DutyCycleRegister(uint16_t value);
+void LED_PWM_SetSlice1Output2DutyCycleRegister(uint16_t value);
 
 /**
  * @ingroup pwm1_16bit
  * @brief Reloads the period or duty cycle registers on the next period event. 
-          This routine must be called after calling FET_PWM_WritePeriodRegister)(), FET_PWM_SetSlice1Output1DutyCycleRegister, 
-          and FET_PWM_SetSlice1Output2DutyCycleRegister().
+          This routine must be called after calling LED_PWM_WritePeriodRegister)(), LED_PWM_SetSlice1Output1DutyCycleRegister, 
+          and LED_PWM_SetSlice1Output2DutyCycleRegister().
  * @param None.
  * @return None.
  */
-void FET_PWM_LoadBufferRegisters(void);
+void LED_PWM_LoadBufferRegisters(void);
 
 /**
  * @ingroup pwm1_16bit
@@ -106,7 +106,7 @@ void FET_PWM_LoadBufferRegisters(void);
  * @param None.
  * @return None.
  */
-void FET_PWM_PWMI_ISR(void);
+void LED_PWM_PWMI_ISR(void);
 
 /**
  * @ingroup pwm1_16bit
@@ -114,7 +114,7 @@ void FET_PWM_PWMI_ISR(void);
  * @param None.
  * @return None.
  */
-void FET_PWM_PWMPI_ISR(void);
+void LED_PWM_PWMPI_ISR(void);
 
 /**
  * @ingroup pwm1_16bit
@@ -122,7 +122,7 @@ void FET_PWM_PWMPI_ISR(void);
  * @param void (* InterruptHandler)(void) - Pointer to Slice 1, Parameter 1 interrupt event handler.
  * @return None.
  */
-void FET_PWM_Slice1Output1_SetInterruptHandler(void (* InterruptHandler)(void));
+void LED_PWM_Slice1Output1_SetInterruptHandler(void (* InterruptHandler)(void));
 
 /**
  * @ingroup pwm1_16bit
@@ -130,7 +130,7 @@ void FET_PWM_Slice1Output1_SetInterruptHandler(void (* InterruptHandler)(void));
  * @param void (* InterruptHandler)(void) - Pointer to Slice 1, Parameter 2 interrupt event handler.
  * @return None.
  */
-void FET_PWM_Slice1Output2_SetInterruptHandler(void (* InterruptHandler)(void));
+void LED_PWM_Slice1Output2_SetInterruptHandler(void (* InterruptHandler)(void));
 
 /**
  * @ingroup pwm1_16bit
@@ -138,6 +138,6 @@ void FET_PWM_Slice1Output2_SetInterruptHandler(void (* InterruptHandler)(void));
  * @param void (* InterruptHandler)(void) - Pointer to Period interrupt event handler.
  * @return None.
  */
-void FET_PWM_Period_SetInterruptHandler(void (* InterruptHandler)(void));
+void LED_PWM_Period_SetInterruptHandler(void (* InterruptHandler)(void));
 
 #endif //PWM1_16BIT_H

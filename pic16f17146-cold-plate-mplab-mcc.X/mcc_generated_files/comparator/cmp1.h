@@ -51,16 +51,16 @@
  * @param void
  * @return void
  */
-void CURRENT_SENSE_CMP_Initialize(void);
+void POWER_FAIL_CMP_Initialize(void);
 
 /**
  * @ingroup cmp1
  * @brief This routine gets the CMP1 output status.
- * @pre CURRENT_SENSE_CMP_Initialize() should have been called prior to calling this function.
+ * @pre POWER_FAIL_CMP_Initialize() should have been called prior to calling this function.
  * @param void
  * @return bool - true if the CMP1 output is high, false if the output is low
  */
-bool CURRENT_SENSE_CMP_GetOutputStatus(void);
+bool POWER_FAIL_CMP_GetOutputStatus(void);
 
 /**
  * @ingroup cmp1
@@ -68,7 +68,7 @@ bool CURRENT_SENSE_CMP_GetOutputStatus(void);
  * @param void
  * @return void
  */
-void CURRENT_SENSE_CMP_ISR(void);
+void POWER_FAIL_CMP_ISR(void);
 
 
 #endif // CMP1_H

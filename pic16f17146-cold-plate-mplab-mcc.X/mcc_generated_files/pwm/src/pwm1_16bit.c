@@ -40,26 +40,26 @@
 
 //Pointers to PWM1_16BIT interrupt handlers
 //User can use them in application code to initialize with custom ISRs
-static void (*FET_PWM_Slice1Output1_InterruptHandler)(void);   //SaP1IF and hence PWMxIF is set
-static void (*FET_PWM_Slice1Output2_InterruptHandler)(void);   //SaP2IF and hence PWMxIF is set
-static void (*FET_PWM_Period_InterruptHandler)(void);          //PWMxPIF is set
-static void FET_PWM_Slice1Output1_DefaultInterruptHandler(void);
-static void FET_PWM_Slice1Output2_DefaultInterruptHandler(void);
-static void FET_PWM_Period_DefaultInterruptHandler(void);
+static void (*LED_PWM_Slice1Output1_InterruptHandler)(void);   //SaP1IF and hence PWMxIF is set
+static void (*LED_PWM_Slice1Output2_InterruptHandler)(void);   //SaP2IF and hence PWMxIF is set
+static void (*LED_PWM_Period_InterruptHandler)(void);          //PWMxPIF is set
+static void LED_PWM_Slice1Output1_DefaultInterruptHandler(void);
+static void LED_PWM_Slice1Output2_DefaultInterruptHandler(void);
+static void LED_PWM_Period_DefaultInterruptHandler(void);
 
-void FET_PWM_Initialize(void)
+void LED_PWM_Initialize(void)
 {
     //PWMERS External Reset Disabled; 
     PWM1ERS = 0x0;
 
-    //PWMCLK HFINTOSC; 
-    PWM1CLK = 0x3;
+    //PWMCLK LFINTOSC; 
+    PWM1CLK = 0x4;
 
     //PWMLDS Autoload disabled; 
     PWM1LDS = 0x0;
 
-    //PWMPRL 159; 
-    PWM1PRL = 0x9F;
+    //PWMPRL 154; 
+    PWM1PRL = 0x9A;
 
     //PWMPRH 0; 
     PWM1PRH = 0x0;
@@ -79,14 +79,14 @@ void FET_PWM_Initialize(void)
     //PWMPOL1 disabled; PWMPOL2 disabled; PWMPPEN disabled; PWMMODE Right aligned mode; 
     PWM1S1CFG = 0x1;
 
-    //PWMS1P1L 120; 
-    PWM1S1P1L = 0x78;
+    //PWMS1P1L 77; 
+    PWM1S1P1L = 0x4D;
 
     //PWMS1P1H 0; 
     PWM1S1P1H = 0x0;
 
-    //PWMS1P2L 8; 
-    PWM1S1P2L = 0x8;
+    //PWMS1P2L 77; 
+    PWM1S1P2L = 0x4D;
 
     //PWMS1P2H 0; 
     PWM1S1P2H = 0x0;
@@ -107,104 +107,104 @@ void FET_PWM_Initialize(void)
     PIE3bits.PWM1IE = 0;
     
     //PWM1_16BIT period interrupt enable bit
-    PIE3bits.PWM1PIE = 1;
+    PIE3bits.PWM1PIE = 0;
     
     //Set default interrupt handlers
-    FET_PWM_Slice1Output1_SetInterruptHandler(FET_PWM_Slice1Output1_DefaultInterruptHandler);
-    FET_PWM_Slice1Output2_SetInterruptHandler(FET_PWM_Slice1Output2_DefaultInterruptHandler);
-    FET_PWM_Period_SetInterruptHandler(FET_PWM_Period_DefaultInterruptHandler);
+    LED_PWM_Slice1Output1_SetInterruptHandler(LED_PWM_Slice1Output1_DefaultInterruptHandler);
+    LED_PWM_Slice1Output2_SetInterruptHandler(LED_PWM_Slice1Output2_DefaultInterruptHandler);
+    LED_PWM_Period_SetInterruptHandler(LED_PWM_Period_DefaultInterruptHandler);
 
-    //PWMEN enabled; PWMLD disabled; PWMERSPOL disabled; PWMERSNOW disabled; 
-    PWM1CON = 0x80;
+    //PWMEN disabled; PWMLD disabled; PWMERSPOL disabled; PWMERSNOW disabled; 
+    PWM1CON = 0x0;
 }
 
-void FET_PWM_Enable()
+void LED_PWM_Enable()
 {
     PWM1CON |= _PWM1CON_EN_MASK;
 }
 
-void FET_PWM_Disable()
+void LED_PWM_Disable()
 {
     PWM1CON &= (~_PWM1CON_EN_MASK);
 }
 
-void FET_PWM_WritePeriodRegister(uint16_t periodCount)
+void LED_PWM_WritePeriodRegister(uint16_t periodCount)
 {
     PWM1PRL = (uint8_t)periodCount;
     PWM1PRH= (uint8_t)(periodCount >> 8);
 }
 
-void FET_PWM_SetSlice1Output1DutyCycleRegister(uint16_t registerValue)
+void LED_PWM_SetSlice1Output1DutyCycleRegister(uint16_t registerValue)
 {    
     PWM1S1P1L = (uint8_t)(registerValue);
     PWM1S1P1H = (uint8_t)(registerValue >> 8);
 }
 
-void FET_PWM_SetSlice1Output2DutyCycleRegister(uint16_t registerValue)
+void LED_PWM_SetSlice1Output2DutyCycleRegister(uint16_t registerValue)
 {        
     PWM1S1P2L = (uint8_t)(registerValue);
     PWM1S1P2H = (uint8_t)(registerValue >> 8);
 }
 
-void FET_PWM_LoadBufferRegisters(void)
+void LED_PWM_LoadBufferRegisters(void)
 {
     //Load the period and duty cycle registers on the next period event
     PWM1CONbits.LD = 1;
 }
 
-void FET_PWM_PWMI_ISR(void)
+void LED_PWM_PWMI_ISR(void)
 {
     PIR3bits.PWM1IF = 0;
     if((PWM1GIEbits.S1P1IE == 1) && (PWM1GIRbits.S1P1IF == 1))
     {
         PWM1GIRbits.S1P1IF = 0;
-        if(FET_PWM_Slice1Output1_InterruptHandler != NULL)
-            FET_PWM_Slice1Output1_InterruptHandler();
+        if(LED_PWM_Slice1Output1_InterruptHandler != NULL)
+            LED_PWM_Slice1Output1_InterruptHandler();
     }
     else if((PWM1GIEbits.S1P2IE == 1) && (PWM1GIRbits.S1P2IF == 1))
     {
         PWM1GIRbits.S1P2IF = 0;
-        if(FET_PWM_Slice1Output2_InterruptHandler != NULL)
-            FET_PWM_Slice1Output2_InterruptHandler();
+        if(LED_PWM_Slice1Output2_InterruptHandler != NULL)
+            LED_PWM_Slice1Output2_InterruptHandler();
     }
 }
 
-void FET_PWM_PWMPI_ISR(void)
+void LED_PWM_PWMPI_ISR(void)
 {
     PIR3bits.PWM1PIF = 0;
-    if(FET_PWM_Period_InterruptHandler != NULL)
-        FET_PWM_Period_InterruptHandler();
+    if(LED_PWM_Period_InterruptHandler != NULL)
+        LED_PWM_Period_InterruptHandler();
 }
 
-void FET_PWM_Slice1Output1_SetInterruptHandler(void (* InterruptHandler)(void))
+void LED_PWM_Slice1Output1_SetInterruptHandler(void (* InterruptHandler)(void))
 {
-    FET_PWM_Slice1Output1_InterruptHandler = InterruptHandler;
+    LED_PWM_Slice1Output1_InterruptHandler = InterruptHandler;
 }
 
-void FET_PWM_Slice1Output2_SetInterruptHandler(void (* InterruptHandler)(void))
+void LED_PWM_Slice1Output2_SetInterruptHandler(void (* InterruptHandler)(void))
 {
-    FET_PWM_Slice1Output2_InterruptHandler = InterruptHandler;
+    LED_PWM_Slice1Output2_InterruptHandler = InterruptHandler;
 }
 
-void FET_PWM_Period_SetInterruptHandler(void (* InterruptHandler)(void))
+void LED_PWM_Period_SetInterruptHandler(void (* InterruptHandler)(void))
 {
-    FET_PWM_Period_InterruptHandler = InterruptHandler;
+    LED_PWM_Period_InterruptHandler = InterruptHandler;
 }
 
-static void FET_PWM_Slice1Output1_DefaultInterruptHandler(void)
-{
-    //Add your interrupt code here or
-    //Use FET_PWM_Slice1Output1_SetInterruptHandler() function to use Custom ISR
-}
-
-static void FET_PWM_Slice1Output2_DefaultInterruptHandler(void)
+static void LED_PWM_Slice1Output1_DefaultInterruptHandler(void)
 {
     //Add your interrupt code here or
-    //Use FET_PWM_Slice1Output2_SetInterruptHandler() function to use Custom ISR
+    //Use LED_PWM_Slice1Output1_SetInterruptHandler() function to use Custom ISR
 }
 
-static void FET_PWM_Period_DefaultInterruptHandler(void)
+static void LED_PWM_Slice1Output2_DefaultInterruptHandler(void)
 {
     //Add your interrupt code here or
-    //Use FET_PWM_Period_SetInterruptHandler() function to use Custom ISR
+    //Use LED_PWM_Slice1Output2_SetInterruptHandler() function to use Custom ISR
+}
+
+static void LED_PWM_Period_DefaultInterruptHandler(void)
+{
+    //Add your interrupt code here or
+    //Use LED_PWM_Period_SetInterruptHandler() function to use Custom ISR
 }

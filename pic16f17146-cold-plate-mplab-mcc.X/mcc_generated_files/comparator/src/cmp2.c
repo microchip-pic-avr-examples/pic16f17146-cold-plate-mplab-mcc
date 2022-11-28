@@ -43,7 +43,7 @@
   Section: CMP2 APIs
 */
 
-void CMP2_Initialize(void) 
+void OVERCURRENT_CMP_Initialize(void) 
 {
     /* Disable CMP2 interrupt before configuring the CMP2
       control register. Although a comparator is disabled, an interrupt can be
@@ -71,13 +71,13 @@ void CMP2_Initialize(void)
     PIE5bits.CM2IE = 1; 
 }
 
-bool CMP2_GetOutputStatus(void) 
+bool OVERCURRENT_CMP_GetOutputStatus(void) 
 {
   return CM2CON0bits.C2OUT; /* Note : As per datasheet, CxOUT bit in CMOUT register (if relevant) 
                                                    is mirror copy of CMxCON0.OUT */
 }
 
-void CMP2_ISR(void) 
+void OVERCURRENT_CMP_ISR(void) 
 {
     currentSense_overcurrentCallback();
     

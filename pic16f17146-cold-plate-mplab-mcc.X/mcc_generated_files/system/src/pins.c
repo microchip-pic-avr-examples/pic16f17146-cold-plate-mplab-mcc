@@ -56,7 +56,7 @@ void PIN_MANAGER_Initialize(void)
     */
     ANSELA = 0x4;
     ANSELB = 0xA0;
-    ANSELC = 0xB5;
+    ANSELC = 0x85;
 
     /**
     WPUx registers
@@ -97,7 +97,8 @@ void PIN_MANAGER_Initialize(void)
     CLCIN1PPS = 0x16; //RC6->CLC1:CLCIN1;
     T4INPPS = 0x5; //RA5->TMR4:T4IN;
     T2INPPS = 0x4; //RA4->TMR2:T2IN;
-    RC5PPS = 0x05;  //RC5->CWG1:CWG1A;
+    RA1PPS = 0x0B;  //RA1->PWM1_16BIT:PWM11;
+    RA0PPS = 0x0C;  //RA0->PWM1_16BIT:PWM12;
     RC4PPS = 0x0D;  //RC4->PWM2_16BIT:PWM21;
     RB6PPS = 0x13;  //RB6->EUSART1:TX1;
 

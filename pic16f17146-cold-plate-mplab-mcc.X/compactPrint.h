@@ -32,7 +32,7 @@ extern "C" {
     
     //Converts a duty cycle to a string
     //Requires up-to 5 positions "100%" + [NULL]
-    void compactPrint_convertDutyCycleToString(char* str, uint8_t duty);
+    void compactPrint_convertCurrentToString(char* str, uint8_t duty);
     
     //Sends Debug Telemetry to the UART
     void compactPrint_sendDebugTelemetry(void);

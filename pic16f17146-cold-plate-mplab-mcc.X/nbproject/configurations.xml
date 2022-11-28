@@ -13,8 +13,6 @@
         <logicalFolder name="clc" displayName="clc" projectFiles="true">
           <itemPath>mcc_generated_files/clc/clc1.h</itemPath>
           <itemPath>mcc_generated_files/clc/clc2.h</itemPath>
-          <itemPath>mcc_generated_files/clc/clc3.h</itemPath>
-          <itemPath>mcc_generated_files/clc/clc4.h</itemPath>
         </logicalFolder>
         <logicalFolder name="clkref" displayName="clkref" projectFiles="true">
           <itemPath>mcc_generated_files/clkref/clkref.h</itemPath>
@@ -26,18 +24,12 @@
         <logicalFolder name="crc" displayName="crc" projectFiles="true">
           <itemPath>mcc_generated_files/crc/crc.h</itemPath>
         </logicalFolder>
-        <logicalFolder name="cwg" displayName="cwg" projectFiles="true">
-          <itemPath>mcc_generated_files/cwg/cwg1.h</itemPath>
-        </logicalFolder>
         <logicalFolder name="dac" displayName="dac" projectFiles="true">
           <itemPath>mcc_generated_files/dac/dac2.h</itemPath>
           <itemPath>mcc_generated_files/dac/dac1.h</itemPath>
         </logicalFolder>
         <logicalFolder name="fvr" displayName="fvr" projectFiles="true">
           <itemPath>mcc_generated_files/fvr/fvr.h</itemPath>
-        </logicalFolder>
-        <logicalFolder name="nco" displayName="nco" projectFiles="true">
-          <itemPath>mcc_generated_files/nco/nco1.h</itemPath>
         </logicalFolder>
         <logicalFolder name="opa" displayName="opa" projectFiles="true">
           <itemPath>mcc_generated_files/opa/opa1.h</itemPath>
@@ -72,8 +64,8 @@
         <itemPath>fanControl.h</itemPath>
         <itemPath>NTC_ROM.h</itemPath>
         <itemPath>peltierControl.h</itemPath>
-        <itemPath>tempMonitor.h</itemPath>
         <itemPath>currentSense.h</itemPath>
+        <itemPath>measurements.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="User Interface" projectFiles="true">
         <itemPath>encoderControl.h</itemPath>
@@ -110,8 +102,6 @@
           <logicalFolder name="src" displayName="src" projectFiles="true">
             <itemPath>mcc_generated_files/clc/src/clc2.c</itemPath>
             <itemPath>mcc_generated_files/clc/src/clc1.c</itemPath>
-            <itemPath>mcc_generated_files/clc/src/clc3.c</itemPath>
-            <itemPath>mcc_generated_files/clc/src/clc4.c</itemPath>
           </logicalFolder>
         </logicalFolder>
         <logicalFolder name="clkref" displayName="clkref" projectFiles="true">
@@ -130,11 +120,6 @@
             <itemPath>mcc_generated_files/crc/src/crc.c</itemPath>
           </logicalFolder>
         </logicalFolder>
-        <logicalFolder name="cwg" displayName="cwg" projectFiles="true">
-          <logicalFolder name="src" displayName="src" projectFiles="true">
-            <itemPath>mcc_generated_files/cwg/src/cwg1.c</itemPath>
-          </logicalFolder>
-        </logicalFolder>
         <logicalFolder name="dac" displayName="dac" projectFiles="true">
           <logicalFolder name="src" displayName="src" projectFiles="true">
             <itemPath>mcc_generated_files/dac/src/dac2.c</itemPath>
@@ -144,11 +129,6 @@
         <logicalFolder name="fvr" displayName="fvr" projectFiles="true">
           <logicalFolder name="src" displayName="src" projectFiles="true">
             <itemPath>mcc_generated_files/fvr/src/fvr.c</itemPath>
-          </logicalFolder>
-        </logicalFolder>
-        <logicalFolder name="nco" displayName="nco" projectFiles="true">
-          <logicalFolder name="src" displayName="src" projectFiles="true">
-            <itemPath>mcc_generated_files/nco/src/nco1.c</itemPath>
           </logicalFolder>
         </logicalFolder>
         <logicalFolder name="opa" displayName="opa" projectFiles="true">
@@ -190,9 +170,9 @@
       <logicalFolder name="f1" displayName="Peltier Control" projectFiles="true">
         <itemPath>fanControl.c</itemPath>
         <itemPath>NTC_ROM.c</itemPath>
-        <itemPath>tempMonitor.c</itemPath>
         <itemPath>peltierControl.c</itemPath>
         <itemPath>currentSense.c</itemPath>
+        <itemPath>measurements.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="User Interface" projectFiles="true">
         <itemPath>encoderControl.c</itemPath>

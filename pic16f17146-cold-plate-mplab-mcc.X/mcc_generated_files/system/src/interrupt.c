@@ -66,17 +66,13 @@ void __interrupt() INTERRUPT_InterruptManager (void)
     // interrupt handler
     if(INTCONbits.PEIE == 1)
     {
-        if(PIE3bits.PWM1PIE == 1 && PIR3bits.PWM1PIF == 1)
-        {
-            FET_PWM_PWMPI_ISR();
-        } 
-        else if(PIE0bits.TMR0IE == 1 && PIR0bits.TMR0IF == 1)
+        if(PIE0bits.TMR0IE == 1 && PIR0bits.TMR0IF == 1)
         {
             Timer0_OverflowISR();
         } 
         else if(PIE5bits.CM2IE == 1 && PIR5bits.CM2IF == 1)
         {
-            CMP2_ISR();
+            OVERCURRENT_CMP_ISR();
         } 
         else if(PIE6bits.ADTIE == 1 && PIR6bits.ADTIF == 1)
         {

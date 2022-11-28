@@ -3,7 +3,7 @@
 #include <xc.h>
 #include "mcc_generated_files/system/system.h"
 #include "fanControl.h"
-#include "tempMonitor.h"
+#include "measurements.h"
 #include "settings.h"
 #include "peltierControl.h"
 
@@ -156,12 +156,32 @@ void compactPrint_convertTempToString(char* str, int8_t temp, char unit)
     *(end + 1) = '\0';
 }
 
-//Converts a duty cycle to a string
-void compactPrint_convertDutyCycleToString(char* str, uint8_t duty)
+//Converts a current (in 100s of mA) to a string
+void compactPrint_convertCurrentToString(char* str, uint8_t current)
 {
-    char* end = compactPrint_convertUint8ToString(str, duty);
-    *end = '%';
-    *(end + 1) = '\0';
+    //10's digit
+    char value = '0';
+    while (current >= 100)
+    {
+        current -= 100;
+        value++;
+    }
+    str[0] = value;
+    
+    //1's digit
+    value = '0';
+    while (current >= 10)
+    {
+        current -= 10;
+        value++;
+    }
+    
+    str[1] = value;
+    str[2] = '.';
+    
+    //100mA digit
+    str[3] = '0' + current;
+    str[4] = '\0';
 }
 
 //Sends Debug Telemetry to the UART
@@ -182,22 +202,22 @@ void compactPrint_sendDebugTelemetry(void)
 
     //Print Cold Plate Temperature
     compactPrint_sendStringLiteral("Cold Plate Temp: ");
-    compactPrint_convertTempToString(buffer, tempMonitor_getLastColdTemp(), settings_getSetting(SETTINGS_TEMP_UNIT));
+    compactPrint_convertTempToString(buffer, Measurements_getLastColdTemp(), settings_getSetting(SETTINGS_TEMP_UNIT));
     compactPrint_sendStringWithNewline(buffer);
     
     //Print Heatsink Temperature
     compactPrint_sendStringLiteral("Heatsink Temp: ");
-    compactPrint_convertTempToString(buffer, tempMonitor_getLastHotTemp(), settings_getSetting(SETTINGS_TEMP_UNIT));
+    compactPrint_convertTempToString(buffer, Measurements_getLastHotTemp(), settings_getSetting(SETTINGS_TEMP_UNIT));
     compactPrint_sendStringWithNewline(buffer);
 
     //Print MCU Temperature
     compactPrint_sendStringLiteral("Int Temp: ");
-    compactPrint_convertTempToString(buffer, tempMonitor_getLastIntTemp(), settings_getSetting(SETTINGS_TEMP_UNIT));
+    compactPrint_convertTempToString(buffer, Measurements_getLastIntTemp(), settings_getSetting(SETTINGS_TEMP_UNIT));
     compactPrint_sendStringWithNewline(buffer);
     
     //Print Duty Cycle
-    compactPrint_sendStringLiteral("Average Duty Cycle: ");
-    compactPrint_convertDutyCycleToString(buffer, peltierControl_getAverageDutyCycle());
+    compactPrint_sendStringLiteral("Peltier Current: ");
+    compactPrint_convertCurrentToString(buffer, Measurements_getLastCurrent());
     compactPrint_sendStringWithNewline(buffer);
     
     compactPrint_sendStringLiteral("Peltier State: ");

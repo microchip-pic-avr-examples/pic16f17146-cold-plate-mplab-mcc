@@ -33,7 +33,7 @@ void settingMenus_standbySetup(void){
 void settingMenus_standbyUpdate(int16_t moves){
     char temp_buff[4];
     OLED_command(line_address[0] + 15);
-    sprintf(temp_buff, "%3d", dispTemp(tempMonitor_getLastColdTemp()));
+    sprintf(temp_buff, "%3d", dispTemp(Measurements_getLastColdTemp()));
     OLED_writeString(temp_buff);
     OLED_writeTempUnit();
     

@@ -51,16 +51,16 @@
  * @param void
  * @return void
  */
-void CMP2_Initialize(void);
+void OVERCURRENT_CMP_Initialize(void);
 
 /**
  * @ingroup cmp2
  * @brief This routine gets the CMP2 output status.
- * @pre CMP2_Initialize() should have been called prior to calling this function.
+ * @pre OVERCURRENT_CMP_Initialize() should have been called prior to calling this function.
  * @param void
  * @return bool - true if the CMP2 output is high, false if the output is low
  */
-bool CMP2_GetOutputStatus(void);
+bool OVERCURRENT_CMP_GetOutputStatus(void);
 
 /**
  * @ingroup cmp2
@@ -68,7 +68,7 @@ bool CMP2_GetOutputStatus(void);
  * @param void
  * @return void
  */
-void CMP2_ISR(void);
+void OVERCURRENT_CMP_ISR(void);
 
 
 #endif // CMP2_H

@@ -10,7 +10,7 @@ extern "C" {
 #include <xc.h>
 #include "OLED.h"
 #include "fanControl.h"
-#include "tempMonitor.h"
+#include "measurements.h"
 #include "settingMenus.h"
     
 void runningMenus_runningSetup(void);

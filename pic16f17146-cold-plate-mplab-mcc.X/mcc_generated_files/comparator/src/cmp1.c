@@ -41,7 +41,7 @@
   Section: CMP1 APIs
 */
 
-void CURRENT_SENSE_CMP_Initialize(void) 
+void POWER_FAIL_CMP_Initialize(void) 
 {
     // CHYS enabled; CON enabled; CPOL not inverted; CSYNC asynchronous; 
     CM1CON0 = 0x82;
@@ -56,13 +56,13 @@ void CURRENT_SENSE_CMP_Initialize(void)
     CM1PCH = 0x4;    
 }
 
-bool CURRENT_SENSE_CMP_GetOutputStatus(void) 
+bool POWER_FAIL_CMP_GetOutputStatus(void) 
 {
   return CM1CON0bits.C1OUT; /* Note : As per datasheet, CxOUT bit in CMOUT register (if relevant) 
                                                    is mirror copy of CMxCON0.OUT */
 }
 
-void CURRENT_SENSE_CMP_ISR(void) 
+void POWER_FAIL_CMP_ISR(void) 
 {
     // Clear the CMP1 interrupt flag
     PIR5bits.CM1IF = 0; 

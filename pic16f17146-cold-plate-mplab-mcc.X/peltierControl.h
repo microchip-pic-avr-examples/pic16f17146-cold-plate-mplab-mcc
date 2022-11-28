@@ -10,8 +10,9 @@ extern "C" {
     
     typedef enum {
         PELTIER_ERROR_NONE = 0, PELTIER_FAN1_ERROR, 
-        PELTIER_OVERCURRENT_ERROR, PELTIER_INT_OVERHEAT, PELTIER_HEATSINK_OVERHEAT, 
-        PELTIER_SENSE_HOT_OPEN, PELTIER_SENSE_COLD_OPEN,
+        PELTIER_OVERCURRENT_ERROR, PELTIER_POWER_ERROR,
+        PELTIER_INT_OVERHEAT, PELTIER_HEATSINK_OVERHEAT, 
+        PELTIER_SENSE_HOT_OPEN, PELTIER_SENSE_COLD_OPEN, 
         PELTIER_PLATE_TEMP_LIMIT
     } PeltierError;
     
@@ -27,13 +28,6 @@ extern "C" {
     //If this function is not called, the device will RESET.
     //ONLY CALL THIS FUNCTION FROM MAIN
     void peltierControl_periodicCheck(void);
-    
-    //Calculates the average duty cycle
-    //CALL EVERY 10ms
-    void peltierControl_calculateDutyCycle(void);
-    
-    //Calculate the average duty cycle of the PWM
-    uint8_t peltierControl_getAverageDutyCycle(void);
     
     //Returns the current state of the Peltier
     PeltierState peltierControl_getState(void);

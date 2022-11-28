@@ -10,7 +10,7 @@ extern "C" {
 #include <xc.h>
 #include "navMenu.h"
 #include "OLED.h"
-#include "tempMonitor.h"
+#include "measurements.h"
 #include "settings.h"
 #include "config.h"
 #include "utility.h"

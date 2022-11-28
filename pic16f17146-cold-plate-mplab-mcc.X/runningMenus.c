@@ -48,7 +48,7 @@ void runningMenus_runningUpdate(int16_t moves){
         // Show icons
         // update current Plate Temperature
         OLED_command(line_address[0]+14);
-        sprintf(disp_buff, "%3d", dispTemp(tempMonitor_getLastColdTemp()));
+        sprintf(disp_buff, "%3d", dispTemp(Measurements_getLastColdTemp()));
         OLED_writeString(disp_buff);
         OLED_writeTempUnit();
 
@@ -59,12 +59,12 @@ void runningMenus_runningUpdate(int16_t moves){
 
         // MCU Temp
         OLED_command(line_address[1]+4);
-        sprintf(disp_buff, "%3d", dispTemp(tempMonitor_getLastIntTemp()));
+        sprintf(disp_buff, "%3d", dispTemp(Measurements_getLastIntTemp()));
         OLED_writeString(disp_buff);
         OLED_writeTempUnit();
 
         OLED_command(line_address[1]+14);
-        sprintf(disp_buff, "%3d", dispTemp(tempMonitor_getLastHotTemp()));
+        sprintf(disp_buff, "%3d", dispTemp(Measurements_getLastHotTemp()));
         OLED_writeString(disp_buff);
         OLED_writeTempUnit();
 
@@ -73,18 +73,18 @@ void runningMenus_runningUpdate(int16_t moves){
         
         // update current Plate Temperature
         OLED_command(line_address[0]+9);
-        sprintf(disp_buff, "%3d/%3d", dispTemp(tempMonitor_getLastColdTemp()), dispTemp(settingMenus_getTargetTemp()));
+        sprintf(disp_buff, "%3d/%3d", dispTemp(Measurements_getLastColdTemp()), dispTemp(settingMenus_getTargetTemp()));
         OLED_writeString(disp_buff);
         OLED_writeTempUnit();
 
         OLED_command(line_address[1]+12);
-        sprintf(disp_buff, "%4d", dispTemp(tempMonitor_getLastHotTemp()));
+        sprintf(disp_buff, "%4d", dispTemp(Measurements_getLastHotTemp()));
         OLED_writeString(disp_buff);
         OLED_writeTempUnit();
 
         // MCU Temp
         OLED_command(line_address[2]+12);
-        sprintf(disp_buff, "%4d", dispTemp(tempMonitor_getLastIntTemp()));
+        sprintf(disp_buff, "%4d", dispTemp(Measurements_getLastIntTemp()));
         OLED_writeString(disp_buff);
         OLED_writeTempUnit();
     }
@@ -121,6 +121,9 @@ void runningMenus_errorUpdate(int16_t moves){
             break;
         case PELTIER_OVERCURRENT_ERROR:
             OLED_writeString("Overcurrent Error");
+            break;
+        case PELTIER_POWER_ERROR:
+            OLED_writeString("No Power Error");
             break;
         case PELTIER_PLATE_TEMP_LIMIT:
             OLED_writeSpaces(2);

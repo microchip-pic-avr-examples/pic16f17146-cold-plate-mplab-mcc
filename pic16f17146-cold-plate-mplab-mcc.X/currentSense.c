@@ -14,13 +14,13 @@
 #include <math.h>
 
 //1x, 2x, 4x, 8x, 16x Gains + OFFSET
-static float OPAMPGain = 4.0;
+static float OPAMPGain = 8.0;
 static int8_t offset = 0;
 static bool isOvercurrent = false;
 
 static CurrentSenseGain systemGain = UNITY;
 
-#define SYSTEM_GAIN GAIN_4
+#define SYSTEM_GAIN GAIN_8
 
 //Init Current Sense System
 void currentSense_init(void)
@@ -186,6 +186,12 @@ void currentSense_setConfiguration(CurrentSenseGain gain)
     
     //Set to VDD
     OPA1_SetSoftwareOverride(0x00);
+}
+
+//Gets the gain configuration of the amplifier
+CurrentSenseGain currentSense_getConfiguration(void)
+{
+    return systemGain;
 }
 
 //Overcurrent event has occurred

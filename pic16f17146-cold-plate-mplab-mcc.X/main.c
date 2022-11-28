@@ -31,7 +31,7 @@
     THIS SOFTWARE.
 */
 #include "mcc_generated_files/system/system.h"
-#include "tempMonitor.h"
+#include "measurements.h"
 #include "fanControl.h"
 #include "NTC_ROM.h"
 #include "testing.h"
@@ -72,8 +72,7 @@ void Timer0_1ms_Callback(void)
     if (counter10ms == 10)
     {
         //Call these functions every 10ms
-        tempMonitor_runStateMachine();
-        peltierControl_calculateDutyCycle();
+        Measurements_runStateMachine();
         
         if(encoderControl_getBreatheStatus()){
             encoderControl_breatheLED();
@@ -138,7 +137,7 @@ int main(void)
     fanControl_init();
     
     //Init Temp Monitor
-    tempMonitor_init();
+    Measurements_init();
     
     //Init Current Sense Circuit
     currentSense_init();
@@ -154,10 +153,7 @@ int main(void)
     Timer0_OverflowCallbackRegister(&Timer0_1ms_Callback);
     
     //Setup ADC Results Callback
-    ADCC_SetADTIInterruptHandler(&tempMonitor_loadResults);
-    
-    //Setup DAC Settling Time Callback
-    FET_PWM_Period_SetInterruptHandler(&peltierControl_adjustThreshold);
+    ADCC_SetADTIInterruptHandler(&Measurements_loadResults);
     
     // Enable the Global Interrupts 
     INTERRUPT_GlobalInterruptEnable(); 
