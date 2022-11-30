@@ -127,7 +127,7 @@ void peltierControl_periodicCheck(void)
                 {
                     //Plate needs to be cooled
                     peltierState = PELTIER_STATE_COOLING;
-                    PELTIER_DISABLE();
+                    PELTIER_ENABLE();
                     
 #ifdef DEBUG_PRINT
                     compactPrint_sendStringWithNewline("-- PELTIER ON --");
@@ -145,7 +145,7 @@ void peltierControl_periodicCheck(void)
             {
                 //Need to restart the peltier
                 peltierState = PELTIER_STATE_COOLING;
-                PELTIER_DISABLE();
+                PELTIER_ENABLE();
                 
 #ifdef DEBUG_PRINT
                 compactPrint_sendStringWithNewline("-- PELTIER ON --");
@@ -160,14 +160,14 @@ void peltierControl_periodicCheck(void)
             //No power detected
             if (POWER_FAIL_CMP_GetOutputStatus())
             {
-                error = PELTIER_POWER_ERROR;
+                //error = PELTIER_POWER_ERROR;
             }
 
             if (currentTemp <= stopTemp)
             {
                 //At Temperature
                 peltierState = PELTIER_STATE_AT_TEMP;
-                PELTIER_ENABLE();
+                PELTIER_DISABLE();
                 
 #ifdef DEBUG_PRINT
                 compactPrint_sendStringWithNewline("-- PELTIER IDLE --");
