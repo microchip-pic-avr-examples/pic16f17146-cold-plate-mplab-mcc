@@ -114,8 +114,8 @@ void LED_PWM_Initialize(void)
     LED_PWM_Slice1Output2_SetInterruptHandler(LED_PWM_Slice1Output2_DefaultInterruptHandler);
     LED_PWM_Period_SetInterruptHandler(LED_PWM_Period_DefaultInterruptHandler);
 
-    //PWMEN disabled; PWMLD disabled; PWMERSPOL disabled; PWMERSNOW disabled; 
-    PWM1CON = 0x0;
+    //PWMEN enabled; PWMLD disabled; PWMERSPOL disabled; PWMERSNOW disabled; 
+    PWM1CON = 0x80;
 }
 
 void LED_PWM_Enable()
