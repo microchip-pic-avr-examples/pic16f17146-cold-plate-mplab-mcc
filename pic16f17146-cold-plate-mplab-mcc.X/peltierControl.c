@@ -160,7 +160,7 @@ void peltierControl_periodicCheck(void)
             //No power detected
             if (POWER_FAIL_CMP_GetOutputStatus())
             {
-                //error = PELTIER_POWER_ERROR;
+                error = PELTIER_POWER_ERROR;
             }
 
             if (currentTemp <= stopTemp)

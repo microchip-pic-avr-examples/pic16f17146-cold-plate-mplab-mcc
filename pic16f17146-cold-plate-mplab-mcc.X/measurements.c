@@ -201,19 +201,19 @@ void Measurements_loadResults(void)
                     break;
                 case GAIN_2:
                     //25 mA per bit
-                    peltierCurrent = ADCvalue << 2;
+                    peltierCurrent = ADCvalue >> 2;
                     break;
                 case GAIN_4:
                     //12.5 mA per bit
-                    peltierCurrent = ADCvalue << 3;
+                    peltierCurrent = ADCvalue >> 3;
                     break;
                 case GAIN_8:
                     //6.25 mA per bit
-                    peltierCurrent = ADCvalue << 4;
+                    peltierCurrent = ADCvalue >> 4;
                     break;
                 case GAIN_16:
                     //3.125 mA per bit
-                    peltierCurrent = ADCvalue << 5;
+                    peltierCurrent = ADCvalue >> 5;
                     break;
             }
             
