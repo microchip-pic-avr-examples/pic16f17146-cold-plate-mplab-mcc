@@ -42,141 +42,103 @@ int16_t encoderControl_getMoves(void){
     return encoder;
 }
 
-
-EncoderLEDState LEDState = OFF; // BLUE, ORANGE, BOTH, or OFF
-bool breatheStatus = false; // whether to breathe the LED
-
-// LED color getter
-EncoderLEDState encoderControl_getLEDState(void){
-    return LEDState;
-}
-
-// LED color setter
-void encoderControl_setLEDState(EncoderLEDState new_state){
-    LEDState = new_state;
-}
-
-bool encoderControl_getBreatheStatus(void){
-    return breatheStatus;
-}
-
-void encoderControl_setBreatheStatus(bool status){
-    breatheStatus = status;
-}
-
-
+// called every 10ms
 void encoderControl_updateLEDs(void){
     switch(UI_getState()){
         case STANDBY:
-            encoderControl_setLEDState(PURPLE);
-            breatheStatus = true;
+            encoderControl_breatheLED(PURPLE);
             break;
         case ERROR:
-            encoderControl_setLEDState(ORANGE);
-            breatheStatus = false;
+            encoderControl_setColor(ORANGE);
             break;
         case MENU:
             if(!UI_isRunning()){
-                encoderControl_setLEDState(PURPLE);
-                breatheStatus = false;
+                encoderControl_setColor(PURPLE);
             } else { // If running
-                encoderControl_setLEDState(BLUE);
-                breatheStatus = peltierControl_getState() == PELTIER_STATE_AT_TEMP ? false : true;
+                if(!(peltierControl_getState() == PELTIER_STATE_AT_TEMP)){
+                    encoderControl_breatheLED(BLUE);
+                } else {
+                    encoderControl_setColor(BLUE);
+                }
             }
             break;
         case RUNNING:
-            encoderControl_setLEDState(BLUE);
             // PWM while cooling, Solid blue at temp
-            breatheStatus = peltierControl_getState() == PELTIER_STATE_AT_TEMP ? false : true;
+            if(!(peltierControl_getState() == PELTIER_STATE_AT_TEMP)){
+                encoderControl_breatheLED(BLUE);
+            } else {
+                encoderControl_setColor(BLUE);
+            }
             break;
     }
 }
 
-
-// set encoder LED colors
-void encoderControl_updateColor(void){
-    switch(LEDState){
-        case ORANGE:
-            LED_ERROR_SetHigh();
-            LED_STATUS_SetLow();
-            break;
+void encoderControl_setColor(EncoderLEDState color){
+    switch(color){
         case BLUE:
-            LED_ERROR_SetLow();
-            LED_STATUS_SetHigh();
+            encoderControl_setLEDValue(65535, 0);
+            break;
+        case ORANGE:
+            encoderControl_setLEDValue(0, 65535);
             break;
         case PURPLE:
-            LED_ERROR_SetHigh();
-            LED_STATUS_SetHigh();
+            encoderControl_setLEDValue(65535, 65535);
             break;
-        case OFF: 
-            LED_ERROR_SetLow();
-            LED_STATUS_SetLow();
+        case OFF:
+            encoderControl_setLEDValue(0, 0);
             break;
     }
 }
 
+// set encoder LED colors
+void encoderControl_setLEDValue(uint16_t blue, uint16_t orange){
+    LED_PWM_SetSlice1Output1DutyCycleRegister(blue);
+    LED_PWM_SetSlice1Output2DutyCycleRegister(orange);
+    LED_PWM_LoadBufferRegisters();
+}
 
 // number of PWM increments (PWM functions scale to each intensity level is 10% of increments)
-#define PWM_increments 20
-static uint8_t PWM_intensity = 0; // value between 0 - PWM_increments
+#define PWM_MAX_VAL 200
+#define PWM_increments 100
 
-
-// PWM intensity between 0-PWM_increments
-void encoderControl_PWM(void){
-    static uint8_t duty_cycle = 0;
-    if(duty_cycle < PWM_intensity){
-        if(LEDState == PURPLE){
-            LED_ERROR_SetHigh();
-        }
-        LED_STATUS_SetHigh();
-    } else if(duty_cycle <= PWM_increments){
-        LED_ERROR_SetLow();
-        LED_STATUS_SetLow();
-    } else{
-        duty_cycle = 0;
-    }
-    duty_cycle++;
-}
 
 // if breathing, call every 10ms
-void encoderControl_breatheLED(void){
+void encoderControl_breatheLED(EncoderLEDState color){
     enum BREATHING_STATES {RAMPING_UP, PEAK, RAMPING_DOWN, BOTTOM};
     static enum BREATHING_STATES breathing_state = RAMPING_UP;
-    static uint16_t counter = 0;
+    static uint16_t delay_counter = 0;
+    static uint8_t PWM_intensity = 0; // value between 0 - PWM_increments
     
     switch(breathing_state){
         case RAMPING_UP: 
-            if(counter >= 3){ // PWM 1% increase every 10ms
-                PWM_intensity+=1;
-                counter = 0;
-            }
+            PWM_intensity+=1;
+            encoderControl_setLEDValue((int)(PWM_MAX_VAL/PWM_increments) * PWM_intensity, (color == PURPLE) ? (int)(PWM_MAX_VAL/PWM_increments) * PWM_intensity : 0);
             if(PWM_intensity >= PWM_increments){ // when intensity is maxed out
                 breathing_state = PEAK;
-                counter = 0;
+                delay_counter = 0;
             }
             break;
         case PEAK: // wait 500ms before ramping down
-            if(counter >= 50){
+            if(delay_counter >= 50){
                 breathing_state = RAMPING_DOWN;
-                counter = 0;
+                delay_counter = 0;
             }
             break;
         case RAMPING_DOWN:
-            if(counter >= 3){ // PWM 1% decrease every 10ms
-                PWM_intensity-=1;
-                counter = 0;
-            }
+            PWM_intensity-=1;
+            encoderControl_setLEDValue((int)(PWM_MAX_VAL/PWM_increments) * PWM_intensity, (color == PURPLE) ? (int)(PWM_MAX_VAL/PWM_increments) * PWM_intensity : 0);
+
             if(PWM_intensity <= 0){
                 breathing_state = BOTTOM;
-                counter = 0;
+                delay_counter = 0;
             }
             break;
         case BOTTOM:
-            if(counter >= 50){ // wait 50 ms before restarting cycle
+            if(delay_counter >= 50){ // wait 50 ms before restarting cycle
                 breathing_state = RAMPING_UP;
-                counter = 0;
+                delay_counter = 0;
             }
             break;
     }
-    counter++;
+    delay_counter++;
 }

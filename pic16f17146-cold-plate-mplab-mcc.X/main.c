@@ -59,24 +59,13 @@ void Timer0_1ms_Callback(void)
     static volatile uint8_t counter100ms = 1;
     static volatile uint16_t counter1s = 1;
     
-    {
-        //Call these functions every 1ms
-        
-        //Call for breathing LED if needed, otherwise update LED every 100ms
-        if(encoderControl_getBreatheStatus()){
-            encoderControl_PWM();
-        }
-    }
-        
-    
     if (counter10ms == 10)
     {
         //Call these functions every 10ms
         Measurements_runStateMachine();
-        
-        if(encoderControl_getBreatheStatus()){
-            encoderControl_breatheLED();
-        }
+
+        // update breathing effect every 10ms
+        encoderControl_updateLEDs();
         
         counter10ms = 0;
     }
@@ -180,6 +169,9 @@ int main(void)
     //Start Fan Controller
     fanControl_start();
     
+    // Enable PWM
+    LED_PWM_Enable();
+    
     while(1)
     {        
         //Note: This must occur every 250ms to 2s or WWDT will reset
@@ -199,12 +191,6 @@ int main(void)
         
         if(dispRefresh){ // update UI every 100ms
             UI_refresh();
-            encoderControl_updateLEDs();
-            if(!encoderControl_getBreatheStatus())
-            {
-                // Update LEDs if not breathing them
-                encoderControl_updateColor();
-            }
             dispRefresh = false;
         }
 
