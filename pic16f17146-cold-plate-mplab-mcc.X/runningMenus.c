@@ -37,8 +37,11 @@ void runningMenus_runningSetup(void){
     OLED_writeString("MCU:");
     }
     
-    OLED_command(line_address[3]);
-    OLED_writeString("Fan RPMs:");
+    OLED_command(line_address[3]+6);
+    OLED_writeString("Amps");
+    OLED_command(line_address[3]+16);
+    OLED_writeString("RPM");
+    
     
 }
 
@@ -88,9 +91,13 @@ void runningMenus_runningUpdate(int16_t moves){
         OLED_writeString(disp_buff);
         OLED_writeTempUnit();
     }
+
+    OLED_command(line_address[3]+1);
+    sprintf(disp_buff, "%2d.%1d", (int)Measurements_getLastCurrent()/10, (int)Measurements_getLastCurrent()%10);
+    OLED_writeString(disp_buff);
     
-    OLED_command(line_address[3]+10);
-    sprintf(disp_buff, "%4d, %4d", fanControl_getFan1RPM(), fanControl_getFan2RPM());
+    OLED_command(line_address[3]+11);
+    sprintf(disp_buff, "%4d", fanControl_getFan1RPM());
     OLED_writeString(disp_buff);
 }
 
