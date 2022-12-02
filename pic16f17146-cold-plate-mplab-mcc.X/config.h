@@ -13,6 +13,9 @@ extern "C" {
 //If defined, debug messages will be sent via UART
 #define DEBUG_PRINT
     
+//If defined, raw ADC readings will be sent via UART
+#define DEBUG_RAW_VALUES
+    
 //If defined, UI will show error messages
 #define UI_ERRORS
     

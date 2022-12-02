@@ -11,6 +11,7 @@
 #include "currentSense.h"
 
 static volatile int8_t coldTemp = INT8_MIN, hotTemp = INT8_MAX, intTemp = INT8_MAX;
+static volatile uint16_t coldADC, hotADC, intADC, currentADC;
 static volatile uint8_t peltierCurrent = 0;
 
 //DIA Fields from the Device
@@ -170,16 +171,19 @@ void Measurements_loadResults(void)
     {
         case SAMPLE_COLD:
         {
+            coldADC = ADCvalue;
             coldTemp = NTC_ROM_search(ADCvalue);
             break;
         }
         case SAMPLE_HOT:
         {
+            hotADC = ADCvalue;
             hotTemp = NTC_ROM_search(ADCvalue);
             break;
         }
         case SAMPLE_INT:
         {                        
+            intADC = ADCvalue;
             int24_t buffer = (int24_t) (ADCvalue) * TS_GAIN;
             
             //Add 128 to ensure good rounding
@@ -193,6 +197,7 @@ void Measurements_loadResults(void)
         }
         case SAMPLE_PELTIER:
         {
+            currentADC = ADCvalue;
             switch (currentSense_getConfiguration())
             {
                 case UNITY:
@@ -234,10 +239,20 @@ int8_t Measurements_getLastColdTemp(void)
     return coldTemp;
 }
 
+uint16_t Measurements_getRawColdValue(void)
+{
+    return coldADC;
+}
+
 //Returns the last heatsink temperature
 int8_t Measurements_getLastHotTemp(void)
 {
     return hotTemp;
+}
+
+uint16_t Measurements_getRawHotValue(void)
+{
+    return hotADC;
 }
 
 //Returns the last internal temperature
@@ -246,8 +261,19 @@ int8_t Measurements_getLastIntTemp(void)
     return intTemp;
 }
 
+uint16_t Measurements_getRawIntValue(void)
+{
+    return intADC;
+}
+
 //Returns the last current through the loop
 uint8_t Measurements_getLastCurrent(void)
 {
     return peltierCurrent;
+}
+
+//Returns the raw current value from the ADC
+uint16_t Measurements_getRawCurrentValue(void)
+{
+    return currentADC;
 }

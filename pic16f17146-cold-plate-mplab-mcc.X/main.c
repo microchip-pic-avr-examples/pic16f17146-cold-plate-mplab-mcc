@@ -186,6 +186,9 @@ int main(void)
 #ifdef DEBUG_PRINT
             compactPrint_sendDebugTelemetry();
 #endif
+#ifdef DEBUG_RAW_VALUES
+            compactPrint_sendRawADCValues();
+#endif
 #endif
         }
         

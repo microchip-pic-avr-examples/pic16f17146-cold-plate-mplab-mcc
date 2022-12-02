@@ -47,7 +47,6 @@ void SYSTEM_Initialize(void)
     ADCC_Initialize();
     CLC1_Initialize();
     CLC2_Initialize();
-    CLKREF_Initialize();
     CRC_Initialize();
     DAC1_Initialize();
     DAC2_Initialize();

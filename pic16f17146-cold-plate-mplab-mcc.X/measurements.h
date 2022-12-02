@@ -24,21 +24,36 @@ extern "C" {
     
     //Measures current through the loop
     void Measurements_sampleCurrent(void);
-    
-    //Loads results from the ADC. Results must be ready
+        
+    //Load Results for the ADC
     void Measurements_loadResults(void);
+    
+    //Prints raw values to UART
+    void Measurements_printRawValues(void);
     
     //Returns the last cold plate temperature
     int8_t Measurements_getLastColdTemp(void);
     
+    //Returns the raw cold value from the ADC
+    uint16_t Measurements_getRawColdValue(void);
+    
     //Returns the last heatsink temperature
     int8_t Measurements_getLastHotTemp(void);
     
+    //Returns the raw hot value from the ADC
+    uint16_t Measurements_getRawHotValue(void);
+
     //Returns the last internal temperature
     int8_t Measurements_getLastIntTemp(void);
     
+    //Returns the raw INT value from the ADC
+    uint16_t Measurements_getRawIntValue(void);
+    
     //Returns the last current through the loop (in 100s of mA)
     uint8_t Measurements_getLastCurrent(void);
+    
+    //Returns the raw current value from the ADC
+    uint16_t Measurements_getRawCurrentValue(void);
     
 #ifdef	__cplusplus
 }

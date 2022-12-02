@@ -254,3 +254,25 @@ void compactPrint_sendDebugTelemetry(void)
     //Add an extra line for readability
     compactPrint_sendStringLiteral("\r\n");
 }
+
+//Sends Raw ADC values to the UART
+void compactPrint_sendRawADCValues(void)
+{
+    char buffer[6];
+    
+    compactPrint_sendStringLiteral("Cold Sense ADC: ");
+    compactPrint_convertUint16ToString(buffer, Measurements_getRawColdValue());
+    compactPrint_sendStringWithNewline(buffer);
+    
+    compactPrint_sendStringLiteral("Hot Sense ADC: ");
+    compactPrint_convertUint16ToString(buffer, Measurements_getRawHotValue());
+    compactPrint_sendStringWithNewline(buffer);
+
+    compactPrint_sendStringLiteral("Int. Temp ADC: ");
+    compactPrint_convertUint16ToString(buffer, Measurements_getRawIntValue());
+    compactPrint_sendStringWithNewline(buffer);
+    
+    compactPrint_sendStringLiteral("Current Sense ADC: ");
+    compactPrint_convertUint16ToString(buffer, Measurements_getRawCurrentValue());
+    compactPrint_sendStringWithNewline(buffer);
+}
