@@ -38,7 +38,7 @@
         },
         "author": "Robert Perkel and Josh Booth",
         "peripherals": [
-            "ADCC", "CLC", "CMP", "CRC", "DAC", "FVR", "OPAMP", "PWM", "TMR0", "TMR1", "TMR2", "UART", "WWDT"
+            "ADCC", "CLC", "CMP", "CRC", "DAC", "VREF", "OPAMP", "PWM", "TMR0", "TMR1", "TMR2", "UART", "WWDT"
         ],
         "keywords": [
             "Quadrature Encoder", "Analog", "Temperature", "Current Monitor", "User Interface", "Fan Controller"
