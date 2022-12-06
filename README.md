@@ -52,7 +52,7 @@ In depth information on each major function system can be found in the App Note 
 
 On boot, a standby menu shows the current plate temperature, the set temperature, and whether the product is in demo mode (which limits the lowest temperature for safety)
 
-// insert picture of standby menu
+![Main Menu](images/main_menu.jpg)
 
 Pressing the rotary encoder button brings up a menu that can be used to change various running parameters:
 
@@ -67,13 +67,16 @@ Pressing the rotary encoder button brings up a menu that can be used to change v
 | About | Lists developer and version info |
 | Demo Mode Toggle | Password protected way to disable demo mode|
 
+![Top Menu](images/top_menu.jpg)
+![Bottom Menu](images/bottom_menu.jpg)
+
 Upon pressing Start, the plate power is enabled, the MCU begins checking for various errors, and if all checks pass, the user is brought to the running status screen which shows the plate target temp, the current temp, the heatsink temp, the MCU temp, the current being drawn, and the heatsink fan RPM.
 
-// insert picture of running screen.
+![Running Menu](images/running.jpg)
 
 If any of the error checks fail, the power to the plate is cut, and the error displays on the screen. Press the rotary encoder to clear the error and return to the standy screen.
 
-// insert picture of missing fan screen.
+![Error Menu](images/error.jpg)
 
 Below is a list of the various possible errors that are continuously checked for during running operation:
 
