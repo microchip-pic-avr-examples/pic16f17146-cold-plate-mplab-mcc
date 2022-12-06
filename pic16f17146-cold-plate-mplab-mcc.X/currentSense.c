@@ -1,8 +1,5 @@
 #include "currentSense.h"
-#include "mcc_generated_files/opa/opa1.h"
-#include "mcc_generated_files/adcc/adcc.h"
-#include "mcc_generated_files/dac/dac1.h"
-#include "mcc_generated_files/dac/dac2.h"
+#include "mcc_generated_files/system/system.h"
 #include "config.h"
 #include "compactPrint.h"
 #include "peltierControl.h"
@@ -16,6 +13,8 @@
 //1x, 2x, 4x, 8x, 16x Gains + OFFSET
 static float OPAMPGain = 8.0;
 static int8_t offset = 0;
+
+//If true, an overcurrent event has occurred
 static bool isOvercurrent = false;
 
 static CurrentSenseGain systemGain = UNITY;
@@ -32,7 +31,7 @@ void currentSense_init(void)
     OPA1_SetNegativeSource(OPA1_Vss);
     
     //Set power limit
-    currentSense_setCurrentLimit(CURRENT_LIMIT);
+    currentSense_setCurrentLimit(PELTIER_CURRENT_LIMIT);
 }
 
 //Runs current sense - self calibration

@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdbool.h>
     
-//If defined, telemetry will be sent via UART
+//If defined, telemetry will be sent via UART (Global Enable)
 #define DEBUG_TELEMETRY 
     
 //If defined, debug messages will be sent via UART
@@ -34,15 +34,6 @@ extern "C" {
 //Minimum Heatsink Temperature (to be considered connected)
 #define TEMP_NTC_COLD_OPEN 40
     
-//Temperature to throw an error at
-#define TEMP_LIMIT_SAFETY_MARGIN 5
-    
-//Minimum Current Limit
-#define CURRENT_LIMIT_MIN 1
-    
-//Maximum Current Limit
-#define CURRENT_LIMIT_MAX 10
-        
 //Max Temperature before 100% Fan Speed
 #define HEATSINK_TEMP_FAN_MAX 60
     
@@ -51,13 +42,7 @@ extern "C" {
     
 //Min Fan Speed (1 degree per C above)
 #define HEATSINK_TEMP_SLOPE 40
-
-//Pre-Computed DAC Constant (Current per bit)
-#define DAC_FORMULA_CONSTANT 0.1
-    
-//Current Limit (100s of mA)
-#define CURRENT_LIMIT 60
-    
+        
 #ifdef	__cplusplus
 }
 #endif

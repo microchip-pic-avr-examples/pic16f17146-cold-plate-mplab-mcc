@@ -9,6 +9,9 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
   
+//Current Limit (100s of mA)
+#define PELTIER_CURRENT_LIMIT 85
+    
     typedef enum {
         UNITY = 0, GAIN_2, GAIN_4, GAIN_8, GAIN_16
     } CurrentSenseGain;
