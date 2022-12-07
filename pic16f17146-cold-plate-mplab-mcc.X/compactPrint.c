@@ -6,6 +6,7 @@
 #include "measurements.h"
 #include "settings.h"
 #include "peltierControl.h"
+#include "currentSense.h"
 
 //Sends a string of text to the UART with no newline appended
 void compactPrint_sendStringLiteral(const char* str)
@@ -251,6 +252,17 @@ void compactPrint_sendDebugTelemetry(void)
         }
     }
     
+    compactPrint_sendStringLiteral("Overcurrent Error: ");
+    if (currentSense_hasOvercurrentOccurred())
+    {
+        compactPrint_sendStringWithNewline("TRUE");
+    }
+    else
+    {
+        compactPrint_sendStringWithNewline("FALSE");
+    }
+    
+    
     //Add an extra line for readability
     compactPrint_sendStringLiteral("\r\n");
 }
@@ -275,4 +287,26 @@ void compactPrint_sendRawADCValues(void)
     compactPrint_sendStringLiteral("Current Sense ADC: ");
     compactPrint_convertUint16ToString(buffer, Measurements_getRawCurrentValue());
     compactPrint_sendStringWithNewline(buffer);
+    
+    compactPrint_sendStringLiteral("Power Fail CMP State: ");
+    if (POWER_FAIL_CMP_GetOutputStatus())
+    {
+        //Power Fail
+        compactPrint_sendStringWithNewline("TRUE");
+    }
+    else
+    {
+        compactPrint_sendStringWithNewline("FALSE");
+    }
+    
+    compactPrint_sendStringLiteral("Overcurrent CMP State: ");
+    if (OVERCURRENT_CMP_GetOutputStatus())
+    {
+        //Power Fail
+        compactPrint_sendStringWithNewline("TRUE");
+    }
+    else
+    {
+        compactPrint_sendStringWithNewline("FALSE");
+    }
 }
