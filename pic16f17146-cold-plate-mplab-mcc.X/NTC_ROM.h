@@ -9,6 +9,7 @@ extern "C" {
     
     /*
      * This is a ROM file for the NTC Thermistor P/N USP7765 from Littelfuse Inc.
+     * Modified based on our measured values in system
      * 
      * Starting Position is -24C (lowest reading possible is -23C)
      * Ending Position is 104C (highest reading possible 103C)

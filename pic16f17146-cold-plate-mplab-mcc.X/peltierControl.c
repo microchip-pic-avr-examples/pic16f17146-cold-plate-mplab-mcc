@@ -75,6 +75,11 @@ void peltierControl_periodicCheck(void)
         //Overcurrent
         error = PELTIER_OVERCURRENT_ERROR;
     }
+    if (!currentSense_isGainOK())
+    {
+        //Gain of OPAMP out of tolerance
+        error = PELTIER_GAIN_ERROR;
+    }
 
     int8_t stopTemp, startTemp, currentTemp;
     stopTemp = settings_getSetting(SETTINGS_LAST_SET_TEMP);

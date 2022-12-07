@@ -43,6 +43,18 @@ extern "C" {
 //Min Fan Speed (1 degree per C above)
 #define HEATSINK_TEMP_SLOPE 40
         
+//Peltier Current Limit (100s of mA)
+#define PELTIER_CURRENT_MAX 85
+
+//Minimum Peltier current for detection
+#define PELTIER_CURRENT_MIN 10
+    
+//Defines the gain the system is in
+#define SYSTEM_GAIN GAIN_8
+    
+//Allowed error margin for gain (+/-)
+#define GAIN_TOLERANCE 0.25
+    
 #ifdef	__cplusplus
 }
 #endif

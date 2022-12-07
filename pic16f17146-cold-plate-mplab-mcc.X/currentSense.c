@@ -15,11 +15,9 @@ static float OPAMPGain = 8.0;
 static int8_t offset = 0;
 
 //If true, an overcurrent event has occurred
-static bool isOvercurrent = false;
+static bool isOvercurrent = false, gainOK = false;
 
 static CurrentSenseGain systemGain = UNITY;
-
-#define SYSTEM_GAIN GAIN_8
 
 //Init Current Sense System
 void currentSense_init(void)
@@ -29,25 +27,28 @@ void currentSense_init(void)
     
     //Select VSS as a negative source
     OPA1_SetNegativeSource(OPA1_Vss);
-    
-    //Set power limit
-    currentSense_setCurrentLimit(PELTIER_CURRENT_LIMIT);
 }
 
-//Runs current sense - self calibration
+//Runs current sense - self test
 //Blocking Code
-void currentSense_selfCalibrate(void)
+void currentSense_selfTest(void)
 {
     //Disable CMP2 to prevent overcurrent trigger
-    
     CM2CON0bits.EN = 0;
-    currentSense_gainCalibration();
+    
+    //Gain Self-Test
+    currentSense_gainSelfTest();
+    
+    //Configure Current Limits
+    currentSense_setCurrentLimits();
+    
+    //Re-enable CMP2
     CM2CON0bits.EN = 1;
 }
 
-//Calibrates the gain of the OPAMP
+//Tests the gain of the current sense system
 //Blocking Code - only run on startup
-void currentSense_gainCalibration(void)
+void currentSense_gainSelfTest(void)
 {
     //2.048V for VREF DAC
     //~100mV output
@@ -98,6 +99,24 @@ void currentSense_gainCalibration(void)
     //Calculate Gain
     OPAMPGain = (((float)gainResult) / unityGainResult);
     
+    //Check to see if gain is within tolerance
+    
+    //Calculate Gain Ranges
+    uint8_t idealGain = (1 << SYSTEM_GAIN);
+    float minGain = idealGain * (1 - GAIN_TOLERANCE);
+    float maxGain = idealGain * (1 + GAIN_TOLERANCE);
+    
+    if ((OPAMPGain >= minGain) && (OPAMPGain <= maxGain))
+    {
+        //Gain is within tolerance
+        gainOK = true;
+    }
+    else
+    {
+        //Not within tolerance
+        gainOK = false;
+    }
+    
     //Return OPAMP to Input Pin
     OPA1_SetPositiveChannel(OPA1_posChannel_OPA1IN);
     
@@ -110,14 +129,72 @@ void currentSense_gainCalibration(void)
 
 //Sets the current limit of the demo
 //Units are 100s of mA (e.g.: 100mA = 1, 1A = 10, etc...)
-void currentSense_setCurrentLimit(uint8_t limit)
+void currentSense_setCurrentLimits(void)
 {
-    uint8_t dacCode = limit;
-    DAC1_SetOutput(dacCode);
+    //At a gain of 8x, no changes are needed
     
-    //Update Overcurrent Limits (125%)
-    dacCode += (dacCode >> 2);
-    DAC2_SetOutput(dacCode);
+    uint8_t minLevel, maxLevel;
+    
+    //Load initial values
+    minLevel = PELTIER_CURRENT_MIN;
+    maxLevel = PELTIER_CURRENT_MAX;
+    
+    //DAC precision at 2.048V, 8mV per bit
+    switch (currentSense_getConfiguration())
+    {
+        case UNITY:
+        {
+            //Unity (1x) gain
+            //100mA x 0.01 ohm x 1 = 1mV per 100mA
+            //Divide by 8
+            
+            minLevel >>= 3;
+            maxLevel >>= 3;
+            break;
+        }
+        case GAIN_2:
+        {
+            //2x gain
+            //100mA x 0.01 ohm x 2 = 2mV per 100mA
+            //Divide by 4
+            
+            minLevel >>= 2;
+            maxLevel >>= 2;
+            break;
+        }
+        case GAIN_4:
+        {
+            //4x gain
+            //100mA x 0.01 ohm x 4 = 4mV per 100mA
+            //Divide by 2
+            
+            minLevel >>= 1;
+            maxLevel >>= 1;
+            break;
+        }
+        case GAIN_8:
+        {
+            //At 8x gain, no changes are needed
+            //100mA x 0.01 ohm x 8 = 8mV per 100mA
+            break;
+        }
+        case GAIN_16:
+        {
+            //16x gain
+            //100mA x 0.01 ohm x 16 = 16mV per 100mA
+            //Multiple by 2
+            
+            minLevel <<= 1;
+            maxLevel <<= 1;
+            break;
+        }
+    }
+    
+    //Set Power Detect Threshold
+    DAC1_SetOutput(minLevel);
+    
+    //Set Overcurrent Limits
+    DAC2_SetOutput(maxLevel);
 }
 
 //Sets the gain of the current sense amplifier
@@ -204,4 +281,9 @@ void currentSense_overcurrentCallback(void)
 bool currentSense_hasOvercurrentOccurred(void)
 {
     return isOvercurrent;
+}
+
+bool currentSense_isGainOK(void)
+{
+    return gainOK;
 }

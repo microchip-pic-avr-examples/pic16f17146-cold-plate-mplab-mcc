@@ -129,6 +129,9 @@ void runningMenus_errorUpdate(int16_t moves){
         case PELTIER_OVERCURRENT_ERROR:
             OLED_writeString("Overcurrent Error");
             break;
+        case PELTIER_GAIN_ERROR:
+            OLED_writeString("OPAMP Gain Error");
+            break;
         case PELTIER_POWER_ERROR:
             OLED_writeString("No Power Error");
             break;
