@@ -53,6 +53,9 @@ extern "C" {
     //Returns the error code from the Peltier regulator. Does NOT clear the error
     PeltierError peltierControl_getError(void);
 
+    // Clears error code
+    void peltierControl_clearError(void);
+    
 #ifdef	__cplusplus
 }
 #endif

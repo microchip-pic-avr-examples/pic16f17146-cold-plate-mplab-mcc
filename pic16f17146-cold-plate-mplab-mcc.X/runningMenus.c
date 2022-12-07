@@ -160,5 +160,5 @@ void runningMenus_errorUpdate(int16_t moves){
         case PELTIER_ERROR_NONE:
             break;
     }
-
+    peltierControl_clearError(); // clear error after it has been displayed
 }

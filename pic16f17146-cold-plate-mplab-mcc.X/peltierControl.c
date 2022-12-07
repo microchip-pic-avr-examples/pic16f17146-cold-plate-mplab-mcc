@@ -223,6 +223,7 @@ void peltierControl_stop(void)
         compactPrint_sendStringWithNewline("-- PELTIER OFF --");
 #endif
     }
+       
 }
 
 void peltierControl_fastStop(void)
@@ -237,3 +238,7 @@ PeltierError peltierControl_getError(void)
     return error;
 }
 
+// Clears error code
+void peltierControl_clearError(void){
+    error = PELTIER_ERROR_NONE;
+}

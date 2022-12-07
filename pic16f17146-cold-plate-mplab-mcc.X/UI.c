@@ -30,17 +30,7 @@ bool UI_isRunning(void){
 
 //Updates the scene elements & sets a new scene if needed
 void UI_refresh(void){
-    
-    // Adds error states to UI
-    #ifdef UI_ERRORS
-    // Error occurred & neither peltier state machine nor UI state machine is already in error state
-    if(UI_is_running && peltierControl_getError() != PELTIER_ERROR_NONE && UI_state != ERROR){
-        UI_setState(ERROR);
-        peltierControl_stop(); // stop peltier plate
-    }
-    #endif
-
-    // Set static elements of a scene when a new UI state is entered
+        // Set static elements of a scene when a new UI state is entered
     if(UI_new_state){
         UI_setup();
         UI_new_state = false;
@@ -49,13 +39,19 @@ void UI_refresh(void){
     // Immediately update dynamic elements so they populate
     UI_update();
 
+    // Adds error states to UI
+    #ifdef UI_ERRORS
+    // Error occurred & neither peltier state machine nor UI state machine is already in error state
+    if(UI_is_running && peltierControl_getError() != PELTIER_ERROR_NONE && UI_state != ERROR){
+        UI_setState(ERROR);
+    }
+    #endif
 }
 
 //Fill OLED with new static state data when the state is switched
 void UI_setup(void){
     switch(UI_state){
         case STANDBY:
-            peltierControl_stop();
             settingMenus_standbySetup();
             break;
         case MENU:
