@@ -22,8 +22,8 @@ extern "C" {
     
 //Default Temperature Hysteresis
 //Will turn off at SET_POINT + OVER and on again at SET_POINT + UNDER
-#define DEFAULT_TEMP_HYSTER_OVER 5
-#define DEFAULT_TEMP_HYSTER_UNDER 5
+#define DEFAULT_TEMP_HYSTER_OVER 1
+#define DEFAULT_TEMP_HYSTER_UNDER 1
 
 #define DEFAULT_SHOW_ICONS false
 
