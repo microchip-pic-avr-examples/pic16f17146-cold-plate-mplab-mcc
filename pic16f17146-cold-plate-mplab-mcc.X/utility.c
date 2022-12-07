@@ -27,8 +27,10 @@ uint16_t DIA_readValue(uint16_t address)
 void System_printResetRegisters(void)
 {
 #ifdef DEBUG_PRINT
-    compactPrint_sendErrorCode("PCON0 = ", PCON0);
-    compactPrint_sendErrorCode("PCON1 = ", PCON1);
+#ifdef DEBUG_RAW_VALUES
+    compactPrint_sendErrorCode("PCON0: ", PCON0);
+    compactPrint_sendErrorCode("PCON1: ", PCON1);
+#endif
 #endif
     
     //Clear Values

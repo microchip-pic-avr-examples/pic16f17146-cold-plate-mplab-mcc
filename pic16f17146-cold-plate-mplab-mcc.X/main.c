@@ -113,7 +113,7 @@ int main(void)
     MSSP_HostInit();
     
 #ifdef DEBUG_PRINT
-    compactPrint_sendStringWithNewline("\r\nStarting Up...");
+    compactPrint_sendStringWithNewline("\r\n--STARTING UP--");
 #endif
     
     //Print the Reset Registers
@@ -133,11 +133,7 @@ int main(void)
     
     //Init Peltier Control
     peltierControl_init();
-        
-#ifdef DEBUG_PRINT
-    compactPrint_sendStringWithNewline("Done initializing...");
-#endif
-    
+            
     //Configure 10ms Callback
     Timer0_OverflowCallbackRegister(&Timer0_1ms_Callback);
     
@@ -153,7 +149,7 @@ int main(void)
     //Run Gain Self-Test
     //Must be run before Timer0 starts!
     currentSense_selfTest();
-    
+        
     //Start Timer 0 (10ms)
     Timer0_Start();
     
@@ -169,6 +165,9 @@ int main(void)
     // Enable PWM
     LED_PWM_Enable();
     
+#ifdef DEBUG_PRINT
+    compactPrint_sendStringWithNewline("--STARTUP DONE--\r\n");
+#endif    
     while(1)
     {        
         //Note: This must occur every 250ms to 2s or WWDT will reset

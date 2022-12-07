@@ -36,6 +36,9 @@ extern "C" {
     //Overcurrent event has occurred
     void currentSense_overcurrentCallback(void);
     
+    //Sets the boolean for overcurrent events
+    void currentSense_setOvercurrentEvent(void);
+    
     //Returns true if an overcurrent event was detected
     bool currentSense_hasOvercurrentOccurred(void);
     

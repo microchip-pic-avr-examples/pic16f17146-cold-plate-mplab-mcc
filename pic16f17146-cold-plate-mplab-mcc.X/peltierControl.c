@@ -75,6 +75,14 @@ void peltierControl_periodicCheck(void)
         //Overcurrent
         error = PELTIER_OVERCURRENT_ERROR;
     }
+    else if (OVERCURRENT_CMP_GetOutputStatus())
+    {
+        //Overcurrent
+        //Edge case for if the current alarm is active on startup
+        error = PELTIER_OVERCURRENT_ERROR;
+        currentSense_setOvercurrentEvent();
+    }
+    
     if (!currentSense_isGainOK())
     {
         //Gain of OPAMP out of tolerance
@@ -206,12 +214,12 @@ void peltierControl_start(void)
 //Stop the Peltier Regulator
 void peltierControl_stop(void)
 {   
-#ifdef DEBUG_PRINT
-    if (error != PELTIER_ERROR_NONE)
-    {
-        compactPrint_sendErrorCode("Peltier Control Error, Code ", error);
-    }
-#endif
+//#ifdef DEBUG_PRINT
+//    if (error != PELTIER_ERROR_NONE)
+//    {
+//        compactPrint_sendErrorCode("Peltier Control Error, Code ", error);
+//    }
+//#endif
     
     //Disable Output
     PELTIER_DISABLE();

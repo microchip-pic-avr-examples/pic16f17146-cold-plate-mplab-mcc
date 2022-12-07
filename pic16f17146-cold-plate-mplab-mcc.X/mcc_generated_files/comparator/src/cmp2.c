@@ -55,8 +55,8 @@ void OVERCURRENT_CMP_Initialize(void)
     // CHYS enabled; CON disabled; CPOL inverted; CSYNC asynchronous; 
     CM2CON0 = 0x12;
 
-    // CINTN no_intFlag; CINTP no_intFlag; 
-    CM2CON1 = 0x0;
+    // CINTN no_intFlag; CINTP intFlag_pos; 
+    CM2CON1 = 0x2;
     
     // CNCH OPA1OUT; 
     CM2NCH = 0x5;

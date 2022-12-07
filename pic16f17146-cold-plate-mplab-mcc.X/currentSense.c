@@ -106,15 +106,18 @@ void currentSense_gainSelfTest(void)
     float minGain = idealGain * (1 - GAIN_TOLERANCE);
     float maxGain = idealGain * (1 + GAIN_TOLERANCE);
     
+    compactPrint_sendStringLiteral("OPAMP Gain Self-Test: ");
     if ((OPAMPGain >= minGain) && (OPAMPGain <= maxGain))
     {
         //Gain is within tolerance
         gainOK = true;
+        compactPrint_sendStringWithNewline("OK");
     }
     else
     {
         //Not within tolerance
         gainOK = false;
+        compactPrint_sendStringWithNewline("FAIL");
     }
     
     //Return OPAMP to Input Pin
@@ -274,6 +277,12 @@ CurrentSenseGain currentSense_getConfiguration(void)
 void currentSense_overcurrentCallback(void)
 {
     peltierControl_fastStop();
+    isOvercurrent = true;
+}
+
+//Sets the boolean for overcurrent events
+void currentSense_setOvercurrentEvent(void)
+{
     isOvercurrent = true;
 }
 

@@ -182,7 +182,8 @@ void compactPrint_convertCurrentToString(char* str, uint8_t current)
     
     //100mA digit
     str[3] = '0' + current;
-    str[4] = '\0';
+    str[4] = 'A';
+    str[5] = '\0';
 }
 
 //Sends Debug Telemetry to the UART
@@ -191,35 +192,13 @@ void compactPrint_sendDebugTelemetry(void)
     //Buffer for RPM/Temp/Etc...
     char buffer[6];
     
-    //Print Fan 1 RPM
-    compactPrint_sendStringLiteral("Fan 1 RPM: ");
-    compactPrint_convertUint16ToString(buffer, fanControl_getFan1RPM());
-    compactPrint_sendStringWithNewline(buffer);
-
-    //Print Fan 2 RPM
-    compactPrint_sendStringLiteral("Fan 2 RPM: ");
-    compactPrint_convertUint16ToString(buffer, fanControl_getFan2RPM());
-    compactPrint_sendStringWithNewline(buffer);
-
-    //Print Cold Plate Temperature
-    compactPrint_sendStringLiteral("Cold Plate Temp: ");
-    compactPrint_convertTempToString(buffer, Measurements_getLastColdTemp(), settings_getSetting(SETTINGS_TEMP_UNIT));
-    compactPrint_sendStringWithNewline(buffer);
-    
-    //Print Heatsink Temperature
-    compactPrint_sendStringLiteral("Heatsink Temp: ");
-    compactPrint_convertTempToString(buffer, Measurements_getLastHotTemp(), settings_getSetting(SETTINGS_TEMP_UNIT));
-    compactPrint_sendStringWithNewline(buffer);
-
-    //Print MCU Temperature
-    compactPrint_sendStringLiteral("Int Temp: ");
-    compactPrint_convertTempToString(buffer, Measurements_getLastIntTemp(), settings_getSetting(SETTINGS_TEMP_UNIT));
-    compactPrint_sendStringWithNewline(buffer);
-    
-    //Print Duty Cycle
-    compactPrint_sendStringLiteral("Peltier Current: ");
-    compactPrint_convertCurrentToString(buffer, Measurements_getLastCurrent());
-    compactPrint_sendStringWithNewline(buffer);
+    compactPrint_sendStringWithNewline("--BEGIN TELEMETRY--");
+        
+    //If there is an error
+    if (peltierControl_getError() != PELTIER_ERROR_NONE)
+    {
+        compactPrint_sendErrorCode("Peltier Control Error: ", peltierControl_getError());
+    }
     
     compactPrint_sendStringLiteral("Peltier State: ");
     PeltierState currentPeltierState = peltierControl_getState();
@@ -252,7 +231,12 @@ void compactPrint_sendDebugTelemetry(void)
         }
     }
     
-    compactPrint_sendStringLiteral("Has Overcurrent Occurred: ");
+    //Print Peltier Current
+    compactPrint_sendStringLiteral("Peltier Current: ");
+    compactPrint_convertCurrentToString(buffer, Measurements_getLastCurrent());
+    compactPrint_sendStringWithNewline(buffer);
+    
+    compactPrint_sendStringLiteral("Peltier OCP Triggered: ");
     if (currentSense_hasOvercurrentOccurred())
     {
         compactPrint_sendStringWithNewline("TRUE");
@@ -262,8 +246,32 @@ void compactPrint_sendDebugTelemetry(void)
         compactPrint_sendStringWithNewline("FALSE");
     }
     
-    //Add an extra line for readability
-    compactPrint_sendStringLiteral("\r\n");
+    //Print Fan 1 RPM
+    compactPrint_sendStringLiteral("Fan 1 RPM: ");
+    compactPrint_convertUint16ToString(buffer, fanControl_getFan1RPM());
+    compactPrint_sendStringWithNewline(buffer);
+
+    //Print Fan 2 RPM
+    compactPrint_sendStringLiteral("Fan 2 RPM: ");
+    compactPrint_convertUint16ToString(buffer, fanControl_getFan2RPM());
+    compactPrint_sendStringWithNewline(buffer);
+
+    //Print Cold Plate Temperature
+    compactPrint_sendStringLiteral("Cold Plate Temp: ");
+    compactPrint_convertTempToString(buffer, Measurements_getLastColdTemp(), settings_getSetting(SETTINGS_TEMP_UNIT));
+    compactPrint_sendStringWithNewline(buffer);
+    
+    //Print Heatsink Temperature
+    compactPrint_sendStringLiteral("Heatsink Temp: ");
+    compactPrint_convertTempToString(buffer, Measurements_getLastHotTemp(), settings_getSetting(SETTINGS_TEMP_UNIT));
+    compactPrint_sendStringWithNewline(buffer);
+
+    //Print MCU Temperature
+    compactPrint_sendStringLiteral("Int Temp: ");
+    compactPrint_convertTempToString(buffer, Measurements_getLastIntTemp(), settings_getSetting(SETTINGS_TEMP_UNIT));
+    compactPrint_sendStringWithNewline(buffer);
+        
+    compactPrint_sendStringWithNewline("--END TELEMETRY--\r\n");
 }
 
 //Sends Raw ADC values to the UART
@@ -271,15 +279,7 @@ void compactPrint_sendRawValues(void)
 {
     char buffer[6];
     
-    compactPrint_sendStringLiteral("OPAMP Gain OK: ");
-    if (currentSense_isGainOK())
-    {
-        compactPrint_sendStringWithNewline("TRUE");
-    }
-    else
-    {
-        compactPrint_sendStringWithNewline("FALSE");
-    }
+    compactPrint_sendStringWithNewline("--BEGIN RAW DATA--");
     
     compactPrint_sendStringLiteral("Cold Sense ADC: ");
     compactPrint_convertUint16ToString(buffer, Measurements_getRawColdValue());
@@ -296,6 +296,17 @@ void compactPrint_sendRawValues(void)
     compactPrint_sendStringLiteral("Current Sense ADC: ");
     compactPrint_convertUint16ToString(buffer, Measurements_getRawCurrentValue());
     compactPrint_sendStringWithNewline(buffer);
+    
+    //OPAMP Gain Startup Test
+    compactPrint_sendStringLiteral("OPAMP Gain Self-Test: ");
+    if (currentSense_isGainOK())
+    {
+        compactPrint_sendStringWithNewline("PASS");
+    }
+    else
+    {
+        compactPrint_sendStringWithNewline("FAIL");
+    }
     
     compactPrint_sendStringLiteral("Power Fail CMP State: ");
     if (POWER_FAIL_CMP_GetOutputStatus())
@@ -318,4 +329,6 @@ void compactPrint_sendRawValues(void)
     {
         compactPrint_sendStringWithNewline("FALSE");
     }
+    
+    compactPrint_sendStringWithNewline("--END RAW DATA--\r\n");
 }
