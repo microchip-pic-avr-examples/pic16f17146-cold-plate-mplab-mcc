@@ -33,6 +33,7 @@ void UI_refresh(void){
     
     // Adds error states to UI
     #ifdef UI_ERRORS
+    // Error occurred & neither peltier state machine nor UI state machine is already in error state
     if(UI_is_running && peltierControl_getError() != PELTIER_ERROR_NONE && UI_state != ERROR){
         UI_setState(ERROR);
         peltierControl_stop(); // stop peltier plate
