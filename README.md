@@ -38,7 +38,7 @@ In depth information on each major function system can be found in the App Note 
 
 **Current control and monitoring** – OPA1, DAC1, DAC2, CMP1, and ADCC CIPs create a CPU-independent system for controlling/monitoring the current being pulled by the Peltier plate. DAC2/CMP2 are used to detect current flowing. The amplified current sense output of the OP-AMP is compared to a small reference value (from DAC2) using CMP2. If it is greater, CMP2 is triggered, indiciating current is flowing through the system. DAC1/CMP1 work in the same way, but are used to limit the top-end current limit. If the DAC1 value is exceeded by the OP-AMP output, the current control signal is cutoff to keep current within set parameters.
 
-**Cold plate, heatsink, and MCU temperature monitoring** – The microcontroller monitors the temperature at these 3 different locations by reading a thermistor for the cold plate and heatsink temperature, and an internal temperature module for the MCU . The analog values of each are read by the ADCC CIP (which is configured to use the FVR CIP as it's Aref).
+**Cold plate, heatsink, and MCU temperature monitoring** – The microcontroller monitors the temperature at these 3 different locations by reading a thermistor for the cold plate and heatsink temperature, and an internal temperature module for the MCU . The analog values of each are read by the ADCC CIP (which is configured to use the FVR CIP as it's Vref).
 
 **Functional safety supported persistent storage & functional monitoring** –  Using the NVM & CRC CIPs, user settings are saved to EEPROM along with a checksum. On startup, the checksum is re-validated to ensure data integrity. These CIPs reduce code size & free the CPU from having to perform these tasks, offloading it to dedicated hardware. Also, since the cold plate involves high currents and potentially hazardous temperatures, a WWDT CIP ensures the CPU is always available to handle the safety critical tasks, automatically resetting the MCU if something is stalling the CPU, ensuring safety is not compromised.
 
@@ -57,7 +57,7 @@ On boot, a standby menu shows the current plate temperature, the set temperature
 Pressing the rotary encoder button brings up a menu that can be used to change various running parameters:
 
 | Name | Function |
-| :---: | :---: |
+| --- | --- |
 | Go Back | Return to Standby screen |
 | Start | Turn on plate, go to running status screen |
 | Set Temperature | Change temp to cool to |
@@ -81,7 +81,7 @@ If any of the error checks fail, the power to the plate is cut, and the error di
 Below is a list of the various possible errors that are continuously checked for during running operation:
 
 | Name | Cause |
-| :---: | :---: |
+| --- | --- |
 | PELTIER_FAN1_ERROR | The heatsink fan is unplugged |
 | PELTIER_OVERCURRENT_ERROR | More current is pulled than software allows (10A)|
 | PELTIER_POWER_ERROR | No power is detected when the plate should be pulling current |
