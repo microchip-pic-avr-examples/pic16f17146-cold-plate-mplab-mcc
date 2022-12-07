@@ -150,12 +150,9 @@ int main(void)
     // Enable the Peripheral Interrupts 
     INTERRUPT_PeripheralInterruptEnable(); 
         
-    //Run Self-Calibration for OPAMP
+    //Run Gain Self-Test
     //Must be run before Timer0 starts!
-    currentSense_selfCalibrate();
-    
-    //Update current limit after self-cal
-    currentSense_setCurrentLimit(PELTIER_CURRENT_LIMIT);
+    currentSense_selfTest();
     
     //Start Timer 0 (10ms)
     Timer0_Start();
@@ -187,7 +184,7 @@ int main(void)
             compactPrint_sendDebugTelemetry();
 #endif
 #ifdef DEBUG_RAW_VALUES
-            compactPrint_sendRawADCValues();
+            compactPrint_sendRawValues();
 #endif
 #endif
         }

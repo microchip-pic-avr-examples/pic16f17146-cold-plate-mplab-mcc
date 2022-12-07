@@ -252,7 +252,7 @@ void compactPrint_sendDebugTelemetry(void)
         }
     }
     
-    compactPrint_sendStringLiteral("Overcurrent Error: ");
+    compactPrint_sendStringLiteral("Has Overcurrent Occurred: ");
     if (currentSense_hasOvercurrentOccurred())
     {
         compactPrint_sendStringWithNewline("TRUE");
@@ -262,15 +262,24 @@ void compactPrint_sendDebugTelemetry(void)
         compactPrint_sendStringWithNewline("FALSE");
     }
     
-    
     //Add an extra line for readability
     compactPrint_sendStringLiteral("\r\n");
 }
 
 //Sends Raw ADC values to the UART
-void compactPrint_sendRawADCValues(void)
+void compactPrint_sendRawValues(void)
 {
     char buffer[6];
+    
+    compactPrint_sendStringLiteral("OPAMP Gain OK: ");
+    if (currentSense_isGainOK())
+    {
+        compactPrint_sendStringWithNewline("TRUE");
+    }
+    else
+    {
+        compactPrint_sendStringWithNewline("FALSE");
+    }
     
     compactPrint_sendStringLiteral("Cold Sense ADC: ");
     compactPrint_convertUint16ToString(buffer, Measurements_getRawColdValue());

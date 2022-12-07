@@ -38,7 +38,7 @@ extern "C" {
     void compactPrint_sendDebugTelemetry(void);
     
     //Sends Raw ADC values to the UART
-    void compactPrint_sendRawADCValues(void);
+    void compactPrint_sendRawValues(void);
     
 #ifdef	__cplusplus
 }
