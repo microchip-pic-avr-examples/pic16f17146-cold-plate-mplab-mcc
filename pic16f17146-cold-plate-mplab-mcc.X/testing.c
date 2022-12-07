@@ -48,24 +48,3 @@ void TEST_NTC_ROM(void)
 
     }
 }
-
-//Software Test Pattern for Current -> DAC settings
-void TEST_DAC_Calc(void)
-{
-    uint8_t dacCode;
-#ifdef DEBUG_PRINT
-    compactPrint_sendStringWithNewline("Running DAC Computation Tests...");
-#endif
-    
-    uint8_t testValues[] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
-    
-    for (uint8_t i = 0; i < 10; i++)
-    {
-       //Same formula!
-       dacCode = floorf(DAC_FORMULA_CONSTANT * 8.0 * testValues[i]);
-#ifdef DEBUG_PRINT
-        sprintf(&msgBuffer[0], "Test %u - DAC set for input %u: %dC\r\n", i, testValues[i], dacCode);
-        compactPrint_sendStringWithNewline(&msgBuffer[0]);
-#endif
-    }
-}

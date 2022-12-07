@@ -17,14 +17,6 @@
 #define PELTIER_ENABLE() FET_CONTROL_SetHigh()
 #define PELTIER_DISABLE() FET_CONTROL_SetLow()
 
-//State machine for DAC updates
-enum CurrentLimitState {
-    CURRENT_LIMIT_NO_CHANGE = 0, CURRENT_LIMIT_SET_DAC, CURRENT_LIMIT_SETTLE
-};
-
-//DAC Update State Machine w/ Anti-Glitch Operation
-static enum CurrentLimitState dacUpdateState = CURRENT_LIMIT_NO_CHANGE;
-
 //Peltier State Machine
 static PeltierState peltierState = PELTIER_STATE_DISABLED;
 

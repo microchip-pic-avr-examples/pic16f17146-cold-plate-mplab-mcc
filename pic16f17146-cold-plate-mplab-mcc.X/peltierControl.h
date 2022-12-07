@@ -8,6 +8,7 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
     
+    //Peltier Error Codes
     typedef enum {
         PELTIER_ERROR_NONE = 0, PELTIER_FAN1_ERROR, 
         PELTIER_OVERCURRENT_ERROR, PELTIER_POWER_ERROR,
@@ -16,10 +17,10 @@ extern "C" {
         PELTIER_PLATE_TEMP_LIMIT
     } PeltierError;
     
+    //Peltier States
     typedef enum {
         PELTIER_STATE_DISABLED = 0, PELTIER_STATE_STARTUP, PELTIER_STATE_AT_TEMP, PELTIER_STATE_COOLING
     } PeltierState;
-
         
     //Init the Peltier Current Controller
     void peltierControl_init(void);

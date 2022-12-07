@@ -47,7 +47,6 @@
 #include "../adcc/adcc.h"
 #include "../clc/clc1.h"
 #include "../clc/clc2.h"
-#include "../clkref/clkref.h"
 #include "../crc/crc.h"
 #include "../dac/dac1.h"
 #include "../dac/dac2.h"

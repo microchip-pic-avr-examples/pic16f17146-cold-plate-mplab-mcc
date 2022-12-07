@@ -6,10 +6,7 @@ extern "C" {
 #endif
 
 //-- Default Values used for resetting EEPROM -- 
-        
-//Default Peltier Current Limit (divide by 10 to avoid using float))
-#define DEFAULT_CURRENT_LIMIT 40
-    
+
 //Default to Celsius
 #define DEFAULT_TEMP_UNIT 'C'
         

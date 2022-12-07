@@ -76,7 +76,7 @@ void settings_writeDefaults(void)
 #endif
     
     //Write Defaults
-    settings_writeValue(SETTINGS_CURRENT_LIMIT, DEFAULT_CURRENT_LIMIT);
+    settings_writeValue(SETTINGS_UNUSED, 0xFF);
     settings_writeValue(SETTINGS_TEMP_UNIT, DEFAULT_TEMP_UNIT);
     settings_writeValue(SETTINGS_MAX_INT_TEMP, DEFAULT_MAX_INT_SETTING);
     settings_writeValue(SETTINGS_MAX_HEATSINK_TEMP, DEFAULT_MAX_HOT_SETTINGS);

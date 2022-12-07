@@ -26,13 +26,13 @@ extern "C" {
     //Resets the WWDT
     void WWDT_reset(void);
     
-    
     //Converts Celsius to Fahrenheit
     int8_t CtoF(int8_t celsius);
 
     //Converts Fahrenheit to Celsius
     int8_t FtoC(int8_t fahrenheit);
     
+    //Switches temperature units automatically for the UI
     int8_t dispTemp(int8_t temp);
     
 #ifdef	__cplusplus
