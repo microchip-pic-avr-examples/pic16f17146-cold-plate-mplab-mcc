@@ -12,10 +12,6 @@ This README covers a brief usage guide, and other surface level info about the d
 - [PIC16F17146 Datasheet](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/-PIC16F17126-46-Full-Featured-Microcontrollers-Data-Sheet-40002343C.pdf)
 - [EA OLEDM204 datasheet](https://www.lcd-module.de/fileadmin/html-seiten/eng/pdf/doma/oledm204-ae.pdf)
 
-TODO: get these
-- Peltier Element - get ID
-- NTC thermistor curves?
-
 ## Software Used
 
 - [MPLAB® X IDE 6.0.0](https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide) or newer
@@ -25,7 +21,7 @@ TODO: get these
 
 ## Hardware Used
 
-- [PIC16F17146](https://www.microchip.com/en-us/product/PIC16F17146) DIP
+- [PIC16F17146](https://www.microchip.com/en-us/product/PIC16F17146)
 - [Curiosity Development Board](https://www.microchip.com/en-us/development-tool/dm164137) (used during development only)
 
 ## Major Functions
