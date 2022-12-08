@@ -33,9 +33,6 @@ extern "C" {
     //Gets the gain configuration of the amplifier
     CurrentSenseGain currentSense_getConfiguration(void);
     
-    //Overcurrent event has occurred
-    void currentSense_overcurrentCallback(void);
-    
     //Sets the boolean for overcurrent events
     void currentSense_setOvercurrentEvent(void);
     

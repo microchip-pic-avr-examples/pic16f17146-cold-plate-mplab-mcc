@@ -273,13 +273,6 @@ CurrentSenseGain currentSense_getConfiguration(void)
     return systemGain;
 }
 
-//Overcurrent event has occurred
-void currentSense_overcurrentCallback(void)
-{
-    peltierControl_fastStop();
-    isOvercurrent = true;
-}
-
 //Sets the boolean for overcurrent events
 void currentSense_setOvercurrentEvent(void)
 {
