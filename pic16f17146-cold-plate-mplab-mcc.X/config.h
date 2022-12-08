@@ -44,7 +44,7 @@ extern "C" {
 #define HEATSINK_TEMP_SLOPE 40
         
 //Peltier Current Limit (100s of mA)
-#define PELTIER_CURRENT_MAX 85
+#define PELTIER_CURRENT_MAX 100
 
 //Minimum Peltier current for detection
 #define PELTIER_CURRENT_MIN 10

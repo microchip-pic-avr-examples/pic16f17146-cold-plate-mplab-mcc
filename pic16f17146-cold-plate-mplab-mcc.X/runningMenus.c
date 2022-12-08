@@ -133,6 +133,7 @@ void runningMenus_errorUpdate(int16_t moves){
             OLED_writeString("OPAMP Gain Error");
             break;
         case PELTIER_POWER_ERROR:
+            OLED_writeSpaces(3);
             OLED_writeString("No Power Error");
             break;
         case PELTIER_PLATE_TEMP_LIMIT:

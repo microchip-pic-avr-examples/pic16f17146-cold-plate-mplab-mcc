@@ -52,6 +52,7 @@ void UI_refresh(void){
 void UI_setup(void){
     switch(UI_state){
         case STANDBY:
+            peltierControl_stop();
             settingMenus_standbySetup();
             break;
         case MENU:
