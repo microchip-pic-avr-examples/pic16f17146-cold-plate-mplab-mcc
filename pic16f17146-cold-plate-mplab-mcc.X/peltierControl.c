@@ -73,19 +73,12 @@ void peltierControl_periodicCheck(void)
         //This is likely a rare condition (expect overcool to detect this), but worth testing for
         error = PELTIER_SENSE_COLD_OPEN;
     }
-    if (currentSense_hasOvercurrentOccurred())
+    if (OVERCURRENT_CMP_GetOutputStatus())
     {
-        //Overcurrent
-        error = PELTIER_OVERCURRENT_ERROR;
-    }
-    else if (OVERCURRENT_CMP_GetOutputStatus())
-    {
-        //Overcurrent
-        //Edge case for if the current alarm is active on startup
+        //Overcurrent Error
         error = PELTIER_OVERCURRENT_ERROR;
         currentSense_setOvercurrentEvent();
     }
-    
     if (!currentSense_isGainOK())
     {
         //Gain of OPAMP out of tolerance

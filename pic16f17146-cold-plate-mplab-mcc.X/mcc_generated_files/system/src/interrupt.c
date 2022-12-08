@@ -70,10 +70,6 @@ void __interrupt() INTERRUPT_InterruptManager (void)
         {
             Timer0_OverflowISR();
         } 
-        else if(PIE5bits.CM2IE == 1 && PIR5bits.CM2IF == 1)
-        {
-            OVERCURRENT_CMP_ISR();
-        } 
         else if(PIE6bits.ADTIE == 1 && PIR6bits.ADTIF == 1)
         {
             ADCC_ThresholdISR();
