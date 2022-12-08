@@ -2,7 +2,7 @@
 
 # Intelligent Cooling Plate with PIC16F17146
 
-Packed with more peripherals than I/O pins, this intelligent cooling plate (aka: the cold plate) cools it's the metal surface and anything on top of it. Controlling this system is a single 20-pin, 8-bit MCU, which performs temperature measurements, peltier current monitoring, user interface control, and safety functions. This MCU can handle this task single-handedly due to the wide array of Core Independent Peripherals (CIPs) on the device.
+Packed with more peripherals than I/O pins, this intelligent cooling plate (also known as: the cold plate) cools it's metal surface and anything on top of it. Controlling this system is a single 20-pin, 8-bit MCU, which performs temperature measurements, peltier current monitoring, user interface control, and safety functions. This MCU can handle this task single-handedly thanks to the wide array of Core Independent Peripherals (CIPs) on the device.
 
 This README covers a brief usage guide, and other surface level info about the demo. The cold plate was made so different aspects/functionalities of the microcontroller could be copied/adapted to various applications, rather than the intention someone would build their own cold plate. Because of this, there is no how-to guide to build up the hardware. However, all PCB, CAD files, and non-standard BOM components are included in the repo for reference.
 
