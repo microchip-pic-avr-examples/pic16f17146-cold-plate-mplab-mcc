@@ -38,6 +38,9 @@ void peltierControl_periodicCheck(void)
     //Clear the WWDT
     WWDT_reset();    
     
+    //Clear existing errors
+    error = PELTIER_ERROR_NONE;
+    
     if (fanControl_getFan1RPM() == 0)
     {
         //Fan Error!

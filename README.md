@@ -124,17 +124,17 @@ If an error occurs, power to the plate is cut, and a troubleshooting error messa
 
 Below is a list of the various possible errors that are continuously checked for during running operation:
 
-| Name | Cause |
-| --- | --- |
-| PELTIER_FAN1_ERROR | The heatsink fan is unplugged |
-| PELTIER_OVERCURRENT_ERROR | More current is pulled than software allows |
-| PELTIER_POWER_ERROR | No power is detected when the plate should be pulling current |
-| PELTIER_GAIN_ERROR | The gain of the operational amplifier exceeds expected tolerance.
-| PELTIER_INT_OVERHEAT | Internal MCU temperature is too hot (70C)|
-| PELTIER_HEATSINK_OVERHEAT | Heatsink is too hot (80C)|
-| PELTIER_SENSE_HOT_OPEN | Thermocouple for heatsink is disconnected |
-| PELTIER_SENSE_COLD_OPEN | Thermocouple for plate temp is disconnected |
-| PELTIER_PLATE_TEMP_LIMIT | Cold plate is below safe temperature |
+| Name | Error Code | Cause |
+| ---- | ----------- |--- |
+| PELTIER_FAN1_ERROR | 1 | The heatsink fan is unplugged |
+| PELTIER_OVERCURRENT_ERROR | 2 | More current is pulled than software allows |
+| PELTIER_POWER_ERROR | 3 | No power is detected when the plate should be pulling current |
+| PELTIER_GAIN_ERROR | 4 | The gain of the operational amplifier exceeds expected tolerance.
+| PELTIER_INT_OVERHEAT | 5 | Internal MCU temperature is too hot (70C)|
+| PELTIER_HEATSINK_OVERHEAT | 6 | Heatsink is too hot (80C)|
+| PELTIER_SENSE_HOT_OPEN | 7 | Thermocouple for heatsink is disconnected |
+| PELTIER_SENSE_COLD_OPEN | 8 | Thermocouple for plate temp is disconnected |
+| PELTIER_PLATE_TEMP_LIMIT | 9 | Cold plate is below safe temperature |
 
 Once started, pressing the rotary encoder button and selecting `Cancel` stops the plate and returns to the standby menu.
 
