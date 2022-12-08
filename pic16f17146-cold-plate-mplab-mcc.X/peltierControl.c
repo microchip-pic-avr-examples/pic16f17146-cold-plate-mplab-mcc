@@ -209,14 +209,7 @@ void peltierControl_start(void)
 
 //Stop the Peltier Regulator
 void peltierControl_stop(void)
-{   
-//#ifdef DEBUG_PRINT
-//    if (error != PELTIER_ERROR_NONE)
-//    {
-//        compactPrint_sendErrorCode("Peltier Control Error, Code ", error);
-//    }
-//#endif
-    
+{       
     //Disable Output
     PELTIER_DISABLE();
 
