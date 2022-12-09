@@ -4,14 +4,14 @@
 
 Packed with more peripherals than I/O pins, this intelligent cooling plate (aka: the cold plate) cools its metal surface and anything on top of it. Controlling this system is a single 20-pin, 8-bit MCU, which performs temperature measurements, peltier current monitoring, user interface control, and safety functions. The MCU can handle this task single-handedly thanks to its wide array of Core Independent Peripherals (CIPs).
 
-This README covers a brief usage guide, and other surface level info about the demo. The cold plate was made so that different aspects/functionalities of the microcontroller could be copied/adapted to various applications, rather than someone would building up their own cold plate. Because of this, there is no how-to guide to build up the hardware. However, all PCB, CAD files, and non-standard BOM components are included in the repo for reference.
+This README covers a brief usage guide and other surface level info about the demo. The cold plate was designed so that different aspects/functionalities of the microcontroller could be copied/adapted to various applications, rather than someone would building up their own cold plate. Consequently, there is no how-to guide to build up the hardware. However, all PCB, CAD files, and non-standard BOM components are included in the repo for reference.
 
 ![The Cold Plate](./images/cold_plate.png)
 
 ## Related Documentation
-- [PIC16F17146 Datasheet](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/-PIC16F17126-46-Full-Featured-Microcontrollers-Data-Sheet-40002343C.pdf)
+- [PIC16F17146 Family](https://www.microchip.com/en-us/products/microcontrollers-and-microprocessors/8-bit-mcus/pic-mcus/pic16f17146?utm_source=GitHub&utm_medium=TextLink&utm_campaign=MCU8_MMTCha_pic171xx&utm_content=pic16f17146-cold-plate-mplab-mcc-github)
 - [EA OLEDM204 Datasheet](https://www.lcd-module.de/fileadmin/html-seiten/eng/pdf/doma/oledm204-ae.pdf)
-- [CP85438 Peltier Plate](https://www.cuidevices.com/product/resource/cp85.pdf)
+- [CP85435 Peltier Plate Datasheet](https://www.cuidevices.com/product/resource/cp85.pdf)
 - [PS103J2 NTC Thermistors](https://www.littelfuse.com/products/temperature-sensors/leaded-thermistors/interchangeable-thermistors/standard-precision-ps/ps103j2.aspx)
 
 ## Software Used
@@ -20,13 +20,15 @@ This README covers a brief usage guide, and other surface level info about the d
 - [MPLAB Code Configurator](https://www.microchip.com/en-us/tools-resources/configure/mplab-code-configurator?utm_source=GitHub&utm_medium=TextLink&utm_campaign=MCU8_MMTCha_pic171xx&utm_content=pic16f17146-cold-plate-mplab-mcc-github) (MCC)
 - [MPLAB Mindi&trade; Analog Simulator](https://www.microchip.com/en-us/tools-resources/develop/analog-development-tool-ecosystem/mplab-mindi-analog-simulator?utm_source=GitHub&utm_medium=TextLink&utm_campaign=MCU8_MMTCha_pic171xx&utm_content=pic16f17146-cold-plate-mplab-mcc-github)
 
-## Hardware Used
+## Development Hardware Used
 
 - [PIC16F17146](https://www.microchip.com/en-us/product/PIC16F17146?utm_source=GitHub&utm_medium=TextLink&utm_campaign=MCU8_MMTCha_pic171xx&utm_content=pic16f17146-cold-plate-mplab-mcc-github)
 - [Curiosity Development Board (DM164137)](https://www.microchip.com/en-us/development-tool/DM164137?utm_source=GitHub&utm_medium=TextLink&utm_campaign=MCU8_MMTCha_pic171xx&utm_content=pic16f17146-cold-plate-mplab-mcc-github) (used during development)
 
 ## Major Functions
-These are the major functions are implemented on the microcontroller.
+These are the major functions that are implemented on the microcontroller.
+
+![Block Diagram](./images/blockDiagram.png)
 
 **Current Monitoring and Measurement**  
 - Integrated Operational Amplifier (OPA1)  
@@ -36,6 +38,8 @@ These are the major functions are implemented on the microcontroller.
 - Fixed Voltage Reference (FVR)
 
 OPA1 is implemented as a current-sense amplifier, which amplifies the small voltage across the current shunt resistor. The output of OPA1 is also used internally for monitoring and measurement. 
+
+![Current Sense Amplifier](./images/currentSenseAmplifier.png)  
 
 The amplified current sense output of OPA1 is compared to a small, set voltage level (from DAC1) using CMP1. If it is greater, CMP1 is high, indiciating current is flowing through the system.
 
@@ -48,7 +52,7 @@ Additionally, the current is measured for telemetry by the ADCC, with the FVR pr
 - Fixed Voltage Reference (FVR)
 - Temperature Indicator Module (TEMP)
 
-The microcontroller monitors the temperature in the system by measuring NTC thermistors for the top plate and its heatsink. It also monitors the internal temperature of the MCU die with the TEMP peripheral. The ADCC uses the FVR to ensure measurements are stable, and to provide the appropriate voltage for the TEMP peripheral. 
+The microcontroller measures the temperature of the top plate and its heatsink using NTC thermistors. It also monitors the internal temperature of the MCU die with the TEMP peripheral. The ADCC uses the FVR to ensure measurements are stable, and to provide the appropriate voltage for the TEMP peripheral. 
 
 **Functional Safety Supported Setting Storage**
 - Cyclic Redundancy Check (CRC) with Memory Scanner 
@@ -60,7 +64,7 @@ Using the NVM and CRC CIPs, user settings are saved to EEPROM along with a CRC c
 - Timer 0 (TMR0)
 - Windowed Watchdog Timer (WWDT)
 
-Since the cold plate involves high currents and potentially hazardous temperatures, the WWDT is used to ensure periodic monitoring of the device is performed. If the WWDT is not triggered within a specific time, the microcontroller will reset. This ensures that if the firmware ever deadlocked, the system would not remain active, thus ensuring safety is not compromised. TMR0 generates the base timing for the periodic self-check.
+Since the cold plate involves high currents and potentially hazardous temperatures, the WWDT is used to ensure periodic monitoring of the device is performed. If the WWDT is not triggered within a specific amount of time, the microcontroller will reset. This ensures that if the firmware deadlocks, the system would not remain active, thus ensuring safety is not compromised. TMR0 generates the base timing for the periodic self-check.
 
 **Single Speed Fan Control with Dual Fan Speed Monitoring**
 - Pulse Width Modulator with Compare 2 (PWM2)
