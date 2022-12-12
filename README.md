@@ -88,7 +88,7 @@ Lastly, the rotary encoder has 2 LEDs built-in - an orange and a blue LED. Using
 | --- | --- |
 | Breathing Purple | Standby |
 | Breathing Blue | Actively Cooling |
-| Sold Blue | At Target Temperature |
+| Solid Blue | At Target Temperature |
 | Solid Orange | Error |
 
 **Debug Print**
