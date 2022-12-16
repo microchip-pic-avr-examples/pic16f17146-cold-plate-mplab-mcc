@@ -10,7 +10,7 @@
         "shortDescription": "Control a Peltier device with a PIC16F17146 to regulate the temperature of a metal plate.",
         "ide": {
             "name": "MPLAB X",
-            "semverRange": ">=6.0.0"
+            "semverRange": ">=6.0.5"
         },
         "compiler": [
             {
