@@ -101,7 +101,7 @@ EUSART1 is used to transmit debug messages from the MCU. It is set up to run at 
 
 On boot, a standby screen shows the current plate temperature, the set temperature, and whether the product is in demo mode (which limits the lowest temperature for safety).
 
-![Main Menu](images/main_menu.jpg)
+![Main Menu](images/main_menu.png)
 
 Pressing the rotary encoder button brings up a menu that can be used to change various running parameters:
 
@@ -116,8 +116,8 @@ Pressing the rotary encoder button brings up a menu that can be used to change v
 | About | Lists developer and version info |
 | Demo Mode Toggle | Password protected way to disable demo mode|
 
-![Top Menu](images/top_menu.jpg)
-![Bottom Menu](images/bottom_menu.jpg)
+![Top Menu](images/top_menu.png)
+![Bottom Menu](images/bottom_menu.png)
 
 Upon pressing Start, the MCU begins checking for various errors. If all checks pass, the plate power is enabled and the user is brought to a running status screen which shows:
 
@@ -127,11 +127,11 @@ Upon pressing Start, the MCU begins checking for various errors. If all checks p
 - Current Peltier current
 - Cooling fan RPM
 
-![Running Menu](images/running.jpg)
+![Running Menu](images/running.png)
 
 If an error occurs, power to the plate is cut, and a troubleshooting error message displays on the screen. Press the rotary encoder to clear the error and return to the standy screen. If the error is not remedied and the plate is started again, it will loop back to the same error screen.
 
-![Error Menu](images/error.jpg)
+![Error Menu](images/error.png)
 
 Below is a list of the various possible errors that are continuously checked for during running operation:
 
