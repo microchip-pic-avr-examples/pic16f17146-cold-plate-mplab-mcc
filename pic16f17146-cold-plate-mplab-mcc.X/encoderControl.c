@@ -55,7 +55,9 @@ void encoderControl_updateLEDs(void){
             if(!UI_isRunning()){
                 encoderControl_setColor(PURPLE);
             } else { // If running
-                if(!(peltierControl_getState() == PELTIER_STATE_AT_TEMP)){
+                // comparison bases LED off current value, not hysteresis. Makes more sense than
+                // current temp being at set temp, but not show via LED it's at set temp
+                if(Measurements_getLastColdTemp() > settingMenus_getTargetTemp()){
                     encoderControl_breatheLED(BLUE);
                 } else {
                     encoderControl_setColor(BLUE);
@@ -64,7 +66,7 @@ void encoderControl_updateLEDs(void){
             break;
         case RUNNING:
             // PWM while cooling, Solid blue at temp
-            if(!(peltierControl_getState() == PELTIER_STATE_AT_TEMP)){
+            if(Measurements_getLastColdTemp() > settingMenus_getTargetTemp()){
                 encoderControl_breatheLED(BLUE);
             } else {
                 encoderControl_setColor(BLUE);
