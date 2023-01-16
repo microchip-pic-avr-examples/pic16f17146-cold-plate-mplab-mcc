@@ -56,7 +56,7 @@ The microcontroller measures the temperature of the top plate and its heat sink 
 
 **Functional Safety Supported Setting Storage**
 - Cyclic Redundancy Check (CRC) with Memory Scanner 
-- Nonvoltatile Memory (NVM) Control
+- Nonvolatile Memory (NVM) Control
 
 Using the NVM and CRC CIPs, user settings are saved to EEPROM along with a CRC checksum. On start-up, the checksum is revalidated for data integrity. The CRC reduces code size and runs faster than the software could perform, by offloading it to the dedicated hardware.
  
