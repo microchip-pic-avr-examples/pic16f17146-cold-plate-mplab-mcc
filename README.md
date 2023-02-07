@@ -4,7 +4,7 @@
 
 Packed with more peripherals than I/O pins, this intelligent cooling plate — the cold plate — cools its metal surface and anything on top of it. This system is controlled by a single 20-pin, 8-bit microcontroller (MCU), which performs temperature measurements, peltier current monitoring, user interface control and safety functions. The MCU can handle this task single-handedly due to its wide array of Core Independent Peripherals (CIPs).
 
-This README covers a brief usage guide and other generic aspects of the intelligent cooling plate, presented through a demo. The design of the cold plate allows for different functionalities of the MCU to be transferable or adaptable to various applications, offering the user a wider potential of interaction more quickly at hand. The present example is not a guide on how to build up the hardware, but all Printed Circuit Board (PCB), Computer-Aided Design (CAD) files and nonstandard Bill of Materials (BOM) components are included in the repo for reference.
+This README covers a usage guide and a functionality overview of the intelligent cooling plate. This is not an end product, but a demonstraion of the expanding capabilities of microcontrollers. Rebuilding this demo in its entirety is possible, but it's purpose is to have pieces of its implementation copied into other practical designs.All Printed Circuit Board (PCB), Computer-Aided Design (CAD) files and nonstandard Bill of Materials (BOM) components are included in the repo for reference. A more in-depth explanation of the functionality listed below can be found in [App Note AN4889](https://www.microchip.com/en-us/application-notes/an4889?utm_source=GitHub&utm_medium=TextLink&utm_campaign=MCU8_MMTCha_pic171xx&utm_content=pic16f17146-cold-plate-mplab-mcc-github)
 
 ![The Cold Plate](./images/cold_plate.png)
 
@@ -61,20 +61,20 @@ The microcontroller measures the temperature of the top plate and its heat sink 
 Using the NVM and CRC CIPs, user settings are saved to EEPROM along with a CRC checksum. On start-up, the checksum is revalidated for data integrity. The CRC reduces code size and runs faster than the software could perform, by offloading it to the dedicated hardware.
  
 **Protective System Monitoring**
-- Timer0 (TMR0)
+- Timer 0 (TMR0)
 - Windowed Watchdog Timer (WWDT)
 
 Since the cold plate involves high currents and potentially hazardous temperatures, the WWDT is used to ensure periodic monitoring of the device is performed. If the WWDT is not triggered within a specific amount of time, the MCU resets. This way, if the firmware deadlocks, the system does not remain active, thus making sure safety is not compromised. TMR0 generates the base timing for the periodic self-check.
 
 **Single-Speed Fan Control with Dual Fan Speed Monitoring**
 - Pulse Width Modulator with Compare 2 (PWM2)
-- Timer2 (TMR2) and Timer4 (TMR4)
+- Timer 2 (TMR2) and Timer 4 (TMR4)
 
 To cool the Peltier plate, a PWM CIP is used to generate a speed control signal for the system fans. This allows the fans to ramp up and down depending on the conditions of the system. Additionally, the tachometer signals from the fans are monitored and counted by TMR2 and TMR4. If Fan 1 is not spinning (or stops spinning), the microcontroller will not power up the Peltier plate. 
 
 **User Interface**
 - Host Synchronous Serial Port 1 (MSSP1), in I<sup>2</sup>C mode
-- Timer1 (TMR1) and Timer3 (TMR3)
+- Timer 1 (TMR1) and Timer 3 (TMR3)
 - Configurable Logic Cell 1 and 2 (CLC1 and CLC2)
 - Pulse Width Modulator with Compare 1 (PWM1)
 
