@@ -37,8 +37,11 @@ typedef enum{
     //Erases EEPROM and writes default values in
     void settings_writeDefaults(void);
 
-    //Returns true if the settings are valid
-    bool settings_isValid(void);
+    //Returns true if an EEPROM write failed
+    bool settings_didWriteFail(void);
+    
+    //Clears the flag for EEPROM write failure
+    void settings_clearWriteFail(void);
     
     //Calculates the CRC and returns the checksum
     uint8_t settings_verifyCRC(void);
@@ -57,7 +60,8 @@ typedef enum{
     
     //Utility Function
     //Writes [VALUE] to [WRITE]. Does not update checksum
-    void settings_writeValue(UserSetting setting, uint8_t value);
+    //Returns true if value was correctly written
+    bool settings_writeValue(UserSetting setting, uint8_t value);
 
     //Write the CRC value with new values from EEPROM
     void settings_writeCRC(void);

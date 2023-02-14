@@ -161,6 +161,9 @@ void runningMenus_errorUpdate(int16_t moves){
             }
 
             break;
+        case PELTIER_EEPROM_WRITE_FAIL:
+            OLED_writeString("EEPROM Write Failure"); 
+            break;
         case PELTIER_ERROR_NONE:
             break;
     }

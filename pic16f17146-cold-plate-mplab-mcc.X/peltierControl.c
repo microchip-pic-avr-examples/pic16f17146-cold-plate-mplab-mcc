@@ -84,6 +84,14 @@ void peltierControl_periodicCheck(void)
         //Gain of OPAMP out of tolerance
         error = PELTIER_GAIN_ERROR;
     }
+    if (settings_didWriteFail())
+    {
+        //EEPROM write failure
+        error = PELTIER_EEPROM_WRITE_FAIL;
+        
+        //Since most of the time RAM caching is used, this flag can be cleared
+        settings_clearWriteFail();
+    }
 
     int8_t stopTemp, startTemp, currentTemp;
     stopTemp = settings_getSetting(SETTINGS_LAST_SET_TEMP);

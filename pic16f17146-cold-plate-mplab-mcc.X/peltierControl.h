@@ -15,7 +15,7 @@ extern "C" {
         PELTIER_GAIN_ERROR,
         PELTIER_INT_OVERHEAT, PELTIER_HEATSINK_OVERHEAT, 
         PELTIER_SENSE_HOT_OPEN, PELTIER_SENSE_COLD_OPEN, 
-        PELTIER_PLATE_TEMP_LIMIT
+        PELTIER_PLATE_TEMP_LIMIT, PELTIER_EEPROM_WRITE_FAIL
     } PeltierError;
     
     //Peltier States
@@ -47,9 +47,6 @@ extern "C" {
     //Stops the Peltier without any prints
     //Only called from ISRs
     void peltierControl_fastStop(void);
-    
-    //Set the max current through the loop
-    //void peltierControl_setMaxCurrent(uint8_t lim);
     
     //Returns the error code from the Peltier regulator. Does NOT clear the error
     PeltierError peltierControl_getError(void);

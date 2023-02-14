@@ -10,6 +10,7 @@
 #include "compactPrint.h"
 
 static uint8_t settingsCache[SETTINGS_CRC];
+static bool writeFail = false;
 
 //Init Settings (Check for validity)
 void settings_init(void)
@@ -56,6 +57,15 @@ void settings_init(void)
         }
     }
     
+#ifdef DEBUG_PRINT
+    if (writeFail)
+    {
+        compactPrint_sendStringWithNewline("EEPROM Write Failure");
+    }
+#endif
+
+    
+    
     //Load the settings
     settings_loadFromEEPROM();
 }
@@ -90,28 +100,26 @@ void settings_writeDefaults(void)
     //Write EEPROM Version ID
     settings_writeValue(SETTINGS_EEPROM_VERSION, COMPILED_EEPROM_VERSION);
 
-    //Calculate new checksum
-    uint8_t newChecksum = settings_calculateCRC();
+    if (!writeFail)
+    {
+        //Calculate new checksum
+        uint8_t newChecksum = settings_calculateCRC();
 
-    //Write the new CRC Value
-    settings_writeValue(SETTINGS_CRC, newChecksum);
+        //Write the new CRC Value
+        settings_writeValue(SETTINGS_CRC, newChecksum);
+    }
 }
 
-
-//Returns true if the settings are valid
-bool settings_isValid(void)
+//Returns true if an EEPROM write failed
+bool settings_didWriteFail(void)
 {
-    if (settings_getSettingFromEEPROM(SETTINGS_EEPROM_VERSION) != COMPILED_EEPROM_VERSION)
-    {
-        //Invalid EEPROM
-        return false;
-    }
-    if (settings_verifyCRC() != 0x00)
-    {
-        //Invalid CRC
-        return false;
-    }
-    return true;
+    return writeFail;
+}
+
+//Clears the flag for EEPROM write failure
+void settings_clearWriteFail(void)
+{
+    writeFail = false;
 }
 
 //Runs a CRC and returns the checksum
@@ -193,16 +201,28 @@ void settings_writeSetting(UserSetting setting, uint8_t value)
 }
 
 //Writes [VALUE] to [WRITE]
-void settings_writeValue(UserSetting setting, uint8_t value)
+bool settings_writeValue(UserSetting setting, uint8_t value)
 {
     if (setting > SETTINGS_CRC)
     {
-        return;
+        writeFail = true;
+        return false;
     }
     
+    //Cache in RAM
     settingsCache[setting] = value;
-
+    
+    //Write to EEPROM
     eeprom_write(setting, value);
+    
+    //Verify write
+    if (settings_getSettingFromEEPROM(setting) != value)
+    {
+        //Write Failure
+        writeFail = true;
+        return false;
+    }
+    return true;
 }
 
 //Write the CRC value with new values from EEPROM
