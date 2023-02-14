@@ -146,6 +146,7 @@ Below is a list of the various possible errors that are continuously checked for
 | PELTIER_SENSE_HOT_OPEN | 7 | Thermocouple for heat sink is disconnected |
 | PELTIER_SENSE_COLD_OPEN | 8 | Thermocouple for plate temp is disconnected |
 | PELTIER_PLATE_TEMP_LIMIT | 9 | Cold plate is below safe temperature |
+| PELTIER_EEPROM_WRITE_FAIL | 10 | Internal EEPROM written value does not match read value. |
 
 Once started, pressing the rotary encoder button and selecting `Cancel` stops the plate and returns to the standby menu.
 
