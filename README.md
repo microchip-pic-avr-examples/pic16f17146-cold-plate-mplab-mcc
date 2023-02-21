@@ -143,8 +143,8 @@ Below is a list of the various possible errors that are continuously checked for
 | PELTIER_GAIN_ERROR | 4 | The gain of the operational amplifier exceeds expected tolerance
 | PELTIER_INT_OVERHEAT | 5 | Internal MCU temperature is too hot (70&deg;C)|
 | PELTIER_HEATSINK_OVERHEAT | 6 | Heat sink is too hot (80&deg;C)|
-| PELTIER_SENSE_HOT_OPEN | 7 | Thermistor for heat sink is disconnected |
-| PELTIER_SENSE_COLD_OPEN | 8 | Thermistor for plate temp is disconnected |
+| PELTIER_SENSE_HOT_OPEN | 7 | Thermistor for the heat sink is disconnected |
+| PELTIER_SENSE_COLD_OPEN | 8 | Thermistor for the plate temp is disconnected |
 | PELTIER_PLATE_TEMP_LIMIT | 9 | Cold plate is below safe temperature |
 | PELTIER_EEPROM_WRITE_FAIL | 10 | Internal EEPROM written value does not match read value. |
 
